@@ -1,0 +1,334 @@
+﻿        //public void Start()
+        //{
+        //    FreeGen();
+        //    var done = false;
+        //    var gdone = 0;
+        //    var _group = begingroup;
+        //    var assignedCheck = true;
+        //    while (gdone < Program.group.Count)
+        //    {
+        //        schedule.Add(new List<List<List<string>>>());
+        //        var tempgroup = Program.group.Values.ToArray()[_group];
+        //        List<string> subjectXweek = new List<string>();
+        //        List<string> subjHalves = new List<string>();
+
+        //        for (int x = 0; x < tempgroup.relatedSubjects.Count; x++)
+        //        {
+        //            double temp = Convert.ToInt32(tempgroup.relatedSubjects.Values.ToArray()[x][1]) / tempgroup.StudyingWeeks;
+        //            if (temp - Math.Floor(temp) >= .35 && temp - Math.Floor(temp) <= .65)
+        //            {
+        //                subjHalves = new List<string>();
+        //                temp = Math.Floor(temp);
+        //            }
+        //            else if (temp - Math.Floor(temp) > .65 && temp - Math.Floor(temp) <= 1)
+        //                temp = Math.Ceiling(temp);
+        //            else
+        //                temp = Math.Floor(temp);
+
+        //            for (int y = 0; y < temp; y++)
+        //                subjectXweek.Add(tempgroup.relatedSubjects.Keys.ToArray()[x]);
+        //        }
+        //        for (int _day = 0; _day < 5; _day++)
+        //        {
+        //            schedule[gdone].Add(new List<List<string>>());
+        //            for (int _couple = 0; _couple < tempgroup.couplesXdayGet(_day); _couple++)
+        //            {
+        //                schedule[gdone][_day].Add(new List<string>());
+        //                var check = false;
+        //                if (subjHalves.Count >= 2)
+        //                    for (int x = 0; x < subjHalves.Count - 1; x++)
+        //                    {
+        //                        for (int y = x + 1; y < subjHalves.Count; y++)
+        //                        {
+        //                            if (scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[subjHalves[x]][0]) &&
+        //                                scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[subjHalves[y]][0]) ||
+        //                                scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[subjHalves[x]][0] + "/") &&
+        //                                scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[subjHalves[y]][0] + "/"))
+        //                            {
+        //                                schedule[gdone][_day][_couple].Add(subjHalves[x]);
+        //                                schedule[gdone][_day][_couple].Add(subjHalves[y]);
+        //                                schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[subjHalves[x]][0]);
+        //                                if(tempgroup.relatedSubjects[subjHalves[x]].Count == 3)
+        //                                    schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[subjHalves[x]][2]);
+        //                                schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[subjHalves[y]][0]);
+        //                                if (tempgroup.relatedSubjects[subjHalves[y]].Count == 3)
+        //                                    schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[subjHalves[y]][2]);
+        //                                schedule[gdone][_day][_couple].Add(getAud(_day, _couple, tempgroup, subjHalves[x], 1));
+        //                                schedule[gdone][_day][_couple].Add(getAud(_day, _couple, tempgroup, subjHalves[y], 1));
+
+        //                                halfObjRem(_day, _couple, 0, tempgroup.relatedSubjects[subjHalves[x]][0]);
+        //                                halfObjRem(_day, _couple, 0, tempgroup.relatedSubjects[subjHalves[y]][0]);
+        //                                subjHalves.Remove(subjHalves[x]);
+        //                                subjHalves.Remove(subjHalves[y]);
+        //                                check = true;
+        //                                break;
+        //                            }
+        //                        }
+        //                        if (check)
+        //                            break;
+        //                    }
+        //                else if (subjHalves.Count == 1 && _couple == tempgroup.couplesXdayGet(_day) - 1 && (scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[subjHalves[0]][0]) || scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[subjHalves[0]][0] + "/")))
+        //                {
+        //                    schedule[gdone][_day][_couple].Add(subjHalves[0]);
+        //                    schedule[gdone][_day][_couple].Add("");
+        //                    schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[subjHalves[0]][0]);
+        //                    if(tempgroup.relatedSubjects[subjHalves[0]].Count == 3)
+        //                        schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[subjHalves[0]][2]);
+        //                    schedule[gdone][_day][_couple].Add("");
+        //                    schedule[gdone][_day][_couple].Add(getAud(_day, _couple, tempgroup, subjHalves[0], 1));
+        //                    if (tempgroup.relatedSubjects[subjHalves[0]].Count == 3)
+        //                        schedule[gdone][_day][_couple].Add(getAud(_day, _couple, tempgroup, subjHalves[0], 1));
+        //                    schedule[gdone][_day][_couple].Add("");
+
+        //                    halfObjRem(_day, _couple, 0, tempgroup.relatedSubjects[subjHalves[0]][0]);
+        //                    subjHalves.Clear();
+        //                    check = true;
+        //                }
+
+        //                if (check)
+        //                    continue;
+
+        //                List<string> sxwHash = new List<string>(subjectXweek.ToHashSet());
+        //                assignedCheck = true;
+        //                for (int x = 0; x < sxwHash.Count; x++)
+        //                {
+        //                    if (scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[sxwHash[x]][0]))
+        //                    {
+        //                        schedule[gdone][_day][_couple].Add(sxwHash[x]); // Предмет
+        //                        schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[sxwHash[x]][0]); // Преподаватель
+        //                        if (tempgroup.relatedSubjects[sxwHash[x]].Count == 3)
+        //                        {
+        //                            schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[sxwHash[x]][2]);
+        //                            scheduleFree[_day][_couple][0].Remove(tempgroup.relatedSubjects[sxwHash[x]][2]);
+        //                        }
+        //                        schedule[gdone][_day][_couple].Add(getAud(_day, _couple, tempgroup, sxwHash[x], 0)); // Аудитория
+        //                        if (tempgroup.relatedSubjects[sxwHash[x]].Count == 3)
+        //                            schedule[gdone][_day][_couple].Add(getAud(_day, _couple, tempgroup, sxwHash[x], 0));
+        //                        scheduleFree[_day][_couple][0].Remove(tempgroup.relatedSubjects[sxwHash[x]][0]);
+        //                        subjectXweek.Remove(sxwHash[x]);
+        //                        assignedCheck = false;
+        //                        break;
+        //                    }
+        //                }
+        //                if (assignedCheck && sxwHash.Count != 0)
+        //                {
+        //                    begingroup++;
+        //                    if (begingroup == Program.group.Count)
+        //                    {
+        //                        MessageBox.Show(scheduleFree[_day][_couple][0].Count + " " + scheduleFree[_day][_couple][1].Count);
+        //                        done = true;
+        //                        Save();
+        //                        MessageBox.Show("Schedule generation done. " + begingroup);
+        //                    }
+        //                    break;
+        //                }
+        //                else
+        //                    assignedCheck = false;
+        //            }
+        //            if (assignedCheck)
+        //                break;
+        //        }
+        //        if (assignedCheck)
+        //            break;
+        //        gdone++;
+        //        _group++;
+        //        if (_group == Program.group.Count)
+        //            _group = 0;
+        //    }
+        //    if (assignedCheck && !done)
+        //    {
+        //        Start();
+        //    }
+        //}
+
+		                        //if (tlist[_group][1].Count >= 2)
+                        //    for (int x = 0; x < tlist[_group][1].Count - 1; x++)
+                        //    {
+                        //        for (int y = x + 1; y < tlist[_group][1].Count; y++)
+                        //        {
+                        //            if (scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[tlist[_group][1][x]][0]) &&
+                        //                scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[tlist[_group][1][y]][0]) ||
+                        //                scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[tlist[_group][1][x]][0] + "/") &&
+                        //                scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[tlist[_group][1][y]][0] + "/"))
+                        //            {
+                        //                schedule[gdone][_day][_couple].Add(tlist[_group][1][x]);
+                        //                schedule[gdone][_day][_couple].Add(tlist[_group][1][y]);
+                        //                schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[tlist[_group][1][x]][0]);
+                        //                if (tempgroup.relatedSubjects[tlist[_group][1][x]].Count == 3)
+                        //                    schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[tlist[_group][1][x]][2]);
+                        //                schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[tlist[_group][1][y]][0]);
+                        //                if (tempgroup.relatedSubjects[tlist[_group][1][y]].Count == 3)
+                        //                    schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[tlist[_group][1][y]][2]);
+                        //                schedule[gdone][_day][_couple].Add(getAud(_day, _couple, tempgroup, tlist[_group][1][x], 1));
+                        //                schedule[gdone][_day][_couple].Add(getAud(_day, _couple, tempgroup, tlist[_group][1][y], 1));
+
+                        //                halfObjRem(_day, _couple, 0, tempgroup.relatedSubjects[tlist[_group][1][x]][0]);
+                        //                halfObjRem(_day, _couple, 0, tempgroup.relatedSubjects[tlist[_group][1][y]][0]);
+                        //                tlist[_group][1].Remove(tlist[_group][1][x]);
+                        //                tlist[_group][1].Remove(tlist[_group][1][y]);
+                        //                break;
+                        //            }
+                        //        }
+                        //        if (schedule[gdone][_day][_couple].Count != 0)
+                        //            break;
+                        //    }
+                        //else if (tlist[_group][1].Count == 1 && _couple == tempgroup.couplesXdayGet(_day) - 1 && (scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[tlist[_group][1][0]][0]) || scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[tlist[_group][1][0]][0] + "/")))
+                        //{
+                        //    schedule[gdone][_day][_couple].Add(tlist[_group][1][0]);
+                        //    schedule[gdone][_day][_couple].Add("");
+                        //    schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[tlist[_group][1][0]][0]);
+                        //    if (tempgroup.relatedSubjects[tlist[_group][1][0]].Count == 3)
+                        //        schedule[gdone][_day][_couple].Add(tempgroup.relatedSubjects[tlist[_group][1][0]][2]);
+                        //    schedule[gdone][_day][_couple].Add("");
+                        //    schedule[gdone][_day][_couple].Add(getAud(_day, _couple, tempgroup, tlist[_group][1][0], 1));
+                        //    if (tempgroup.relatedSubjects[tlist[_group][1][0]].Count == 3)
+                        //        schedule[gdone][_day][_couple].Add(getAud(_day, _couple, tempgroup, tlist[_group][1][0], 1));
+                        //    schedule[gdone][_day][_couple].Add("");
+
+                        //    halfObjRem(_day, _couple, 0, tempgroup.relatedSubjects[tlist[_group][1][0]][0]);
+                        //    tlist[_group][1].Clear();
+                        //}
+                        //else
+                        //{
+
+
+
+
+
+        public void Start()
+        {
+            for (int x = 0; x < Program.group.Count; x++)
+            {
+                subjectres.Add(new List<List<string>>());
+                subjectres[x].Add(new List<string>()); subjectres[x].Add(new List<string>());
+                var tempgroup = Program.group.Values.ToArray()[x];
+                for (int _subject = 0; _subject < tempgroup.relatedSubjects.Count; _subject++)
+                {
+                    double temp = Convert.ToInt32(tempgroup.relatedSubjects.Values.ToArray()[_subject][1]) / tempgroup.StudyingWeeks;
+                    if (temp - Math.Floor(temp) >= .35 && temp - Math.Floor(temp) <= .65)
+                    {
+                        subjectres[x][1].Add(tempgroup.relatedSubjects.Keys.ToArray()[_subject]);
+                        temp = Math.Floor(temp);
+                    }
+                    else if (temp - Math.Floor(temp) > .65 && temp - Math.Floor(temp) <= 1)
+                        temp = Math.Ceiling(temp);
+                    else
+                        temp = Math.Floor(temp);
+
+                    for (int y = 0; y < temp; y++)
+                        subjectres[x][0].Add(tempgroup.relatedSubjects.Keys.ToArray()[_subject]);
+                }
+            }
+            PreGen();
+            for (int x = 0; x < Program.group.Count; x++) {
+                deletedlist.Add(new List<List<List<string>>>());
+                way.Add(new List<List<int>>());
+                for (int y = 0; y < 5; y++) {
+                    way[x].Add(new List<int>());
+                    deletedlist[x].Add(new List<List<string>>());
+                    for (int z = 0; z < Program.group.Values.ToArray()[x].couplesXday[y]; z++) {
+                        way[x][y].Add(0);
+                        deletedlist[x][y].Add(new List<string>());
+                    }
+                }
+            }
+            //
+            while (!Backend()) { PreGen(); };
+            //
+            var s = "";
+            for (int x = 0; x < Program.group.Count; x++)
+            {
+                for (int y = 0; y < 5; y++)
+                {
+                    for (int z = 0; z < Program.group.Values.ToArray()[x].couplesXday[y]; z++)
+                    {
+                        s += Program.group.Keys.ToArray()[x] + " " + way[x][y][z] + "\n";
+                    }
+                }
+            }
+            System.IO.File.WriteAllText("txt.txt", s);
+            Save();
+            MessageBox.Show("SG Done.");
+        }
+
+        private bool Backend()
+        { // tlh
+            var tlist = subjectres;
+            for (int _couple = 0; _couple < 6; _couple++)
+            {
+                for (int _day = 0; _day < 5; _day++)
+                {
+                    for (int _group = 0; _group < Program.group.Count; _group++)
+                    {
+                        if (Program.group.Values.ToArray()[_group].couplesXday[_day] <= _couple)
+                            continue;
+                        var tempgroup = Program.group.Values.ToArray()[_group];
+                                                             //
+                        List<string> sxwHash = new List<string>(tlist[_group][0].ToHashSet());
+                        var x = way[_group][_day][_couple];
+                        //if (x >= sxwHash.Count)
+                        //{
+                        //    MessageBox.Show(_couple +" "+ _day+ " " + Program.group.Keys.ToArray()[_group] + " " + x.ToString());
+                        //}
+                        if (x < sxwHash.Count && scheduleFree[_day][_couple][0].Contains(tempgroup.relatedSubjects[sxwHash[x]][0]))
+                        {
+                            schedule[_group][_day][_couple].Add(sxwHash[x]); // Предмет
+                            schedule[_group][_day][_couple].Add(tempgroup.relatedSubjects[sxwHash[x]][0]); // Преподаватель
+                            if (tempgroup.relatedSubjects[sxwHash[x]].Count == 3)
+                            {
+                                schedule[_group][_day][_couple].Add(tempgroup.relatedSubjects[sxwHash[x]][2]);
+                                scheduleFree[_day][_couple][0].Remove(tempgroup.relatedSubjects[sxwHash[x]][2]);
+                            }
+                            schedule[_group][_day][_couple].Add(getAud(_day, _couple, tempgroup, sxwHash[x], 0)); // Аудитория
+                            if (tempgroup.relatedSubjects[sxwHash[x]].Count == 3)
+                                schedule[_group][_day][_couple].Add(getAud(_day, _couple, tempgroup, sxwHash[x], 0));
+                            scheduleFree[_day][_couple][0].Remove(tempgroup.relatedSubjects[sxwHash[x]][0]);
+                            deletedlist[_group][_day][_couple] = tlist[_group][0];
+                            tlist[_group][0].Remove(sxwHash[x]);
+                        }
+                        else if (tlist[_group][0].Count != 0)
+                        {
+                            way[_group][_day][_couple]++;
+
+                            while (way[_group][_day][_couple] == tlist[_group][0].ToHashSet().Count)
+                            {
+                                way[_group][_day][_couple] = 0;
+                                _group--;
+                                if (_group < 0)
+                                {
+                                    _group = Program.group.Count - 1;
+                                    _day--;
+                                    if (_day < 0)
+                                    {
+                                        _day = 4;
+                                        _couple--;
+                                        if (_couple == 0)
+                                            throw new Exception("Gavno :(");
+                                    }
+                                }
+                                tlist[_group][0] = deletedlist[_group][_day][_couple];
+                                way[_group][_day][_couple]++;
+                            }
+                            return false;
+                        }
+
+                    }
+                }
+            }
+            return true;
+        }.
+
+
+
+
+
+		                    double temp = Convert.ToInt32(tempgroup.relatedSubjects.Values.ToArray()[y][1]) / tempgroup.StudyingWeeks;
+                    if (temp - Math.Floor(temp) >= .35 && temp - Math.Floor(temp) <= .65)
+                    {
+                        subjHalves[x].Add(tempgroup.relatedSubjects.Keys.ToArray()[x]);
+                    }3
+				                var tempgroup = Program.group.Values.ToArray()[x];
+                subjHalves.Add(new List<string>());
+                for (int y = 0; y < tempgroup.relatedSubjects.Count; y++)
+                {
+                }
