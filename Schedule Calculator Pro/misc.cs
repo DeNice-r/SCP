@@ -9,9 +9,46 @@ namespace Schedule_Calculator_Pro
         public string donName { get; set; }
         public List<string> relatedSubjects { get; set; } = new List<string>();
         public string relatedAud { get; set; } = "";
+        public bool[] possDays { get; set; } = new bool[] { true, true, true, true, true };
+        public bool[][] dayStats { get; set; } = new bool[][] { new bool[] { true, true, true, true, true, true },
+                                                                new bool[] { true, true, true, true, true, true },
+                                                                new bool[] { true, true, true, true, true, true },
+                                                                new bool[] { true, true, true, true, true, true },
+                                                                new bool[] { true, true, true, true, true, true }};
+
         public Don(string donName)
         {
             this.donName = donName;
+        }
+
+        public void setExcludes(string vals)
+        {
+            for (int x = 0; x < 5; x++)
+                possDays[x] = (vals[x] == 1) ? true : false;
+            for (int x = 5; x < vals.Length; x++)
+                dayStats[(x - 5) / 6][(x - 5) % 6] = (vals[x] == 1) ? true : false;   // untested
+        }
+
+        public string getExcludes() // test theese separately PLZ
+        {
+            string r = "";
+            for (int x = 0; x < 5; x++)
+                r += (possDays[x]) ? 1 : 0;
+            for (int x = 0; x < 5; x++)
+                for (int y = 0; y < 6; y++)
+                    r += (dayStats[x][y]) ? 1 : 0;   // untested
+            return r;
+        }
+
+        public void excludeDay(int n)
+        {
+            dayStats[n] = new bool[] { false, false, false, false, false, false };
+        }
+
+        public int isStrict(int n)
+        {
+            var v = dayStats[n];
+            return (v[0] && v[1] && v[2] && v[3] && v[4] && v[5]) ? 1 : (v[0] && !v[1] && !v[2] && !v[3] && !v[4] && !v[5]) ? -1 : 0; // if all v's are true 1, are false -1 and 0 if they're mixed
         }
     }
 

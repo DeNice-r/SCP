@@ -41,7 +41,7 @@ namespace Schedule_Calculator_Pro
         public static void SettingsHandle()
         {
             //Перевіряємо, чи існує файл з налаштуваннями, відкриваємо його, якщо він є і створюємо у зворотньому випадку.
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Settings.xlsx") || File.Exists("Settings.xlsx"))
+            if (File.Exists("База даних.xlsx"))
                 GetSettings();
             else if (File.Exists("Дані.xlsx"))
             {
@@ -49,13 +49,15 @@ namespace Schedule_Calculator_Pro
             }
             else
             {
-                MessageBox.Show("Створіть файл з початковими даними і назвіть його Дані.xlsx");
+                MessageBox.Show("Створіть файл з початковими даними і назвіть його Дані.xlsx\n" +
+                                "Типи даних по стовбцях: 1.Викладачі. 2.Групи 3.Предмети 4.Аудиторії");
+                Environment.Exit(1);
             }
         }
 
         private static void GetSettings()
         {
-            Excel excelTemp = new Excel(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Settings.xlsx", 1);
+            Excel excelTemp = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\База даних.xlsx"), 1);
             var t = 0;
             while (excelTemp.BReadCell(t, 0))
             {
@@ -154,14 +156,14 @@ namespace Schedule_Calculator_Pro
             }
 
             excelTemp.close();
-            MessageBox.Show("Завантаження початкових даних завершено.");
+            //MessageBox.Show("Завантаження початкових даних завершено.");
         }
 
         private static void CreateSettings()
         {
-            if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Settings.xlsx"))
+            if (!File.Exists("База даних.xlsx"))
             {
-                Excel excelTemp = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\RawData.xlsx"), 1);
+                Excel excelTemp = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Дані.xlsx"), 1);
 
                 int it = 1, jt = 0;
                 while (excelTemp.BReadCell(it, jt))
@@ -193,7 +195,7 @@ namespace Schedule_Calculator_Pro
 
                 excelTemp.close();
             }
-            Excel excelTemp1 = new Excel(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Settings.xlsx");
+            Excel excelTemp1 = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\База даних.xlsx"));
             List<List<string>> unwritten = new List<List<string>>();
             unwritten.Add(group.Keys.ToList()); unwritten.Add(subject.Keys.ToList()); unwritten.Add(audience.ToList());
             var t = 0;
@@ -264,7 +266,7 @@ namespace Schedule_Calculator_Pro
             excelTemp1.ws.Columns.AutoFit();
             excelTemp1.SaveAs();
             excelTemp1.close();
-            MessageBox.Show("Saving done.");
+            MessageBox.Show("Дані збережено.");
         }
 
         private void SearchHandle(object sender, EventArgs e)
@@ -640,6 +642,11 @@ namespace Schedule_Calculator_Pro
                     Thread.Sleep(250);
                 }
             }
+        }
+
+        private void CoupleExcAnimate()
+        {
+
         }
 
 
@@ -1092,6 +1099,31 @@ namespace Schedule_Calculator_Pro
             temp.Start();
         }
 
+        private void Day_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            CheckBox tbox = (CheckBox)sender;
+            var tbcs = tbox.Content.ToString();
+            if (!tbcs.Contains('/')) {
+                tbox.Content = tbcs + '/';
+            }
+            else {
+                tbox.Content = tbcs.Substring(0, tbcs.Length - 1);
+            }
+            //switch (tbox.Content)
+            //{
+            //    case "Понеділок": ; break;
+            //    case "Вівторок": break;
+            //    case "Середа": break;
+            //    case "Четвер": break;
+            //    case "П'ятниця": break;
+            //}
+        }
+
+        private void Couple_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
 
         // Selection changed callbacks
         private void Search_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -1206,5 +1238,12 @@ namespace Schedule_Calculator_Pro
         {
             donrelsubjname.ItemsSource = subject.Keys.ToArray();
         }
+
+        ~Program()
+        {
+            Excel.Kill("База даних.xlsx");
+            Excel.Kill("Дані.xlsx");
+        }
+
     }
 }
