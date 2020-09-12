@@ -25,6 +25,7 @@ namespace Schedule_Calculator_Pro
         public static Thread SchedGenThread = new Thread(schedule.Start);
         public static Thread SavingThread = new Thread(CreateSettings);
         public static Thread PrimaryFileWorkThread = new Thread(SettingsHandle);
+        public static CheckBox ChosenDay = null;
 
         public Program()
         {
@@ -38,6 +39,8 @@ namespace Schedule_Calculator_Pro
             temp.Start();
         }
 
+
+        #region Settings handlers
         public static void SettingsHandle()
         {
             //Перевіряємо, чи існує файл з налаштуваннями, відкриваємо його, якщо він є і створюємо у зворотньому випадку.
@@ -71,25 +74,29 @@ namespace Schedule_Calculator_Pro
                     don[tmp].relatedAud = excelTemp.ReadCell(t, 1);
                     audience.Add(excelTemp.ReadCell(t, 1));
                 }
-                t++;
-                while (excelTemp.BReadCell(t, 2))
+                if (excelTemp.BReadCell(t, 2))
                 {
-                    var tmp1 = excelTemp.ReadCell(t, 2);       // предмет
+                    don[tmp].setExcludes(excelTemp.ReadCell(t, 2));
+                }
+                t++;
+                while (excelTemp.BReadCell(t, 3))
+                {
+                    var tmp1 = excelTemp.ReadCell(t, 3);       // предмет
                     if (!subject.ContainsKey(tmp1))
                     {
                         subject.Add(tmp1, new Subject(tmp1));
                     }
                     if (!don[tmp].relatedSubjects.Contains(tmp1))
                         don[tmp].relatedSubjects.Add(tmp1);
-                    if (excelTemp.BReadCell(t, 3))
+                    if (excelTemp.BReadCell(t, 4))
                     {
-                        subject[tmp1].relatedAud = excelTemp.ReadCell(t, 3);        // аудитория предмета
-                        audience.Add(excelTemp.ReadCell(t, 3));
+                        subject[tmp1].relatedAud = excelTemp.ReadCell(t, 4);        // аудитория предмета
+                        audience.Add(excelTemp.ReadCell(t, 4));
                     }
                     t++;
-                    while (excelTemp.BReadCell(t, 4))
+                    while (excelTemp.BReadCell(t, 5))
                     {
-                        var tmp2 = excelTemp.ReadCell(t, 4);    // группа
+                        var tmp2 = excelTemp.ReadCell(t, 5);    // группа
                         if (!group.ContainsKey(tmp2))
                         {
                             group.Add(tmp2, new Group(tmp2));
@@ -97,16 +104,16 @@ namespace Schedule_Calculator_Pro
                         if (!group[tmp2].relatedSubjects.ContainsKey(tmp1))
                         {
                             var tmp3 = "";
-                            if (excelTemp.BReadCell(t, 5))
-                                tmp3 = excelTemp.ReadCell(t, 5);            // кол-во пар в семестре
+                            if (excelTemp.BReadCell(t, 6))
+                                tmp3 = excelTemp.ReadCell(t, 6);            // кол-во пар в семестре
                             group[tmp2].SubjValEdit(tmp1, tmp, tmp3);
                         }
                         else if (!group[tmp2].relatedSubjects[tmp1].Contains(tmp))
                             group[tmp2].relatedSubjects[tmp1].Add(tmp);
-                        if (excelTemp.BReadCell(t, 6))
+                        if (excelTemp.BReadCell(t, 7))
                         {
-                            group[tmp2].relatedAud = excelTemp.ReadCell(t, 6);
-                            audience.Add(excelTemp.ReadCell(t, 6));
+                            group[tmp2].relatedAud = excelTemp.ReadCell(t, 7);
+                            audience.Add(excelTemp.ReadCell(t, 7));
                         }
                         t++;
                     }
@@ -201,40 +208,46 @@ namespace Schedule_Calculator_Pro
             var t = 0;
             for (int j = 0; j < don.Count; j++)
             {
-                excelTemp1.WriteToCell(t, 0, don.Keys.ToArray()[j]);
-                excelTemp1.WriteToCell(t, 1, don.Values.ToArray()[j].relatedAud);
+                var cdon = don.Keys.ToArray()[j];
+                var cdonval = don.Values.ToArray()[j];
+                excelTemp1.WriteToCell(t, 0, cdon);
+                excelTemp1.WriteToCell(t, 1, cdonval.relatedAud);
+                excelTemp1.WriteToCell(t, 2, cdonval.getExcludes());
 
-                if (unwritten[2].Contains(don.Values.ToArray()[j].relatedAud))
-                    unwritten[2].Remove(don.Values.ToArray()[j].relatedAud);
+                if (unwritten[2].Contains(cdonval.relatedAud))
+                    unwritten[2].Remove(cdonval.relatedAud);
 
                 t++;
-                for (int k = 0; k < don.Values.ToArray()[j].relatedSubjects.Count; k++)
+                for (int k = 0; k < cdonval.relatedSubjects.Count; k++)
                 {
-                    excelTemp1.WriteToCell(t, 2, don.Values.ToArray()[j].relatedSubjects[k]);
-                    if (unwritten[1].Contains(don.Values.ToArray()[j].relatedSubjects[k]))
-                        unwritten[1].Remove(don.Values.ToArray()[j].relatedSubjects[k]);
+                    var csubj = cdonval.relatedSubjects[k];
+                    excelTemp1.WriteToCell(t, 3, csubj);
+                    if (unwritten[1].Contains(csubj))
+                        unwritten[1].Remove(csubj);
 
-                    if (!subject.ContainsKey(don.Values.ToArray()[j].relatedSubjects[k]))
-                        MessageBox.Show(don.Values.ToArray()[j].relatedSubjects[k]);
+                    if (!subject.ContainsKey(csubj)) // ?
+                        MessageBox.Show("Критична помилка: Цілісність даних порушена.");
 
-                    excelTemp1.WriteToCell(t, 3, subject[don.Values.ToArray()[j].relatedSubjects[k]].relatedAud);
+                    excelTemp1.WriteToCell(t, 4, subject[csubj].relatedAud);
 
-                    if (unwritten[2].Contains(subject[don.Values.ToArray()[j].relatedSubjects[k]].relatedAud))
-                        unwritten[2].Remove(subject[don.Values.ToArray()[j].relatedSubjects[k]].relatedAud);
+                    if (unwritten[2].Contains(subject[csubj].relatedAud))
+                        unwritten[2].Remove(subject[csubj].relatedAud);
                     t++;
                     for (int g = 0; g < group.Count; g++)
                     {
-                        if (group.Values.ToArray()[g].relatedSubjects.ContainsKey(don.Values.ToArray()[j].relatedSubjects[k]) && group.Values.ToArray()[g].relatedSubjects.Values.ToArray().Any(x => x.Contains(don.Keys.ToArray()[j])))
+                        var cgroup = group.Keys.ToArray()[g];
+                        var cgroupval = group.Values.ToArray()[g];
+                        if (cgroupval.relatedSubjects.ContainsKey(csubj) && cgroupval.relatedSubjects.Values.ToArray().Any(x => x.Contains(cdon)))
                         {
-                            excelTemp1.WriteToCell(t, 4, group.Keys.ToArray()[g]);
-                            if (unwritten[0].Contains(group.Keys.ToArray()[g]))
-                                unwritten[0].Remove(group.Keys.ToArray()[g]);
+                            excelTemp1.WriteToCell(t, 5, cgroup);
+                            if (unwritten[0].Contains(cgroup))
+                                unwritten[0].Remove(cgroup);
 
-                            excelTemp1.WriteToCell(t, 5, group.Values.ToArray()[g].relatedSubjects[don.Values.ToArray()[j].relatedSubjects[k]][1].ToString());
-                            excelTemp1.WriteToCell(t, 6, group.Values.ToArray()[g].relatedAud);
+                            excelTemp1.WriteToCell(t, 6, cgroupval.relatedSubjects[csubj][1].ToString());
+                            excelTemp1.WriteToCell(t, 7, cgroupval.relatedAud);
 
-                            if (unwritten[2].Contains(group.Values.ToArray()[g].relatedAud))
-                                unwritten[2].Remove(group.Values.ToArray()[g].relatedAud);
+                            if (unwritten[2].Contains(cgroupval.relatedAud))
+                                unwritten[2].Remove(cgroupval.relatedAud);
 
                             t++;
                         }
@@ -283,9 +296,30 @@ namespace Schedule_Calculator_Pro
             if (!Search.IsDropDownOpen)
                 Search.IsDropDownOpen = true;
         }
+        #endregion
 
+        #region Secondary funcs
+        public static int DaynameToNum(string s)
+        {
+            if (s[s.Length - 1] == '/')
+                 s = s.Substring(0, s.Length - 1);
+            int n = 0;
+            switch (s)
+            {
+                case "Вівторок":
+                    n = 1; break;
+                case "Середа":
+                    n = 2; break;
+                case "Четвер":
+                    n = 3; break;
+                case "П'ятниця":
+                    n = 4; break;
+            }
+            return n;
+        }
+        #endregion
 
-        //       Animations
+        #region Animations
         private void MenuAnimate()
         {
             var n = -0.16;
@@ -363,23 +397,28 @@ namespace Schedule_Calculator_Pro
         {
             if (donname.IsVisible)
             {
-                //DoubleAnimation anim1 = new DoubleAnimation(0, TimeSpan.FromMilliseconds(500));
-                //donname.BeginAnimation(TextBox.OpacityProperty, anim1);
-                //donrelatedsubjects.BeginAnimation(TextBox.OpacityProperty, anim1);
-                //deletedon.BeginAnimation(TextBox.OpacityProperty, anim1);
-                //newdonrelsubj.BeginAnimation(TextBox.OpacityProperty, anim1);
                 for (double x = .98; x >= 0; x -= .02)
                 {
                     donname.Dispatcher.Invoke(delegate { donname.Opacity = x; });
                     donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Opacity = x; });
                     deletedon.Dispatcher.Invoke(delegate { deletedon.Opacity = x; });
                     newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Opacity = x; });
+                    dond1.Dispatcher.Invoke(delegate { dond1.Opacity = x; });
+                    dond2.Dispatcher.Invoke(delegate { dond2.Opacity = x; });
+                    dond3.Dispatcher.Invoke(delegate { dond3.Opacity = x; });
+                    dond4.Dispatcher.Invoke(delegate { dond4.Opacity = x; });
+                    dond5.Dispatcher.Invoke(delegate { dond5.Opacity = x; });
                     Thread.Sleep(2);
                 }
                 donname.Dispatcher.Invoke(delegate { donname.Visibility = Visibility.Hidden; donname.Text = ""; });
                 donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Visibility = Visibility.Hidden; donrelatedsubjects.ItemsSource = null; });
                 deletedon.Dispatcher.Invoke(delegate { deletedon.Visibility = Visibility.Hidden; });
                 newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Visibility = Visibility.Hidden; });
+                dond1.Dispatcher.Invoke(delegate { dond1.Visibility = Visibility.Hidden; });
+                dond2.Dispatcher.Invoke(delegate { dond2.Visibility = Visibility.Hidden; });
+                dond3.Dispatcher.Invoke(delegate { dond3.Visibility = Visibility.Hidden; });
+                dond4.Dispatcher.Invoke(delegate { dond4.Visibility = Visibility.Hidden; });
+                dond5.Dispatcher.Invoke(delegate { dond5.Visibility = Visibility.Hidden; });
             }
             else
             {
@@ -387,18 +426,23 @@ namespace Schedule_Calculator_Pro
                 donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Visibility = Visibility.Visible; });
                 deletedon.Dispatcher.Invoke(delegate { deletedon.Visibility = Visibility.Visible; });
                 newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Visibility = Visibility.Visible; });
+                dond1.Dispatcher.Invoke(delegate { dond1.Visibility = Visibility.Visible; });
+                dond2.Dispatcher.Invoke(delegate { dond2.Visibility = Visibility.Visible; });
+                dond3.Dispatcher.Invoke(delegate { dond3.Visibility = Visibility.Visible; });
+                dond4.Dispatcher.Invoke(delegate { dond4.Visibility = Visibility.Visible; });
+                dond5.Dispatcher.Invoke(delegate { dond5.Visibility = Visibility.Visible; });
 
-                //DoubleAnimation anim1 = new DoubleAnimation(1, TimeSpan.FromMilliseconds(500));
-                //donname.BeginAnimation(TextBox.OpacityProperty, anim1);
-                //donrelatedsubjects.BeginAnimation(TextBox.OpacityProperty, anim1);
-                //deletedon.BeginAnimation(TextBox.OpacityProperty, anim1);
-                //newdonrelsubj.BeginAnimation(TextBox.OpacityProperty, anim1);
                 for (double x = .02; x < 1; x += .02)
                 {
                     donname.Dispatcher.Invoke(delegate { donname.Opacity = x; });
                     donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Opacity = x; });
                     deletedon.Dispatcher.Invoke(delegate { deletedon.Opacity = x; });
                     newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Opacity = x; });
+                    dond1.Dispatcher.Invoke(delegate { dond1.Opacity = x; });
+                    dond2.Dispatcher.Invoke(delegate { dond2.Opacity = x; });
+                    dond3.Dispatcher.Invoke(delegate { dond3.Opacity = x; });
+                    dond4.Dispatcher.Invoke(delegate { dond4.Opacity = x; });
+                    dond5.Dispatcher.Invoke(delegate { dond5.Opacity = x; });
                     Thread.Sleep(2);
                 }
             }
@@ -646,14 +690,52 @@ namespace Schedule_Calculator_Pro
 
         private void CoupleExcAnimate()
         {
+            if (donc1.IsVisible)
+            {
+                for (double x = .98; x >= 0; x -= .02)
+                {
+                    donc1.Dispatcher.Invoke(delegate { donc1.Opacity = x; });
+                    donc2.Dispatcher.Invoke(delegate { donc2.Opacity = x; });
+                    donc3.Dispatcher.Invoke(delegate { donc3.Opacity = x; });
+                    donc4.Dispatcher.Invoke(delegate { donc4.Opacity = x; });
+                    donc5.Dispatcher.Invoke(delegate { donc5.Opacity = x; });
+                    donc6.Dispatcher.Invoke(delegate { donc6.Opacity = x; });
+                    Thread.Sleep(2);
+                }
+                donc1.Dispatcher.Invoke(delegate { donc1.Visibility = Visibility.Hidden; });
+                donc2.Dispatcher.Invoke(delegate { donc2.Visibility = Visibility.Hidden; });
+                donc3.Dispatcher.Invoke(delegate { donc3.Visibility = Visibility.Hidden; });
+                donc4.Dispatcher.Invoke(delegate { donc4.Visibility = Visibility.Hidden; });
+                donc5.Dispatcher.Invoke(delegate { donc5.Visibility = Visibility.Hidden; });
+                donc6.Dispatcher.Invoke(delegate { donc6.Visibility = Visibility.Hidden; });
+            }
+            else
+            {
+                donc1.Dispatcher.Invoke(delegate { donc1.Visibility = Visibility.Visible; });
+                donc2.Dispatcher.Invoke(delegate { donc2.Visibility = Visibility.Visible; });
+                donc3.Dispatcher.Invoke(delegate { donc3.Visibility = Visibility.Visible; });
+                donc4.Dispatcher.Invoke(delegate { donc4.Visibility = Visibility.Visible; });
+                donc5.Dispatcher.Invoke(delegate { donc5.Visibility = Visibility.Visible; });
+                donc6.Dispatcher.Invoke(delegate { donc6.Visibility = Visibility.Visible; });
 
+                for (double x = .02; x < 1; x += .02)
+                {
+                    donc1.Dispatcher.Invoke(delegate { donc1.Opacity = x; });
+                    donc2.Dispatcher.Invoke(delegate { donc2.Opacity = x; });
+                    donc3.Dispatcher.Invoke(delegate { donc3.Opacity = x; });
+                    donc4.Dispatcher.Invoke(delegate { donc4.Opacity = x; });
+                    donc5.Dispatcher.Invoke(delegate { donc5.Opacity = x; });
+                    donc6.Dispatcher.Invoke(delegate { donc6.Opacity = x; });
+                    Thread.Sleep(2);
+                }
+            }
         }
+        #endregion
 
 
+        #region Callbacks
 
-        //          Callbacks
-
-        // Click callbacks
+        #region Click callbacks
         private void Menu_Click(object sender, RoutedEventArgs e)
         {
             if (!MenuX.IsDefault)
@@ -833,7 +915,7 @@ namespace Schedule_Calculator_Pro
             var temp = new Thread(DonAnimate);
             temp.IsBackground = true;
             temp.Start();
-            
+
         }
 
         private void donrelsubjdel_Click(object sender, RoutedEventArgs e)
@@ -977,7 +1059,7 @@ namespace Schedule_Calculator_Pro
                     temp.Values.ToArray()[grouprelatedinfo.SelectedIndex][2] = editseconddonname.Text;
                 else if (editseconddonname.Text != "")
                     temp.Values.ToArray()[grouprelatedinfo.SelectedIndex].Add(editseconddonname.Text);
-                if(group[Search.SelectedItem.ToString()].relatedSubjects.Keys.ToArray()[grouprelatedinfo.SelectedIndex] != editsubjname.Text)
+                if (group[Search.SelectedItem.ToString()].relatedSubjects.Keys.ToArray()[grouprelatedinfo.SelectedIndex] != editsubjname.Text)
                 {
                     group[Search.SelectedItem.ToString()].relatedSubjects.Add(editsubjname.Text, new List<string>(group[Search.SelectedItem.ToString()].relatedSubjects.Values.ToArray()[grouprelatedinfo.SelectedIndex]));
                     group[Search.SelectedItem.ToString()].relatedSubjects.Remove(group[Search.SelectedItem.ToString()].relatedSubjects.Keys.ToArray()[grouprelatedinfo.SelectedIndex]);
@@ -1099,16 +1181,47 @@ namespace Schedule_Calculator_Pro
             temp.Start();
         }
 
-        private void Day_DoubleClick(object sender, MouseButtonEventArgs e)
+        private void Day_RightClick(object sender, MouseButtonEventArgs e)
         {
+            // проверить / в остальных, убрать, не вызывать анимэйшон если уже показаны чекбоксы
             CheckBox tbox = (CheckBox)sender;
+            //MessageBox.Show((tbox == dond1).ToString());
             var tbcs = tbox.Content.ToString();
-            if (!tbcs.Contains('/')) {
+            if (!tbcs.Contains('/'))
+            {
+                if (ChosenDay != null)
+                {
+                    var cdcs = ChosenDay.Content.ToString();
+                    ChosenDay.Content = cdcs.Substring(0, cdcs.Length - 1);
+                }
+                ChosenDay = tbox;
                 tbox.Content = tbcs + '/';
+                var curday = don[donname.Text].dayStats[DaynameToNum(tbcs)];
+                donc1.IsChecked = curday[0];
+                donc2.IsChecked = curday[1];
+                donc3.IsChecked = curday[2];
+                donc4.IsChecked = curday[3];
+                donc5.IsChecked = curday[4];
+                donc6.IsChecked = curday[5];
+                if (!donc1.IsVisible)
+                {
+                    var temp1 = new Thread(CoupleExcAnimate);
+                    temp1.IsBackground = true;
+                    temp1.Start();
+                }
             }
-            else {
+            else
+            {
+                ChosenDay = null;
+                if (donc1.IsVisible)
+                {
+                    var temp1 = new Thread(CoupleExcAnimate);
+                    temp1.IsBackground = true;
+                    temp1.Start();
+                }
                 tbox.Content = tbcs.Substring(0, tbcs.Length - 1);
             }
+
             //switch (tbox.Content)
             //{
             //    case "Понеділок": ; break;
@@ -1121,26 +1234,48 @@ namespace Schedule_Calculator_Pro
 
         private void Couple_Click(object sender, RoutedEventArgs e)
         {
-
+            var curday = don[donname.Text].dayStats[DaynameToNum(ChosenDay.Content.ToString())];
+            var cbox = (CheckBox)sender;
+            curday[Convert.ToInt32(cbox.Uid)-1] = (bool)cbox.IsChecked;
         }
 
+        private void dond_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox cbox = (CheckBox)sender;
+            if (Convert.ToBoolean(cbox.IsChecked))
+            {
+                don[donname.Text].includeDay(cbox.Content.ToString());
+            }
+            else
+            {
+                don[donname.Text].excludeDay(cbox.Content.ToString());
+            }
+        }
+        #endregion
 
-        // Selection changed callbacks
+        #region Selection changed callbacks
         private void Search_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            if (don.Keys.ToArray().Contains(Search.SelectedItem))
+            var sel = Search.SelectedItem;
+            if (don.Keys.ToArray().Contains(sel))
             {
+                var seldon = don[sel.ToString()];
                 if (!donname.IsVisible)
                 {
                     var temp = new Thread(DonAnimate);
                     temp.IsBackground = true;
                     temp.Start();
                 }
-                donrelatedsubjects.ItemsSource= don[Search.SelectedItem.ToString()].relatedSubjects;
+                donrelatedsubjects.ItemsSource = seldon.relatedSubjects;
                 donrelatedsubjects.Columns[0].Width = 320;
-                donname.Text = Search.SelectedItem.ToString();
+                donname.Text = sel.ToString();
+                dond1.IsChecked = seldon.possDays[0];
+                dond2.IsChecked = seldon.possDays[1];
+                dond3.IsChecked = seldon.possDays[2];
+                dond4.IsChecked = seldon.possDays[3];
+                dond5.IsChecked = seldon.possDays[4];
             }
-            else if (group.Keys.ToArray().Contains(Search.SelectedItem))
+            else if (group.Keys.ToArray().Contains(sel))
             {
                 if (!groupname.IsVisible)
                 {
@@ -1148,7 +1283,7 @@ namespace Schedule_Calculator_Pro
                     temp.IsBackground = true;
                     temp.Start();
                 }
-                var temp1 = group[Search.SelectedItem.ToString()].relatedSubjects;
+                var temp1 = group[sel.ToString()].relatedSubjects;
                 List<List<string>> infoset = new List<List<string>>();
                 for (int x = 0; x < temp1.Count; x++)
                 {
@@ -1156,14 +1291,14 @@ namespace Schedule_Calculator_Pro
                     infoset[x].AddRange(new List<string>() { "", "", "", "" });
                     infoset[x][0] = temp1.Keys.ToArray()[x];
                     for (int y = 1; y <= temp1.Values.ToArray()[x].Count; y++)
-                        infoset[x][y] = temp1.Values.ToArray()[x][y-1];
+                        infoset[x][y] = temp1.Values.ToArray()[x][y - 1];
                 }
                 grouprelatedinfo.ItemsSource = infoset;
-                groupname.Text = Search.SelectedItem.ToString();
-                grouprelaud.Text = group[Search.SelectedItem.ToString()].relatedAud;
-                groupstudyingweeks.Text = group[Search.SelectedItem.ToString()].StudyingWeeks.ToString();
+                groupname.Text = sel.ToString();
+                grouprelaud.Text = group[sel.ToString()].relatedAud;
+                groupstudyingweeks.Text = group[sel.ToString()].StudyingWeeks.ToString();
             }
-            else if (subject.Keys.ToArray().Contains(Search.SelectedItem))
+            else if (subject.Keys.ToArray().Contains(sel))
             {
                 if (!subjectname.IsVisible)
                 {
@@ -1171,10 +1306,10 @@ namespace Schedule_Calculator_Pro
                     temp.IsBackground = true;
                     temp.Start();
                 }
-                subjectname.Text = subject[Search.SelectedItem.ToString()].subjectName;
-                subjectrelaud.Text = subject[Search.SelectedItem.ToString()].relatedAud;
+                subjectname.Text = subject[sel.ToString()].subjectName;
+                subjectrelaud.Text = subject[sel.ToString()].relatedAud;
             }
-            else if(audience.Contains(Search.SelectedItem))
+            else if (audience.Contains(sel))
             {
                 if (!audname.IsVisible)
                 {
@@ -1182,7 +1317,7 @@ namespace Schedule_Calculator_Pro
                     temp.IsBackground = true;
                     temp.Start();
                 }
-                audname.Text = Search.SelectedItem.ToString();
+                audname.Text = sel.ToString();
             }
         }
 
@@ -1214,15 +1349,16 @@ namespace Schedule_Calculator_Pro
         private void donrelatedsubjects_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             var tmp = Mouse.GetPosition(System.Windows.Application.Current.MainWindow);
-            if (!donrelsubjdel.IsVisible && tmp.X >= 213 && tmp.X < 741 && tmp.Y >= 219 && tmp.Y < 393) {
+            if (!donrelsubjdel.IsVisible && tmp.X >= 213 && tmp.X < 741 && tmp.Y >= 219 && tmp.Y < 393)
+            {
                 var temp = new Thread(DonRelSubjDelAnimate);
                 temp.IsBackground = true;
                 temp.Start();
             }
         }
+        #endregion
 
-
-        // ?
+        #region Database update callbacks
         private void groupaddcouple_dbudon(object sender, DependencyPropertyChangedEventArgs e)
         {
             editdonname.ItemsSource = don.Keys.ToArray();
@@ -1238,12 +1374,9 @@ namespace Schedule_Calculator_Pro
         {
             donrelsubjname.ItemsSource = subject.Keys.ToArray();
         }
+        #endregion
 
-        ~Program()
-        {
-            Excel.Kill("База даних.xlsx");
-            Excel.Kill("Дані.xlsx");
-        }
+        #endregion
 
     }
 }

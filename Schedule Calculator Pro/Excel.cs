@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using _Excel = Microsoft.Office.Interop.Excel;
 
 namespace Schedule_Calculator_Pro
@@ -15,7 +16,6 @@ namespace Schedule_Calculator_Pro
         public Worksheet ws;
         public Excel(string path)
         {
-            Kill(path);
             this.path = path;
             excel.SheetsInNewWorkbook = 1;
             wb = excel.Workbooks.Add(1);
@@ -23,7 +23,6 @@ namespace Schedule_Calculator_Pro
         }
         public Excel(string path, int sheet)
         {
-            Kill(path);
             this.path = path;
             wb = excel.Workbooks.Open(path);
             ws = wb.Worksheets[sheet];
@@ -33,7 +32,7 @@ namespace Schedule_Calculator_Pro
             excel.Quit();
             System.Runtime.InteropServices.Marshal.ReleaseComObject(wb);
             System.Runtime.InteropServices.Marshal.ReleaseComObject(excel);
-            Kill(path);
+            KillAllInteropProcesses();
         }
 
         public string ReadCell(int i, int j)
@@ -63,13 +62,16 @@ namespace Schedule_Calculator_Pro
                 return false;
         }
 
-        public static void Kill(string excelFileName) // убиваем процесс по имени файла
+        public static void KillAllInteropProcesses() // убиваем процесс по имени файла
         {
             var processes = from p in Process.GetProcessesByName("EXCEL") select p;
-
             foreach (var process in processes)
-                if (process.MainWindowTitle == "Microsoft Excel - " + excelFileName)
+            {
+                if (process.MainWindowTitle == "")
+                {
                     process.Kill();
+                }
+            }
         }
     }
 }
