@@ -60,6 +60,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Don.cs" />
+    <Compile Include="Group.cs" />
     <Compile Include="Schedule.cs" />
     <Page Include="Program.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -70,7 +72,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Excel.cs" />
-    <Compile Include="misc.cs" />
+    <Compile Include="Subject.cs" />
     <Compile Include="Program.xaml.cs">
       <DependentUpon>Program.xaml</DependentUpon>
       <SubType>Code</SubType>

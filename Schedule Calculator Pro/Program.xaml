@@ -13,7 +13,7 @@
                 <GradientStop Color="#FFFFFF64" Offset="1" />
             </LinearGradientBrush>
         </Grid.Background>
-        <ComboBox x:Name="Search" FontSize="17" MouseLeftButtonUp="SearchHandle" PreviewMouseLeftButtonDown="SearchHandle" IsTextSearchEnabled="false" Margin="30,0,0,0" VerticalAlignment="Top" Height="30" IsEditable="True" PreviewKeyUp="SearchHandle" SelectionChanged="Search_SelectionChanged" BorderBrush="White" />
+        <ComboBox x:Name="Search" FontSize="17" PreviewMouseLeftButtonUp="SearchHandle1" PreviewKeyUp="SearchHandle2" IsTextSearchEnabled="false" Margin="30,0,0,0" VerticalAlignment="Top" Height="30" IsEditable="True" SelectionChanged="Search_SelectionChanged" BorderBrush="White" />
         <Line X1="30.5" Y1="0" X2="30.5" Y2="30" StrokeThickness="1" Stroke="White" Grid.RowSpan="2" />
         <Line X1="30.5" Y1="0.5" X2="950.5" Y2="0.5" StrokeThickness="1" Stroke="White" Grid.RowSpan="2" />
         <Line X1="30.5" Y1="29.5" X2="950.5" Y2="29.5" StrokeThickness="1" Stroke="White" Grid.RowSpan="2" />
@@ -49,15 +49,15 @@
             </Button.Background>
         </Button>
         <!-- -->
-        <DataGrid x:Name="donrelatedsubjects" IsReadOnly="True" SelectionChanged="donrelatedsubjects_SelectionChanged" HorizontalAlignment="Left" Height="100" Margin="297,244,0,0" AutoGenerateColumns="False" VerticalAlignment="Top" Width="350" Visibility="Visible">
+        <DataGrid x:Name="donrelatedsubjects" IsReadOnly="True" SelectionChanged="donrelatedsubjects_SelectionChanged" HorizontalAlignment="Left" Height="100" Margin="297,244,0,0" AutoGenerateColumns="False" VerticalAlignment="Top" Width="350" Visibility="Hidden">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Предмети" Binding="{Binding}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="newdonrelsubj" Click="newdonrelsubj_Click" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Margin="621,244,0,0" Background="White" BorderBrush="{x:Null}" Height="25" Width="26" Visibility="Visible">
+        <Button x:Name="newdonrelsubj" Click="newdonrelsubj_Click" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Margin="621,244,0,0" Background="White" BorderBrush="{x:Null}" Height="25" Width="26" Visibility="Hidden">
             <Image Source="Images/add.png" />
         </Button>
-        <ComboBox x:Name="donrelsubjname" IsVisibleChanged="donrelsubjname_dbudrs" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" Width="290" Height="27" Margin="298,215,0,0" Background="{x:Null}" Foreground="Black" Visibility="Visible">
+        <ComboBox x:Name="donrelsubjname" IsVisibleChanged="donrelsubjname_dbudrs" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" Width="291" Height="27" Margin="297,215,0,0" Background="{x:Null}" Foreground="Black" Visibility="Hidden">
             <ComboBox.BorderBrush>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFFF3E53" Offset="0" />
@@ -65,32 +65,34 @@
                 </LinearGradientBrush>
             </ComboBox.BorderBrush>
         </ComboBox>
-        <TextBox x:Name="donname" HorizontalAlignment="Left" Height="25" FontSize="18" Margin="297,188,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="321" Visibility="Visible" />
-        <Button x:Name="deletedon" Click="deletedon_Click" Height="25" Width="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="622,188,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" Visibility="Visible">
+        <TextBox x:Name="donname" HorizontalAlignment="Left" Height="25" FontSize="18" Margin="297,188,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="251" Visibility="Hidden" />
+        <Button x:Name="deletedon" Click="deletedon_Click" Height="25" Width="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="622,188,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" Visibility="Hidden">
             <Image Source="Images/delete.png" />
         </Button>
-        <Button x:Name="donrelsubjok" Click="donrelsubjok_Click" Height="26" Width="26" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="592,215,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" Visibility="Visible">
+        <Button x:Name="donrelsubjok" Click="donrelsubjok_Click" Height="26" Width="26" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="592,215,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" Visibility="Hidden">
             <Image Source="Images/ok.png" />
         </Button>
-        <Button x:Name="donrelsubjcancel" Height="26" Width="26" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="620,215,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" Visibility="Visible" Click="donrelsubjcancel_Click">
+        <Button x:Name="donrelsubjcancel" Height="26" Width="26" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="620,215,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}" Visibility="Hidden" Click="donrelsubjcancel_Click">
             <Image Source="Images/xcircled.png" />
         </Button>
-        <Button x:Name="donrelsubjdel" Click="donrelsubjdel_Click" Height="24" Width="26" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="597,244,0,0" Background="White" BorderBrush="{x:Null}" Foreground="{x:Null}" Visibility="Visible">
+        <Button x:Name="donrelsubjdel" Click="donrelsubjdel_Click" Height="24" Width="26" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="597,244,0,0" Background="White" BorderBrush="{x:Null}" Foreground="{x:Null}" Visibility="Hidden">
             <Image Source="Images/delete.png" />
         </Button>
         <!--Visibility="Hidden" Opacity="0"-->
-        <CheckBox Content="Понеділок" Click="dond_Click" x:Name="dond1" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,203,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <CheckBox Content="Вівторок"  Click="dond_Click" x:Name="dond2" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,223,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <CheckBox Content="Середа"    Click="dond_Click" x:Name="dond3" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,243,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <CheckBox Content="Четвер"    Click="dond_Click" x:Name="dond4" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,263,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <CheckBox Content="П'ятниця"  Click="dond_Click" x:Name="dond5" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,283,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <CheckBox Content="Понеділок" ToolTip="Викладач може провести пару у понеділок?" Click="dond_Click" x:Name="dond1" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,203,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden"/>
+        <CheckBox Content="Вівторок"  ToolTip="Викладач може провести пару у вівторок?"  Click="dond_Click" x:Name="dond2" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,223,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden"/>
+        <CheckBox Content="Середа"    ToolTip="Викладач може провести пару у середу?"    Click="dond_Click" x:Name="dond3" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,243,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden"/>
+        <CheckBox Content="Четвер"    ToolTip="Викладач може провести пару у четвер?"    Click="dond_Click" x:Name="dond4" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,263,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden"/>
+        <CheckBox Content="П'ятниця"  ToolTip="Викладач може провести пару у п'ятницю?"  Click="dond_Click" x:Name="dond5" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,283,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden"/>
 
-        <CheckBox x:Uid="1" Content="" x:Name="donc1" ToolTip="1 пара" Click="Couple_Click" IsChecked="True" HorizontalAlignment="Left" Margin="164,313,0,0" VerticalAlignment="Top" />
-        <CheckBox x:Uid="2" Content="" x:Name="donc2" ToolTip="2 пара" Click="Couple_Click" IsChecked="True" HorizontalAlignment="Left" Margin="184,313,0,0" VerticalAlignment="Top" />
-        <CheckBox x:Uid="3" Content="" x:Name="donc3" ToolTip="3 пара" Click="Couple_Click" IsChecked="True" HorizontalAlignment="Left" Margin="204,313,0,0" VerticalAlignment="Top" />
-        <CheckBox x:Uid="4" Content="" x:Name="donc4" ToolTip="4 пара" Click="Couple_Click" IsChecked="True" HorizontalAlignment="Left" Margin="224,313,0,0" VerticalAlignment="Top" />
-        <CheckBox x:Uid="5" Content="" x:Name="donc5" ToolTip="5 пара" Click="Couple_Click" IsChecked="True" HorizontalAlignment="Left" Margin="244,313,0,0" VerticalAlignment="Top" />
-        <CheckBox x:Uid="6" Content="" x:Name="donc6" ToolTip="6 пара" Click="Couple_Click" IsChecked="True" HorizontalAlignment="Left" Margin="264,313,0,0" VerticalAlignment="Top" />
+        <CheckBox x:Uid="1" Content="" ToolTip="Викладач може провести першу пару?"    x:Name="donc1" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="164,313,0,0" VerticalAlignment="Top" Visibility="Hidden" />
+        <CheckBox x:Uid="2" Content="" ToolTip="Викладач може провести другу пару?"    x:Name="donc2" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="184,313,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+        <CheckBox x:Uid="3" Content="" ToolTip="Викладач може провести третю пару?"    x:Name="donc3" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="204,313,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+        <CheckBox x:Uid="4" Content="" ToolTip="Викладач може провести четверту пару?" x:Name="donc4" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="224,313,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+        <CheckBox x:Uid="5" Content="" ToolTip="Викладач може провести п'яту пару?"    x:Name="donc5" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="244,313,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+        <CheckBox x:Uid="6" Content="" ToolTip="Викладач може провести шосту пару?"    x:Name="donc6" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="264,313,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+
+        <ComboBox x:Name="donrelaud" SelectionChanged="donrelaud_SelectionChanged" Visibility="Hidden" HorizontalAlignment="Left" Margin="553,188,0,0" VerticalAlignment="Top" Width="69" Height="25"/>
         <!--  -->
         <Button x:Name="save" Height="30" Width="30" Click="save_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="884,471,0,0" BorderBrush="{x:Null}" Foreground="{x:Null}" Background="{x:Null}">
             <Image Source="Images/save.png" />

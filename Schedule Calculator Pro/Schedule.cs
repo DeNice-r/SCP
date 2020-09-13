@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
@@ -21,16 +22,18 @@ namespace Schedule_Calculator_Pro
         public void Start()
         {
             PreGen();
-            for (int don = 0; don < Program.don.Count; don++)
+            var pdon = Program.don;
+            var pgroup = Program.group;
+            for (int don = 0; don < pdon.Count; don++)
             {
                 var tgroups = new List<int>();
                 var tlist = new List<List<int>>();
-                for (int group = 0; group < Program.group.Count; group++)
+                for (int group = 0; group < pgroup.Count; group++)
                 {
-                    var tgroup = Program.group.Values.ToArray()[group];
+                    var tgroup = pgroup.Values.ToArray()[group];
                     for (int x = 0; x < tgroup.relatedSubjects.Count; x++)
                     {
-                        if (tgroup.relatedSubjects.Values.ToArray()[x][0] == Program.don.Values.ToArray()[don].donName)
+                        if (tgroup.relatedSubjects.Values.ToArray()[x][0] == pdon.Values.ToArray()[don].donName)
                         {
                             if (!tgroups.Contains(group))
                                 tgroups.Add(group);
@@ -42,29 +45,31 @@ namespace Schedule_Calculator_Pro
                 }
                 for (int day = 0; day < 5; day++)
                 {
+
                     for (int couple = 0; couple < 6; couple++)
                     {
-                        if (scheduleFree[day][couple][0].Contains(Program.don.Keys.ToArray()[don]))
+                        // Если преподаватель свободен в этот день на этой паре
+                        if (scheduleFree[day][couple][0].Contains(pdon.Keys.ToArray()[don]))
                             for (int group = 0; group < tgroups.Count; group++)
                             {
-                                if (Program.group.Values.ToArray()[tgroups[group]].couplesXdayGet(day) <= couple || schedule[tgroups[group]][day][couple].Count != 0)
+                                if (pgroup.Values.ToArray()[tgroups[group]].couplesXdayGet(day) <= couple || schedule[tgroups[group]][day][couple].Count != 0)
                                     continue;
                                 for (int subj = 0; subj < tlist[group].Count; subj++)
-                                    if (Convert.ToInt32(Program.group.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][1]) > 0)
+                                    if (Convert.ToInt32(pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][1]) > 0)
                                     {
-                                        schedule[tgroups[group]][day][couple].Add(Program.group.Values.ToArray()[tgroups[group]].relatedSubjects.Keys.ToArray()[tlist[group][subj]]); // Предмет
-                                        schedule[tgroups[group]][day][couple].Add(Program.don.Keys.ToArray()[don]); // Преподаватель
-                                        var b = Program.group.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]].Count == 3 && Program.group.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][2] != "";
+                                        schedule[tgroups[group]][day][couple].Add(pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Keys.ToArray()[tlist[group][subj]]); // Предмет
+                                        schedule[tgroups[group]][day][couple].Add(pdon.Keys.ToArray()[don]); // Преподаватель
+                                        var b = pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]].Count == 3 && pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][2] != "";
                                         if (b)
                                         {
-                                            schedule[tgroups[group]][day][couple].Add(Program.group.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][2]);
-                                            scheduleFree[day][couple][0].Remove(Program.group.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][2]);
+                                            schedule[tgroups[group]][day][couple].Add(pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][2]);
+                                            scheduleFree[day][couple][0].Remove(pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][2]);
                                         }
-                                        schedule[tgroups[group]][day][couple].Add(getAud(day, couple, Program.group.Values.ToArray()[tgroups[group]], Program.group.Values.ToArray()[tgroups[group]].relatedSubjects.Keys.ToArray()[tlist[group][subj]], 0)); // Аудитория
+                                        schedule[tgroups[group]][day][couple].Add(getAud(day, couple, pgroup.Values.ToArray()[tgroups[group]], pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Keys.ToArray()[tlist[group][subj]], 0)); // Аудитория
                                         if (b)
-                                            schedule[tgroups[group]][day][couple].Add(getAud(day, couple, Program.group.Values.ToArray()[tgroups[group]], Program.group.Values.ToArray()[tgroups[group]].relatedSubjects.Keys.ToArray()[tlist[group][subj]], 0)); // Аудитория
-                                        scheduleFree[day][couple][0].Remove(Program.don.Keys.ToArray()[don]);
-                                        Program.group.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][1] = (Convert.ToInt32(Program.group.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][1]) - 16).ToString();
+                                            schedule[tgroups[group]][day][couple].Add(getAud(day, couple, pgroup.Values.ToArray()[tgroups[group]], pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Keys.ToArray()[tlist[group][subj]], 0)); // Аудитория
+                                        scheduleFree[day][couple][0].Remove(pdon.Keys.ToArray()[don]);
+                                        pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][1] = (Convert.ToInt32(pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][1]) - 16).ToString();
                                         group = 10000;
                                         break;
                                     }
@@ -118,6 +123,8 @@ namespace Schedule_Calculator_Pro
         {
             scheduleFree = new List<List<List<List<string>>>>();
             schedule = new List<List<List<List<string>>>>();
+            var donk = Program.don.Keys.ToList();
+            var donv = Program.don.Values.ToList();
             for (int _day = 0; _day < 5; _day++)
             {
                 scheduleFree.Add(new List<List<List<string>>>());
@@ -126,7 +133,13 @@ namespace Schedule_Calculator_Pro
 
                     scheduleFree[_day].Add(new List<List<string>>());
                     scheduleFree[_day][_couple].Add(new List<string>());
-                    scheduleFree[_day][_couple][0] = Program.don.Keys.ToList();
+                    for (int don = 0; don < donk.Count; don++)
+                    {
+                        if (donv[don].possDays[_day] && donv[don].dayStats[_day][_couple])
+                        {
+                            scheduleFree[_day][_couple][0].Add(donk[don]);
+                        }
+                    }
                     scheduleFree[_day][_couple].Add(new List<string>());
                     scheduleFree[_day][_couple][1] = Program.audience.ToList();
                 }
@@ -150,11 +163,9 @@ namespace Schedule_Calculator_Pro
             for (int _course = 0; _course < 4; _course++)
             {
 
-                var xcl = new Excel(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Розклад " + (_course + 1) + " курс.xlsx");
+                var xcl = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Розклад " + (_course + 1) + " курс.xlsx"));
                 var col = 2;
                 var row = 1;
-                var mrow = 0;
-                var mcol = 0;
                 var mxcpl = new List<int>() { 0, 0, 0, 0, 0 };
 
                 for (int dy = 0; dy < 5; dy++)
@@ -366,7 +377,7 @@ namespace Schedule_Calculator_Pro
                 xcl.SaveAs();
                 xcl.close();
             }
-            Excel xcl1 = new Excel(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Вільні викладачі.xlsx");
+            Excel xcl1 = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Вільні викладачі.xlsx"));
             var xrow = 1;
             var xcol = 0;
             var xrowt = 0;
@@ -448,7 +459,7 @@ namespace Schedule_Calculator_Pro
             xcl1.SaveAs();
             xcl1.close();
 
-            xcl1 = new Excel(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Вільні аудиторії.xlsx");
+            xcl1 = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Вільні аудиторії.xlsx"));
             xcol = 0;
             xrow = 1;
             xrowt = 0;
@@ -544,26 +555,27 @@ namespace Schedule_Calculator_Pro
             return outp;
         }
 
-        private int func1(List<int> inp, int crs, int dy)
-        {
-            var t = 5;
-            while (inp[t] == 0)
-                t--;
-            return t;
-        }
+        // ?
+        //private int func1(List<int> inp, int crs, int dy)
+        //{
+        //    var t = 5;
+        //    while (inp[t] == 0)
+        //        t--;
+        //    return t;
+        //}
 
-        private int func2(List<List<int>> inp)
-        {
-            var outp = 0;
+        //private int func2(List<List<int>> inp)
+        //{
+        //    var outp = 0;
 
-            for (int x = 0; x < inp.Count; x++)
-            {
-                for (int y = 0; y < inp[x].Count; y++)
-                {
-                    outp += inp[x][y];
-                }
-            }
-            return outp;
-        }
+        //    for (int x = 0; x < inp.Count; x++)
+        //    {
+        //        for (int y = 0; y < inp[x].Count; y++)
+        //        {
+        //            outp += inp[x][y];
+        //        }
+        //    }
+        //    return outp;
+        //}
     }
 }

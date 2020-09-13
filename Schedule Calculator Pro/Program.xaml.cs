@@ -1,15 +1,11 @@
-﻿//using Microsoft.Office.Interop.Excel;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
-using _Excel = Microsoft.Office.Interop.Excel;
 
 namespace Schedule_Calculator_Pro
 {
@@ -29,14 +25,22 @@ namespace Schedule_Calculator_Pro
 
         public Program()
         {
-            InitializeComponent();
-            SchedGenThread.IsBackground = true;
-            PrimaryFileWorkThread.IsBackground = true;
-            PrimaryFileWorkThread.Priority = ThreadPriority.Highest;
-            PrimaryFileWorkThread.Start();
-            var temp = new Thread(CogAnimate);
-            temp.IsBackground = true;
-            temp.Start();
+            try
+            {
+                InitializeComponent();
+                SchedGenThread.IsBackground = true;
+                PrimaryFileWorkThread.IsBackground = true;
+                PrimaryFileWorkThread.Priority = ThreadPriority.Highest;
+                PrimaryFileWorkThread.Start();
+                var temp = new Thread(CogAnimate);
+                temp.IsBackground = true;
+                temp.Start();
+            }
+            catch
+            {
+                MessageBox.Show("Виникла критична помилка. Перезапустіть програму та спробуйте ще раз. Якщо помилка повторюється - зв'яжіться із системним адміністратором.", "Упс...");
+                Environment.Exit(111);
+            }
         }
 
 
@@ -122,9 +126,9 @@ namespace Schedule_Calculator_Pro
 
             var i = 0;
 
-            while (excelTemp.BReadCell(i, 7))
+            while (excelTemp.BReadCell(i, 8))
             {
-                var tmp = excelTemp.ReadCell(i, 7);
+                var tmp = excelTemp.ReadCell(i, 8);
                 if (!group.ContainsKey(tmp))
                 {
                     group.Add(tmp, new Group(tmp));
@@ -132,9 +136,9 @@ namespace Schedule_Calculator_Pro
                 i++;
             }
             i = 0;
-            while (excelTemp.BReadCell(i, 8))
+            while (excelTemp.BReadCell(i, 9))
             {
-                var tmp = excelTemp.ReadCell(i, 8);
+                var tmp = excelTemp.ReadCell(i, 9);
                 if (!subject.ContainsKey(tmp))
                 {
                     subject.Add(tmp, new Subject(tmp));
@@ -142,9 +146,9 @@ namespace Schedule_Calculator_Pro
                 i++;
             }
             i = 0;
-            while (excelTemp.BReadCell(i, 9))
+            while (excelTemp.BReadCell(i, 10))
             {
-                var tmp = excelTemp.ReadCell(i, 9);
+                var tmp = excelTemp.ReadCell(i, 10);
                 if (!group.ContainsKey(tmp))
                 {
                     audience.Add(tmp);
@@ -152,12 +156,12 @@ namespace Schedule_Calculator_Pro
                 i++;
             }
 
-            while (excelTemp.BReadCell(i, 10))
+            while (excelTemp.BReadCell(i, 11))
             {
-                var tmp = excelTemp.ReadCell(i, 10);
+                var tmp = excelTemp.ReadCell(i, 11);
 
                 {
-                    group[tmp].StudyingWeeks = Convert.ToInt32(excelTemp.ReadCell(i, 11));
+                    group[tmp].StudyingWeeks = Convert.ToInt32(excelTemp.ReadCell(i, 12));
                 }
                 i++;
             }
@@ -255,25 +259,25 @@ namespace Schedule_Calculator_Pro
                 }
             }
 
-            for (int i = 0; i < unwritten[0].Count; i++)
+            for (int i = 0; i < unwritten[0].Count; i++) // Сохранить не использованные группы
             {
-                excelTemp1.WriteToCell(i, 7, unwritten[0][i]);
+                excelTemp1.WriteToCell(i, 8, unwritten[0][i]);
             }
-            for (int i = 0; i < unwritten[1].Count; i++)
+            for (int i = 0; i < unwritten[1].Count; i++) // // Сохранить не использованные предметы
             {
-                excelTemp1.WriteToCell(i, 8, unwritten[1][i]);
+                excelTemp1.WriteToCell(i, 9, unwritten[1][i]);
             }
-            for (int i = 0; i < unwritten[2].Count; i++)
+            for (int i = 0; i < unwritten[2].Count; i++) // Сохранить не использованные аудитории
             {
-                excelTemp1.WriteToCell(i, 9, unwritten[2][i]);
+                excelTemp1.WriteToCell(i, 10, unwritten[2][i]);
             }
 
             var temp1 = group.Keys.ToArray();
             var temp2 = group.Values.ToArray();
-            for (int i = 0; i < temp1.Count(); i++)
+            for (int i = 0; i < temp1.Count(); i++) // Сохранить соотношение групп - учебных недель
             {
-                excelTemp1.WriteToCell(i, 10, temp1[i]);
-                excelTemp1.WriteToCell(i, 11, temp2[i].StudyingWeeks.ToString());
+                excelTemp1.WriteToCell(i, 11, temp1[i]);
+                excelTemp1.WriteToCell(i, 12, temp2[i].StudyingWeeks.ToString());
             }
 
             excelTemp1.ws.Columns.AutoFit();
@@ -282,17 +286,37 @@ namespace Schedule_Calculator_Pro
             MessageBox.Show("Дані збережено.");
         }
 
-        private void SearchHandle(object sender, EventArgs e)
+        private void SearchHandle1(object sender, MouseEventArgs e)
+        {
+            //MessageBox.Show(e.GetPosition(grid).X.ToString() + " " + e.GetPosition(grid).Y.ToString());
+            if (e.GetPosition(grid).Y >= 0 && e.GetPosition(grid).Y <= 30 && e.GetPosition(grid).X >= 30 && e.GetPosition(grid).X <= 915)
+            {
+                if (!(don.Keys.ToList().All(x => database.Contains(x)) && group.Keys.ToList().All(x => database.Contains(x)) && subject.Keys.ToList().All(x => database.Contains(x)) && audience.All(x => database.Contains(x))))
+                {
+                    database = new List<string>();
+                    database.AddRange(don.Keys.ToArray());
+                    database.AddRange(group.Keys.ToArray());
+                    database.AddRange(subject.Keys.ToArray());
+                    database.AddRange(audience.ToArray());
+                }
+                Search.ItemsSource = database.Where(x => x.ToLower().Contains(Search.Text.ToLower())).ToArray();
+
+                if (!Search.IsDropDownOpen)
+                    Search.IsDropDownOpen = true;
+            }
+        }
+        private void SearchHandle2(object sender, EventArgs e)
         {
             if (!(don.Keys.ToList().All(x => database.Contains(x)) && group.Keys.ToList().All(x => database.Contains(x)) && subject.Keys.ToList().All(x => database.Contains(x)) && audience.All(x => database.Contains(x))))
             {
-                database.RemoveRange(0, database.Count);
+                database = new List<string>();
                 database.AddRange(don.Keys.ToArray());
                 database.AddRange(group.Keys.ToArray());
                 database.AddRange(subject.Keys.ToArray());
                 database.AddRange(audience.ToArray());
             }
             Search.ItemsSource = database.Where(x => x.ToLower().Contains(Search.Text.ToLower())).ToArray();
+
             if (!Search.IsDropDownOpen)
                 Search.IsDropDownOpen = true;
         }
@@ -361,6 +385,67 @@ namespace Schedule_Calculator_Pro
             MenuX.Dispatcher.Invoke(delegate { MenuX.IsDefault = false; });
         }
 
+        private void DonAnimate()
+        {
+            if (donname.IsVisible)
+            {
+                for (double x = .98; x >= 0; x -= .02)
+                {
+                    donname.Dispatcher.Invoke(delegate { donname.Opacity = x; });
+                    donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Opacity = x; });
+                    deletedon.Dispatcher.Invoke(delegate { deletedon.Opacity = x; });
+                    newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Opacity = x; });
+                    donrelaud.Dispatcher.Invoke(delegate { donrelaud.Opacity = x; });
+                    dond1.Dispatcher.Invoke(delegate { dond1.Opacity = x; });
+                    dond2.Dispatcher.Invoke(delegate { dond2.Opacity = x; });
+                    dond3.Dispatcher.Invoke(delegate { dond3.Opacity = x; });
+                    dond4.Dispatcher.Invoke(delegate { dond4.Opacity = x; });
+                    dond5.Dispatcher.Invoke(delegate { dond5.Opacity = x; });
+                    Thread.Sleep(2);
+                }
+                donname.Dispatcher.Invoke(delegate { donname.Visibility = Visibility.Hidden; donname.Text = ""; });
+                donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Visibility = Visibility.Hidden; donrelatedsubjects.ItemsSource = null; });
+                deletedon.Dispatcher.Invoke(delegate { deletedon.Visibility = Visibility.Hidden; });
+                newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Visibility = Visibility.Hidden; });
+                donrelaud.Dispatcher.Invoke(delegate { donrelaud.Visibility = Visibility.Hidden; donrelaud.SelectedIndex = -1; });
+                if (ChosenDay != null)
+                    ChosenDay.Dispatcher.Invoke(delegate { ChosenDay.Content = ChosenDay.Content.ToString().Substring(0, ChosenDay.Content.ToString().Length - 1); ChosenDay = null; });
+                dond1.Dispatcher.Invoke(delegate { dond1.Visibility = Visibility.Hidden; dond1.IsChecked = false; });
+                dond2.Dispatcher.Invoke(delegate { dond2.Visibility = Visibility.Hidden; dond2.IsChecked = false; });
+                dond3.Dispatcher.Invoke(delegate { dond3.Visibility = Visibility.Hidden; dond3.IsChecked = false; });
+                dond4.Dispatcher.Invoke(delegate { dond4.Visibility = Visibility.Hidden; dond4.IsChecked = false; });
+                dond5.Dispatcher.Invoke(delegate { dond5.Visibility = Visibility.Hidden; dond5.IsChecked = false; });
+            }
+            else
+            {
+                donname.Dispatcher.Invoke(delegate { donname.Visibility = Visibility.Visible; });
+                donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Visibility = Visibility.Visible; });
+                deletedon.Dispatcher.Invoke(delegate { deletedon.Visibility = Visibility.Visible; });
+                newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Visibility = Visibility.Visible; });
+                donrelaud.Dispatcher.Invoke(delegate { donrelaud.Visibility = Visibility.Visible; });
+                dond1.Dispatcher.Invoke(delegate { dond1.Visibility = Visibility.Visible; });
+                dond2.Dispatcher.Invoke(delegate { dond2.Visibility = Visibility.Visible; });
+                dond3.Dispatcher.Invoke(delegate { dond3.Visibility = Visibility.Visible; });
+                dond4.Dispatcher.Invoke(delegate { dond4.Visibility = Visibility.Visible; });
+                dond5.Dispatcher.Invoke(delegate { dond5.Visibility = Visibility.Visible; });
+
+                for (double x = .02; x < 1; x += .02)
+                {
+                    donname.Dispatcher.Invoke(delegate { donname.Opacity = x; });
+                    donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Opacity = x; });
+                    deletedon.Dispatcher.Invoke(delegate { deletedon.Opacity = x; });
+                    newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Opacity = x; });
+                    donrelaud.Dispatcher.Invoke(delegate { donrelaud.Opacity = x; });
+                    dond1.Dispatcher.Invoke(delegate { dond1.Opacity = x; });
+                    dond2.Dispatcher.Invoke(delegate { dond2.Opacity = x; });
+                    dond3.Dispatcher.Invoke(delegate { dond3.Opacity = x; });
+                    dond4.Dispatcher.Invoke(delegate { dond4.Opacity = x; });
+                    dond5.Dispatcher.Invoke(delegate { dond5.Opacity = x; });
+                    Thread.Sleep(2);
+                }
+            }
+        }
+
         private void DonNewRelSubjAnimate()
         {
             if (donrelsubjcancel.IsVisible)
@@ -388,61 +473,6 @@ namespace Schedule_Calculator_Pro
                     donrelsubjname.Dispatcher.Invoke(delegate { donrelsubjname.Opacity = x; });
                     donrelsubjok.Dispatcher.Invoke(delegate { donrelsubjok.Opacity = x; });
                     donrelsubjcancel.Dispatcher.Invoke(delegate { donrelsubjcancel.Opacity = x; });
-                    Thread.Sleep(2);
-                }
-            }
-        }
-
-        private void DonAnimate()
-        {
-            if (donname.IsVisible)
-            {
-                for (double x = .98; x >= 0; x -= .02)
-                {
-                    donname.Dispatcher.Invoke(delegate { donname.Opacity = x; });
-                    donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Opacity = x; });
-                    deletedon.Dispatcher.Invoke(delegate { deletedon.Opacity = x; });
-                    newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Opacity = x; });
-                    dond1.Dispatcher.Invoke(delegate { dond1.Opacity = x; });
-                    dond2.Dispatcher.Invoke(delegate { dond2.Opacity = x; });
-                    dond3.Dispatcher.Invoke(delegate { dond3.Opacity = x; });
-                    dond4.Dispatcher.Invoke(delegate { dond4.Opacity = x; });
-                    dond5.Dispatcher.Invoke(delegate { dond5.Opacity = x; });
-                    Thread.Sleep(2);
-                }
-                donname.Dispatcher.Invoke(delegate { donname.Visibility = Visibility.Hidden; donname.Text = ""; });
-                donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Visibility = Visibility.Hidden; donrelatedsubjects.ItemsSource = null; });
-                deletedon.Dispatcher.Invoke(delegate { deletedon.Visibility = Visibility.Hidden; });
-                newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Visibility = Visibility.Hidden; });
-                dond1.Dispatcher.Invoke(delegate { dond1.Visibility = Visibility.Hidden; });
-                dond2.Dispatcher.Invoke(delegate { dond2.Visibility = Visibility.Hidden; });
-                dond3.Dispatcher.Invoke(delegate { dond3.Visibility = Visibility.Hidden; });
-                dond4.Dispatcher.Invoke(delegate { dond4.Visibility = Visibility.Hidden; });
-                dond5.Dispatcher.Invoke(delegate { dond5.Visibility = Visibility.Hidden; });
-            }
-            else
-            {
-                donname.Dispatcher.Invoke(delegate { donname.Visibility = Visibility.Visible; });
-                donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Visibility = Visibility.Visible; });
-                deletedon.Dispatcher.Invoke(delegate { deletedon.Visibility = Visibility.Visible; });
-                newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Visibility = Visibility.Visible; });
-                dond1.Dispatcher.Invoke(delegate { dond1.Visibility = Visibility.Visible; });
-                dond2.Dispatcher.Invoke(delegate { dond2.Visibility = Visibility.Visible; });
-                dond3.Dispatcher.Invoke(delegate { dond3.Visibility = Visibility.Visible; });
-                dond4.Dispatcher.Invoke(delegate { dond4.Visibility = Visibility.Visible; });
-                dond5.Dispatcher.Invoke(delegate { dond5.Visibility = Visibility.Visible; });
-
-                for (double x = .02; x < 1; x += .02)
-                {
-                    donname.Dispatcher.Invoke(delegate { donname.Opacity = x; });
-                    donrelatedsubjects.Dispatcher.Invoke(delegate { donrelatedsubjects.Opacity = x; });
-                    deletedon.Dispatcher.Invoke(delegate { deletedon.Opacity = x; });
-                    newdonrelsubj.Dispatcher.Invoke(delegate { newdonrelsubj.Opacity = x; });
-                    dond1.Dispatcher.Invoke(delegate { dond1.Opacity = x; });
-                    dond2.Dispatcher.Invoke(delegate { dond2.Opacity = x; });
-                    dond3.Dispatcher.Invoke(delegate { dond3.Opacity = x; });
-                    dond4.Dispatcher.Invoke(delegate { dond4.Opacity = x; });
-                    dond5.Dispatcher.Invoke(delegate { dond5.Opacity = x; });
                     Thread.Sleep(2);
                 }
             }
@@ -702,12 +732,12 @@ namespace Schedule_Calculator_Pro
                     donc6.Dispatcher.Invoke(delegate { donc6.Opacity = x; });
                     Thread.Sleep(2);
                 }
-                donc1.Dispatcher.Invoke(delegate { donc1.Visibility = Visibility.Hidden; });
-                donc2.Dispatcher.Invoke(delegate { donc2.Visibility = Visibility.Hidden; });
-                donc3.Dispatcher.Invoke(delegate { donc3.Visibility = Visibility.Hidden; });
-                donc4.Dispatcher.Invoke(delegate { donc4.Visibility = Visibility.Hidden; });
-                donc5.Dispatcher.Invoke(delegate { donc5.Visibility = Visibility.Hidden; });
-                donc6.Dispatcher.Invoke(delegate { donc6.Visibility = Visibility.Hidden; });
+                donc1.Dispatcher.Invoke(delegate { donc1.Visibility = Visibility.Hidden; donc1.IsChecked = false; });
+                donc2.Dispatcher.Invoke(delegate { donc2.Visibility = Visibility.Hidden; donc2.IsChecked = false; });
+                donc3.Dispatcher.Invoke(delegate { donc3.Visibility = Visibility.Hidden; donc3.IsChecked = false; });
+                donc4.Dispatcher.Invoke(delegate { donc4.Visibility = Visibility.Hidden; donc4.IsChecked = false; });
+                donc5.Dispatcher.Invoke(delegate { donc5.Visibility = Visibility.Hidden; donc5.IsChecked = false; });
+                donc6.Dispatcher.Invoke(delegate { donc6.Visibility = Visibility.Hidden; donc6.IsChecked = false; });
             }
             else
             {
@@ -835,12 +865,18 @@ namespace Schedule_Calculator_Pro
                 temp.IsBackground = true;
                 temp.Start();
             }
-
+            if (donc1.IsVisible)
+            {
+                var temp = new Thread(CoupleExcAnimate);
+                temp.IsBackground = true;
+                temp.Start();
+            }
 
         }
 
         private void save_Click(object sender, RoutedEventArgs e)
         {
+            Clear_Click(sender, e);
             if (SavingThread.IsAlive)
                 MessageBox.Show("Збереження вже відбувається...");
             else if (SchedGenThread.IsAlive)
@@ -851,7 +887,6 @@ namespace Schedule_Calculator_Pro
                 SavingThread.IsBackground = true;
                 SavingThread.Start();
             }
-
         }
 
         private void newdonrelsubj_Click(object sender, RoutedEventArgs e)
@@ -971,10 +1006,10 @@ namespace Schedule_Calculator_Pro
 
         private void MenuSchedule_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Розклад 1 курс.xlsx");
-            System.Diagnostics.Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Розклад 2 курс.xlsx");
-            System.Diagnostics.Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Розклад 3 курс.xlsx");
-            System.Diagnostics.Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Розклад 4 курс.xlsx");
+            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Розклад 1 курс.xlsx"));
+            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Розклад 2 курс.xlsx"));
+            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Розклад 3 курс.xlsx"));
+            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Розклад 4 курс.xlsx"));
         }
 
         private void deletegroup_Click(object sender, RoutedEventArgs e)
@@ -1153,12 +1188,12 @@ namespace Schedule_Calculator_Pro
 
         private void MenuFreeDon_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Вільні викладачі.xlsx");
+            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Вільні викладачі.xlsx"));
         }
 
         private void MenuFreeAud_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SCP\\Вільні аудиторії.xlsx");
+            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Вільні аудиторії.xlsx"));
         }
 
         private void audsave_Click(object sender, RoutedEventArgs e)
@@ -1184,19 +1219,19 @@ namespace Schedule_Calculator_Pro
         private void Day_RightClick(object sender, MouseButtonEventArgs e)
         {
             // проверить / в остальных, убрать, не вызывать анимэйшон если уже показаны чекбоксы
-            CheckBox tbox = (CheckBox)sender;
+            CheckBox cbox = (CheckBox)sender;
             //MessageBox.Show((tbox == dond1).ToString());
-            var tbcs = tbox.Content.ToString();
-            if (!tbcs.Contains('/'))
+            var cboxcs = cbox.Content.ToString();
+            if (!cboxcs.Contains('/'))
             {
                 if (ChosenDay != null)
                 {
                     var cdcs = ChosenDay.Content.ToString();
                     ChosenDay.Content = cdcs.Substring(0, cdcs.Length - 1);
                 }
-                ChosenDay = tbox;
-                tbox.Content = tbcs + '/';
-                var curday = don[donname.Text].dayStats[DaynameToNum(tbcs)];
+                ChosenDay = cbox;
+                cbox.Content = cboxcs + '/';
+                var curday = don[donname.Text].dayStats[DaynameToNum(cboxcs)];
                 donc1.IsChecked = curday[0];
                 donc2.IsChecked = curday[1];
                 donc3.IsChecked = curday[2];
@@ -1219,7 +1254,7 @@ namespace Schedule_Calculator_Pro
                     temp1.IsBackground = true;
                     temp1.Start();
                 }
-                tbox.Content = tbcs.Substring(0, tbcs.Length - 1);
+                cbox.Content = cboxcs.Substring(0, cboxcs.Length - 1);
             }
 
             //switch (tbox.Content)
@@ -1234,9 +1269,13 @@ namespace Schedule_Calculator_Pro
 
         private void Couple_Click(object sender, RoutedEventArgs e)
         {
-            var curday = don[donname.Text].dayStats[DaynameToNum(ChosenDay.Content.ToString())];
+            var curdon = don[donname.Text];
+            var chosendaynum = DaynameToNum(ChosenDay.Content.ToString());
+            var curday = curdon.dayStats[chosendaynum];
             var cbox = (CheckBox)sender;
             curday[Convert.ToInt32(cbox.Uid)-1] = (bool)cbox.IsChecked;
+            curdon.fixConsC();
+            ChosenDay.IsChecked = curdon.possDays[chosendaynum];
         }
 
         private void dond_Click(object sender, RoutedEventArgs e)
@@ -1250,11 +1289,22 @@ namespace Schedule_Calculator_Pro
             {
                 don[donname.Text].excludeDay(cbox.Content.ToString());
             }
+            if (donc1.IsVisible && cbox == ChosenDay)
+            {
+                var tbcs = cbox.Content.ToString();
+                var curday = don[donname.Text].dayStats[DaynameToNum(tbcs)];
+                donc1.IsChecked = curday[0];
+                donc2.IsChecked = curday[1];
+                donc3.IsChecked = curday[2];
+                donc4.IsChecked = curday[3];
+                donc5.IsChecked = curday[4];
+                donc6.IsChecked = curday[5];
+            }
         }
         #endregion
 
         #region Selection changed callbacks
-        private void Search_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void Search_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var sel = Search.SelectedItem;
             if (don.Keys.ToArray().Contains(sel))
@@ -1266,6 +1316,10 @@ namespace Schedule_Calculator_Pro
                     temp.IsBackground = true;
                     temp.Start();
                 }
+                SortedSet<string> audinfo = audience;
+                audinfo.Add("");
+                donrelaud.ItemsSource = audinfo;
+                donrelaud.SelectedItem = seldon.relatedAud;
                 donrelatedsubjects.ItemsSource = seldon.relatedSubjects;
                 donrelatedsubjects.Columns[0].Width = 320;
                 donname.Text = sel.ToString();
@@ -1321,7 +1375,7 @@ namespace Schedule_Calculator_Pro
             }
         }
 
-        private void grouprelatedsubjects_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void grouprelatedsubjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (grouprelatedinfo.SelectedIndex != -1)
             {
@@ -1346,7 +1400,7 @@ namespace Schedule_Calculator_Pro
             }
         }
 
-        private void donrelatedsubjects_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void donrelatedsubjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var tmp = Mouse.GetPosition(System.Windows.Application.Current.MainWindow);
             if (!donrelsubjdel.IsVisible && tmp.X >= 213 && tmp.X < 741 && tmp.Y >= 219 && tmp.Y < 393)
@@ -1355,6 +1409,12 @@ namespace Schedule_Calculator_Pro
                 temp.IsBackground = true;
                 temp.Start();
             }
+        }
+
+        private void donrelaud_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Search.SelectedIndex != -1)
+                don[Search.SelectedItem.ToString()].relatedAud = donrelaud.SelectedItem.ToString();
         }
         #endregion
 
@@ -1375,7 +1435,6 @@ namespace Schedule_Calculator_Pro
             donrelsubjname.ItemsSource = subject.Keys.ToArray();
         }
         #endregion
-
         #endregion
 
     }
