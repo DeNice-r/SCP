@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Schedule_Calculator_Pro"
         mc:Ignorable="d"
-        Title="Program" Width="960" Height="540" ResizeMode="CanMinimize">
+        
+        Title="Program" Width="960" Height="540" ResizeMode="CanMinimize" Closed="Window_Closed">
     <Grid x:Name="grid" MouseLeftButtonUp="Grid_Click">
         <Grid.Background>
             <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
@@ -13,7 +14,7 @@
                 <GradientStop Color="#FFFFFF64" Offset="1" />
             </LinearGradientBrush>
         </Grid.Background>
-        <ComboBox x:Name="Search" FontSize="17" PreviewMouseLeftButtonUp="SearchHandle1" PreviewKeyUp="SearchHandle2" IsTextSearchEnabled="false" Margin="30,0,0,0" VerticalAlignment="Top" Height="30" IsEditable="True" SelectionChanged="Search_SelectionChanged" BorderBrush="White" />
+        <ComboBox x:Name="Search" ToolTip="Вибрати об'єкт для внесення змін" FontSize="17" PreviewMouseLeftButtonUp="SearchHandle1" PreviewKeyUp="SearchHandle2" IsTextSearchEnabled="false" Margin="30,0,0,0" VerticalAlignment="Top" Height="30" IsEditable="True" SelectionChanged="Search_SelectionChanged" BorderBrush="White" />
         <Line X1="30.5" Y1="0" X2="30.5" Y2="30" StrokeThickness="1" Stroke="White" Grid.RowSpan="2" />
         <Line X1="30.5" Y1="0.5" X2="950.5" Y2="0.5" StrokeThickness="1" Stroke="White" Grid.RowSpan="2" />
         <Line X1="30.5" Y1="29.5" X2="950.5" Y2="29.5" StrokeThickness="1" Stroke="White" Grid.RowSpan="2" />
@@ -21,7 +22,7 @@
         <Button x:Name="MenuX" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top" Width="30" Height="30" Click="Menu_Click" Background="{x:Null}" BorderBrush="White" BorderThickness="0" RenderTransformOrigin="0.5,0.5">
             <Image Source="Images/menuX.png" />
         </Button>
-        <Button x:Name="Menu" HorizontalAlignment="Left" VerticalAlignment="Top" Width="30" Height="30" Click="Menu_Click" Background="{x:Null}" Foreground="White" BorderBrush="White" BorderThickness="0">
+        <Button x:Name="Menu" ToolTip="Меню" HorizontalAlignment="Left" VerticalAlignment="Top" Width="30" Height="30" Click="Menu_Click" Background="{x:Null}" Foreground="White" BorderBrush="White" BorderThickness="0">
             <Image Source="Images/menu.png" />
         </Button>
         <Button x:Name="MenuSchedule" Click="MenuSchedule_Click" Visibility="Hidden" Content="Розклад" Width="240" Height="34" Margin="-20,29,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="{x:Null}" Foreground="White" FontSize="20">
@@ -94,11 +95,11 @@
 
         <ComboBox x:Name="donrelaud" SelectionChanged="donrelaud_SelectionChanged" Visibility="Hidden" HorizontalAlignment="Left" Margin="553,188,0,0" VerticalAlignment="Top" Width="69" Height="25"/>
         <!--  -->
-        <Button x:Name="save" Height="30" Width="30" Click="save_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="884,471,0,0" BorderBrush="{x:Null}" Foreground="{x:Null}" Background="{x:Null}">
+        <Button x:Name="save" ToolTip="Зберегти зміни у базі даних" Height="30" Width="30" Click="save_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="884,471,0,0" BorderBrush="{x:Null}" Foreground="{x:Null}" Background="{x:Null}">
             <Image Source="Images/save.png" />
         </Button>
         <Rectangle Width="24" Height="30" Fill="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="930,0,0,0" />
-        <Button x:Name="Clear" Click="Clear_Click" IsCancel="True" Content="❌" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="918,4,0,0" BorderBrush="{x:Null}" Background="{x:Null}">
+        <Button x:Name="Clear" ToolTip="Відмінити вибір (або просто очистити поле вводу)" Click="Clear_Click" IsCancel="True" Content="❌" Width="20" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="918,4,0,0" BorderBrush="{x:Null}" Background="{x:Null}">
             <Button.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFFF3E53" Offset="0" />
@@ -113,7 +114,7 @@
         <Button x:Name="audsave" Click="audsave_Click" Height="25" Width="25" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="563,253,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
             <Image Source="Images/save.png" />
         </Button>
-        <Button x:Name="schedulegenerate" Height="30" Width="30" Click="schedulegenerate_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="916,471,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
+        <Button x:Name="schedulegenerate" ToolTip="Створити розклад" Height="30" Width="30" Click="schedulegenerate_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="916,471,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
             <Image Source="Images/gen.png" />
         </Button>
         <Button x:Name="deletegroup" Click="deletegroup_Click" Visibility="Hidden" Width="25" Height="25" Margin="717,134,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
@@ -201,5 +202,9 @@
         <TextBlock x:Name="subjecttext" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="287,240,0,0" FontSize="16" Text="Предмет" />
         <TextBlock x:Name="audtext" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="272,268,0,0" FontSize="16" Text="Аудитория" />
         <Image x:Name="rotcog" Visibility="Hidden" Source="Images/cog.png" Width="100" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+        <Button x:Name="EditSchedule" ToolTip="Відредагувати вже створений розклад" Click="EditSchedule_Click" Width="30" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,471,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
+            <Image Source="Images/EditSchedule.png" />
+        </Button>
     </Grid>
 </Window>

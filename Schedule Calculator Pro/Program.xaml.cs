@@ -9,9 +9,10 @@ using System.Windows.Input;
 
 namespace Schedule_Calculator_Pro
 {
-    public partial class Program : System.Windows.Window
+    public partial class Program : Window
     {
         // Оголошуємо всі змінні, які далі потрібно буде використовувати в інших класах:
+        public static ScheduleEditor scheditwin = null;
         public static SortedDictionary<string, Don> don = new SortedDictionary<string, Don>();
         public static SortedDictionary<string, Group> group = new SortedDictionary<string, Group>();
         public static SortedDictionary<string, Subject> subject = new SortedDictionary<string, Subject>();
@@ -22,6 +23,7 @@ namespace Schedule_Calculator_Pro
         public static Thread SavingThread = new Thread(CreateSettings);
         public static Thread PrimaryFileWorkThread = new Thread(SettingsHandle);
         public static CheckBox ChosenDay = null;
+        public static bool workwithschedit = true;
 
         public Program()
         {
@@ -32,9 +34,17 @@ namespace Schedule_Calculator_Pro
                 PrimaryFileWorkThread.IsBackground = true;
                 PrimaryFileWorkThread.Priority = ThreadPriority.Highest;
                 PrimaryFileWorkThread.Start();
-                var temp = new Thread(CogAnimate);
-                temp.IsBackground = true;
-                temp.Start();
+                if (workwithschedit)
+                {
+                    Height = 0;
+                    Width = 250;
+                    Top = 27;
+                    Left = -8;
+                    EditSchedule_Click(new object(), new RoutedEventArgs());
+                }
+                //var temp = new Thread(CogAnimate);
+                //temp.IsBackground = true;
+                //temp.Start();
             }
             catch
             {
@@ -1301,6 +1311,15 @@ namespace Schedule_Calculator_Pro
                 donc6.IsChecked = curday[5];
             }
         }
+
+        private void EditSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            if (scheditwin == null)
+            {
+                scheditwin = new ScheduleEditor(this);
+                scheditwin.Show();
+            }
+        }
         #endregion
 
         #region Selection changed callbacks
@@ -1435,7 +1454,17 @@ namespace Schedule_Calculator_Pro
             donrelsubjname.ItemsSource = subject.Keys.ToArray();
         }
         #endregion
+
         #endregion
 
+        ~Program()
+        {
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            scheditwin.Close();
+            scheditwin = null;
+        }
     }
 }

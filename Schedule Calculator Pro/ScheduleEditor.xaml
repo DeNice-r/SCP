@@ -1,0 +1,96 @@
+﻿<Window x:Class="Schedule_Calculator_Pro.ScheduleEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Schedule_Calculator_Pro"
+        mc:Ignorable="d"
+        Title="ScheduleEditor" Width="960" Height="540"
+        Closed="Window_Closed" SizeChanged="Window_SizeChanged" LocationChanged="Window_SizeChanged">
+    <Grid Margin="0,0,0,0">
+        <ScrollViewer x:Name="ContentMgr" Width="952" Height="509" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Visible">
+            <DockPanel>
+                <StackPanel>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                </StackPanel>
+                
+                <StackPanel>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                    <Label Content="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"/>
+                </StackPanel>
+            </DockPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>
