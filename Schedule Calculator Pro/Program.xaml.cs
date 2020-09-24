@@ -6,6 +6,8 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Schedule_Calculator_Pro
 {
@@ -23,7 +25,7 @@ namespace Schedule_Calculator_Pro
         public static Thread SavingThread = new Thread(CreateSettings);
         public static Thread PrimaryFileWorkThread = new Thread(SettingsHandle);
         public static CheckBox ChosenDay = null;
-        public static bool workwithschedit = true;
+        public static bool workwithschedit = false;
 
         public Program()
         {
@@ -42,6 +44,8 @@ namespace Schedule_Calculator_Pro
                     Left = -8;
                     EditSchedule_Click(new object(), new RoutedEventArgs());
                 }
+
+
                 //var temp = new Thread(CogAnimate);
                 //temp.IsBackground = true;
                 //temp.Start();

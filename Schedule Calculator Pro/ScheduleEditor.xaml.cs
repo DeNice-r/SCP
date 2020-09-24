@@ -11,6 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.IO;
+using System.Threading;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Schedule_Calculator_Pro
 {
@@ -26,11 +30,26 @@ namespace Schedule_Calculator_Pro
             parent = p;
             ContentMgr.Height = Height - 39;
             ContentMgr.Width = Width - 16;
+
+            var sched = Program.schedule.schedule;
+
+            // Table generation
+            if (File.Exists(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")))
+            {
+                sched = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")), sched.GetType());
+            }
+            // Группа > День > Пара > Преподаватели/Предметы/Аудитории
+
+            
+            for(int _group = 0; _group < sched.Count(); _group++)
+            {
+
+            }
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-                Program.scheditwin = null;
+            Program.scheditwin = null;
             if (Program.workwithschedit)
             {
                 parent.Close();

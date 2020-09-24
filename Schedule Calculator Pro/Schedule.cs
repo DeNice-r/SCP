@@ -1,14 +1,11 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows;
-using System.Windows.Input;
-using _Excel = Microsoft.Office.Interop.Excel;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 
 namespace Schedule_Calculator_Pro
 {
@@ -160,6 +157,11 @@ namespace Schedule_Calculator_Pro
 
         private void Save()
         {
+            // Save in json to work w/ it from program later.
+            
+            System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json"), JsonSerializer.Serialize(schedule));
+
+
             for (int _course = 0; _course < 4; _course++)
             {
 
