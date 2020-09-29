@@ -24,6 +24,8 @@ namespace Schedule_Calculator_Pro
     public partial class ScheduleEditor : Window
     {
         private static Program parent = null;
+        public static string[] DOW = { "Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця" };
+
         public ScheduleEditor(Program p)
         {
             InitializeComponent();
@@ -40,12 +42,55 @@ namespace Schedule_Calculator_Pro
             }
             // Группа > День > Пара > Преподаватели/Предметы/Аудитории
 
-            
+            List<StackPanel> uigroups = new List<StackPanel>();
+
+            while (!Program.loadedinfo) Thread.Sleep(100);
+
             for(int _group = 0; _group < sched.Count(); _group++)
             {
-
+                uigroups.Add(new StackPanel());
+                for(int _day = 0; _day < 5; _day++)
+                {
+                    var ttblock = new TextBlock(); // temp. textblock
+                    var ttblock1 = new TextBlock();
+                    ttblock1.Text = Program.group.Keys.ToArray()[_group];
+                    ttblock.Text = DOW[_day];
+                    ttblock.TextAlignment = TextAlignment.Center;
+                    var border1 = new Border();
+                    var border2 = new Border();
+                    border1.BorderBrush = Brushes.Black;
+                    border1.BorderThickness = new Thickness(1);
+                    border1.Child = ttblock;
+                    border2.BorderBrush = Brushes.Black;
+                    border2.BorderThickness = new Thickness(2);
+                    border2.Child = ttblock1;
+                    uigroups[_group].Children.Add(border1);
+                    uigroups[_group].Children.Add(border2);
+                    for (int _couple = 0; _couple < 6; _couple++)
+                    {
+                        var cttblock = new TextBlock(); // couple temp. textblock
+                        var border = new Border();
+                        border.BorderBrush = Brushes.Black;
+                        border.BorderThickness = new Thickness(1);
+                        border.Child = cttblock;
+                        string s = "";
+                        if (sched[_group][_day].Count() > _couple)
+                        {
+                            foreach (var field in sched[_group][_day][_couple])
+                            {
+                                s += field + " ";
+                            }
+                        }
+                        cttblock.Text = s;
+                        //cttblock.TextAlignment = TextAlignment.Center;
+                        
+                        uigroups[_group].Children.Add(border);
+                    }
+                }
             }
-        }
+            foreach(var group in uigroups)
+                docks.Children.Add(group);
+        } // Перетягивание на коллбеке дрега с переводом сендера в текстблок.
 
         private void Window_Closed(object sender, EventArgs e)
         {

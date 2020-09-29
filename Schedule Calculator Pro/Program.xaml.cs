@@ -24,13 +24,14 @@ namespace Schedule_Calculator_Pro
         public static Thread SchedGenThread = new Thread(schedule.Start);
         public static Thread SavingThread = new Thread(CreateSettings);
         public static Thread PrimaryFileWorkThread = new Thread(SettingsHandle);
+        public static bool loadedinfo = false;
         public static CheckBox ChosenDay = null;
-        public static bool workwithschedit = false;
+        public static bool workwithschedit = true;
 
         public Program()
         {
-            try
-            {
+            //try
+            //{
                 InitializeComponent();
                 SchedGenThread.IsBackground = true;
                 PrimaryFileWorkThread.IsBackground = true;
@@ -46,15 +47,16 @@ namespace Schedule_Calculator_Pro
                 }
 
 
-                //var temp = new Thread(CogAnimate);
-                //temp.IsBackground = true;
-                //temp.Start();
-            }
-            catch
-            {
-                MessageBox.Show("Виникла критична помилка. Перезапустіть програму та спробуйте ще раз. Якщо помилка повторюється - зв'яжіться із системним адміністратором.", "Упс...");
-                Environment.Exit(111);
-            }
+            //var temp = new Thread(CogAnimate);
+            //temp.IsBackground = true;
+            //temp.Start();
+        //}
+        // uncomment try b4 production stage
+            //catch
+            //{
+            //    MessageBox.Show("Виникла критична помилка. Перезапустіть програму та спробуйте ще раз. Якщо помилка повторюється - зв'яжіться із системним адміністратором.", "Упс...");
+            //    Environment.Exit(111);
+            //}
         }
 
 
@@ -182,6 +184,7 @@ namespace Schedule_Calculator_Pro
 
             excelTemp.close();
             //MessageBox.Show("Завантаження початкових даних завершено.");
+            loadedinfo = true;
         }
 
         private static void CreateSettings()
