@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Schedule_Calculator_Pro"
         mc:Ignorable="d"
         
-        Title="Schedule Calculator Pro" Width="960" Height="540" ResizeMode="CanMinimize" Closed="Window_Closed">
+        Title="Створювач розкладу" Width="960" Height="540" ResizeMode="CanMinimize" Closed="Window_Closed">
     <Grid x:Name="grid" MouseLeftButtonUp="Grid_Click">
         <Grid.Background>
             <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">

@@ -1470,8 +1470,11 @@ namespace Schedule_Calculator_Pro
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            scheditwin.Close();
-            scheditwin = null;
+            if (scheditwin != null)
+            {
+                scheditwin.Close();
+                scheditwin = null;
+            }
         }
     }
 }

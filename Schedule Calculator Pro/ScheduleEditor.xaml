@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Schedule_Calculator_Pro"
         mc:Ignorable="d"
-        Title="ScheduleEditor" Width="960" Height="540"
-        Closed="Window_Closed" SizeChanged="Window_SizeChanged" LocationChanged="Window_SizeChanged">
-    <Grid Margin="0,0,0,0">
+        Title="Редактор розкладу" Width="960" Height="540"
+        Closed="Window_Closed" SizeChanged="Window_SizeChanged" LocationChanged="Window_SizeChanged" KeyDown="segrid_KeyDown">
+    <Grid x:Name="segrid" Margin="0,0,0,0">
         <ScrollViewer x:Name="ContentMgr" Width="952" Height="509" VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Visible">
             <DockPanel x:Name="docks">
             </DockPanel>
