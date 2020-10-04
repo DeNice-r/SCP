@@ -50,11 +50,11 @@ namespace Schedule_Calculator_Pro
             //var temp = new Thread(CogAnimate);
             //temp.IsBackground = true;
             //temp.Start();
-        //}
-        // uncomment try b4 production stage
+            //}
+            // uncomment try b4 production stage
             //catch
             //{
-            //    MessageBox.Show("Виникла критична помилка. Перезапустіть програму та спробуйте ще раз. Якщо помилка повторюється - зв'яжіться із системним адміністратором.", "Упс...");
+            //MessageBox.Show("Виникла критична помилка. Перезапустіть програму та спробуйте ще раз, якщо помилка повторюється - перезапустіть комп'ютер. Якщо перезапуски не допомогли - зв'яжіться із системним адміністратором.\n\n\nІнформація для системного адміністратора:\n1. Програма потребує .NET 4.8;\n2. Якщо відсутні DLL-файли чи будь-які інші, спробуйте перевстановити програму з Git за посиланням https://github.com/DeNice-r/SCP/tree/master/Schedule%20Calculator%20Pro/bin/Release; \n3. Зверніться до розробника за посиланням https://t.me/dncyW", "Упс...");
             //    Environment.Exit(111);
             //}
         }
