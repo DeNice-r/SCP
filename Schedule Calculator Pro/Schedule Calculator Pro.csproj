@@ -107,8 +107,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Buttonplus.cs" />
     <Compile Include="Don.cs" />
     <Compile Include="Group.cs" />
+    <Compile Include="schedentry.cs" />
     <Compile Include="Schedule.cs" />
     <Page Include="Program.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -189,7 +191,14 @@
   <ItemGroup>
     <Resource Include="Images\EditSchedule.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\cut.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\insert.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
       <Visible>False</Visible>
