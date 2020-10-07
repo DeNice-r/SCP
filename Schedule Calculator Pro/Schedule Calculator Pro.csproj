@@ -110,7 +110,7 @@
     <Compile Include="Buttonplus.cs" />
     <Compile Include="Don.cs" />
     <Compile Include="Group.cs" />
-    <Compile Include="schedentry.cs" />
+    <Compile Include="Schedentry.cs" />
     <Compile Include="Schedule.cs" />
     <Page Include="Program.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -210,6 +210,15 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\desel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\deleteblack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\saveblack.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

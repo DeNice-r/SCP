@@ -19,6 +19,7 @@ using System.Text.Json.Serialization;
 using System.Drawing.Imaging;
 using System.Windows.Media.Effects;
 using System.Xml.Schema;
+using System.Runtime.CompilerServices;
 
 namespace Schedule_Calculator_Pro
 {
@@ -30,169 +31,20 @@ namespace Schedule_Calculator_Pro
         private static Program parent = null;
         public static string[] DOW = { "Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця" };
         List<StackPanel> uigroups = new List<StackPanel>();
-        List<List<List<List<string>>>> sched = new List<List<List<List<string>>>>();
+        public static List<List<List<List<string>>>> sched = new List<List<List<List<string>>>>();
 
-        //public ScheduleEditor(Program p)
-        //{
-        //    InitializeComponent();
-        //    parent = p;
-        //    ContentMgr.Height = Height - 39;
-        //    ContentMgr.Width = Width - 16;
-
-            
-        //    // Table generation
-        //    if (File.Exists(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")))
-        //    {
-        //        sched = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")), sched.GetType());
-        //        Program.schedule.schedule = sched;
-        //        schedentry.sched = sched;
-        //    }
-        //    // Группа > День > Пара > Преподаватели/Предметы/Аудитории
-
-
-
-        //    while (!Program.loadedinfo) Thread.Sleep(100);
-
-        //    for (int _group = 0; _group < sched.Count(); _group++)
-        //    {
-
-        //            int lensubj = 0, lendon = 0, lenaud = 0;
-        //            foreach (var d in sched[_group]) // Calc 
-        //                foreach (var c in d)
-        //                {
-        //                    if (c.Count() > 0)
-        //                    {
-        //                        if (c.Count() == 6)
-        //                        {
-        //                            if (lensubj < c[0].Length) lensubj = c[0].Length;
-        //                            if (lensubj < c[1].Length) lensubj = c[1].Length;
-        //                            if (lendon < c[2].Length) lendon = c[2].Length;
-        //                            if (lendon < c[3].Length) lendon = c[3].Length;
-        //                            if (lenaud < c[4].Length) lenaud = c[4].Length;
-        //                            if (lenaud < c[5].Length) lenaud = c[5].Length;
-        //                        }
-        //                        else if (c.Count() == 5)
-        //                        {
-        //                            if (lensubj < c[0].Length) lensubj = c[0].Length;
-        //                            if (lendon < c[1].Length) lendon = c[1].Length;
-        //                            if (lendon < c[2].Length) lendon = c[2].Length;
-        //                            if (lenaud < c[3].Length) lenaud = c[3].Length;
-        //                            if (lenaud < c[4].Length) lenaud = c[4].Length;
-        //                        }
-        //                        else if (c.Count() == 3)
-        //                        {
-        //                            if (lensubj < c[0].Length) lensubj = c[0].Length;
-        //                            if (lendon < c[1].Length) lendon = c[1].Length;
-        //                            if (lenaud < c[2].Length) lenaud = c[2].Length;
-        //                        }
-        //                    }
-        //                }
-        //            lensubj *= 7; lendon *= 7; lenaud = lenaud * 7 + 10;
-
-        //        var border2 = new Border();
-        //        border2.BorderBrush = Brushes.Black;
-        //        border2.BorderThickness = new Thickness(1);
-        //        var label1 = new Label();
-        //        border2.Child = label1;
-        //        label1.Content = Program.group.Keys.ToArray()[_group];
-        //        label1.HorizontalContentAlignment = HorizontalAlignment.Center;
-        //        label1.FontSize = 20;
-
-        //        uigroups.Add(new StackPanel());
-        //        uigroups[_group].Children.Add(border2);
-        //        for (int _day = 0; _day < 5; _day++)
-        //        {
-        //            var label = new Label(); // temp. textblock
-        //            label.Content = DOW[_day];
-        //            label.HorizontalContentAlignment = HorizontalAlignment.Center;
-        //            var daybord = new Border();
-        //            daybord.BorderBrush = Brushes.Black;
-        //            daybord.BorderThickness = new Thickness(1);
-        //            daybord.Child = label;
-
-        //            uigroups[_group].Children.Add(daybord);
-        //            for (int _couple = 0; _couple < 6; _couple++)
-        //            {
-        //                DockPanel dp = new DockPanel();
-        //                var border = new Border();
-        //                border.BorderBrush = Brushes.Black;
-        //                border.BorderThickness = new Thickness(1);
-        //                border.Child = dp;
-
-        //                Image cutimage = new Image(); cutimage.Source = cutimg;
-        //                Image insimage = new Image(); insimage.Source = insimg;
-        //                var ctrlpanel = new StackPanel(); var ctrlbord = new Border(); ctrlbord.BorderThickness = new Thickness(1, 0, 0, 0); ctrlbord.BorderBrush = Brushes.Black;
-        //                ctrlbord.Child = ctrlpanel;
-        //                var cutbutt = new Buttonplus(); cutbutt.Click += SubjCut_Click; cutbutt.idx = _group + "." + _day + "." + _couple; ctrlpanel.Children.Add(cutbutt);
-        //                cutbutt.Content = cutimage; cutbutt.Height = cutbutt.Width = 25;
-        //                var insbutt = new Buttonplus(); insbutt.Click += SubjIns_Click; insbutt.idx = _group + "." + _day + "." + _couple; ctrlpanel.Children.Add(insbutt);
-        //                insbutt.Content = insimage; insbutt.Height = insbutt.Width = 25;
-
-        //                if (sched[_group][_day].Count() > _couple)
-        //                {
-        //                    var curcpl = sched[_group][_day][_couple];
-        //                    var curlen = sched[_group][_day][_couple].Count();
-        //                    if (curlen != 0)
-        //                    {
-        //                        var subjpanel = new StackPanel();
-        //                        var donpanel = new StackPanel(); var donbord = new Border(); donbord.BorderThickness = new Thickness(1, 0, 1, 0); donbord.BorderBrush = Brushes.Black;
-        //                        donbord.Child = donpanel;
-        //                        var audpanel = new StackPanel();
-        //                        var tbsubj1 = new Label(); subjpanel.Children.Add(tbsubj1);
-        //                        var tbsubj2 = new Label(); subjpanel.Children.Add(tbsubj2);
-        //                        var tbdon1 = new Label(); donpanel.Children.Add(tbdon1);
-        //                        var tbdon2 = new Label(); donpanel.Children.Add(tbdon2);
-        //                        var tbaud1 = new Label(); audpanel.Children.Add(tbaud1);
-        //                        var tbaud2 = new Label(); audpanel.Children.Add(tbaud2);
-        //                        tbsubj1.Width = tbsubj2.Width = lensubj; tbdon1.Width = tbdon2.Width = lendon; tbaud1.Width = tbaud2.Width = lenaud;
-
-        //                        if (curlen == 5)
-        //                        {
-        //                            tbsubj1.Content = curcpl[0]; tbsubj1.Height = 50; tbsubj1.VerticalContentAlignment = VerticalAlignment.Center;
-        //                            tbdon1.Content = curcpl[1]; tbdon2.Content = curcpl[2];
-        //                            tbaud1.Content = curcpl[3]; tbaud2.Content = curcpl[4];
-        //                            tbdon1.Height = 25; tbaud1.Height = 25;
-        //                        }
-        //                        else if (curlen == 6)
-        //                        {
-        //                            tbsubj1.Content = curcpl[0]; tbsubj2.Content = curcpl[1];
-        //                            tbdon1.Content = curcpl[2]; tbdon2.Content = curcpl[3];
-        //                            tbaud1.Content = curcpl[4]; tbaud2.Content = curcpl[5];
-        //                            tbsubj1.Height = 25; tbdon1.Height = 25; tbaud1.Height = 25;
-        //                        }
-        //                        else
-        //                        {
-        //                            tbsubj1.Content = curcpl[0]; tbsubj1.Width = lensubj; tbsubj1.Height = 50; tbsubj1.VerticalContentAlignment = VerticalAlignment.Center;
-        //                            tbdon1.Content = curcpl[1]; tbdon1.Height = 50; tbdon1.VerticalContentAlignment = VerticalAlignment.Center;
-        //                            tbaud1.Content = curcpl[2]; tbaud1.Height = 50; tbaud1.VerticalContentAlignment = VerticalAlignment.Center;
-        //                        }
-
-        //                        dp.Children.Add(subjpanel); dp.Children.Add(donbord); dp.Children.Add(audpanel); dp.Children.Add(ctrlbord);
-        //                    }
-        //                }
-        //                dp.MouseLeftButtonDown += Cpl_DragEnter;
-        //                dp.Height = 50;
-        //                uigroups[_group].Children.Add(border);
-        //            }
-        //        }
-        //    }
-        //    foreach (var group in uigroups)
-        //        docks.Children.Add(group);
-        //} // Перетягивание на коллбеке дрега с переводом сендера в текстблок.
-
-        public  ScheduleEditor(Program p)
+        public ScheduleEditor(Program p)
         {
             InitializeComponent();
             parent = p;
             ContentMgr.Height = Height - 39;
             ContentMgr.Width = Width - 16;
-
-
             // Table generation
             if (File.Exists(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")))
             {
                 sched = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")), sched.GetType());
-                Program.schedule.schedule = sched;
+                Program.schedule.scheduleFree = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedfreecfg.json")), sched.GetType());
+                Schedentry.sched = Program.schedule.schedule = sched;
             }
             // Группа > День > Пара > Преподаватели/Предметы/Аудитории
 
@@ -235,23 +87,23 @@ namespace Schedule_Calculator_Pro
                             }
                         }
                     lensubj *= 7; lendon *= 7; lenaud = lenaud * 7 + 10;
-                    schedentry.colwidth.Add(new List<uint>() { (uint)lensubj, (uint)lendon, (uint)lenaud });
+                    Schedentry.colwidth.Add(new List<uint>() { (uint)lensubj, (uint)lendon, (uint)lenaud });
                 }
-                schedentry groupentry = new schedentry(new string[] { Program.group.Keys.ToArray()[_group] }, new int[] { _group, _day, _couple });
+                Schedentry groupentry = new Schedentry(new string[] { Program.group.Keys.ToArray()[_group] }, new int[] { _group });
 
                 uigroups.Add(new StackPanel());
                 uigroups[_group].Children.Add(groupentry);
                 for (int _day = 0; _day < 5; _day++)
                 {
-                    schedentry dayentry = new schedentry(new string[] { DOW[_day] }, new int[] { _group, _day, _couple });
+                    Schedentry dayentry = new Schedentry(new string[] { DOW[_day] }, new int[] { _group, _day });
                     uigroups[_group].Children.Add(dayentry);
                     for (int _couple = 0; _couple < 6; _couple++)
                     {
-                        schedentry sentry;
+                        Schedentry sentry;
                         if (sched[_group][_day].Count() > _couple)
-                            sentry = new schedentry(sched[_group][_day][_couple].ToArray(), new int[] { _group, _day, _couple });
+                            sentry = new Schedentry(sched[_group][_day][_couple].ToArray(), new int[] { _group, _day, _couple });
                         else
-                            sentry = new schedentry(new string[] {}, new int[] { _group, _day, _couple });
+                            sentry = new Schedentry(new string[] { }, new int[] { _group, _day, _couple });
                         uigroups[_group].Children.Add(sentry);
                     }
                 }
@@ -271,39 +123,11 @@ namespace Schedule_Calculator_Pro
 
         }
 
-        private void SubjCut_Click(object sender, RoutedEventArgs e)
-        {
-            var s = (Buttonplus) sender;
-            var idx = s.idx.Split('.');
-            var curcpl = sched[Convert.ToInt32(idx[0])][Convert.ToInt32(idx[1])][Convert.ToInt32(idx[2])];
-            string show = "";
-            foreach (var str in curcpl)
-                show += str + " ";
-            MessageBox.Show(show);
-        }
-
-        private void SubjIns_Click(object sender, RoutedEventArgs e)
-        {
-            var s = (Buttonplus)sender;
-            var idx = s.idx.Split('.');
-            var curcpl = sched[Convert.ToInt32(idx[0])][Convert.ToInt32(idx[1])][Convert.ToInt32(idx[2])];
-            string show = "";
-            foreach (var str in curcpl)
-                show += str + " ";
-            MessageBox.Show(show);
-        }
-
-        private void Cpl_DragEnter(object sender, MouseButtonEventArgs e)
-        {
-            var dp = (DockPanel)sender;
-            //MessageBox.Show("");
-            //if()
-        }
-
         private void Window_SizeChanged(object sender, EventArgs e)
         {
             ContentMgr.Height = ActualHeight - 39;
-            ContentMgr.Width = ActualWidth - 16;
+            ContentMgr.Width = ActualWidth - 46;
+            sidebar.Height = ActualHeight - 39;
             //if(ContentMgr.Width > 1000 )
             //    MessageBox.Show(((TextBlock)((Border)uigroups[0].Children[0]).Child).ActualWidth.ToString());
         }
@@ -386,5 +210,118 @@ namespace Schedule_Calculator_Pro
             bmp.UnlockBits(data);
 
             return bmp;
-        } }
+        }
+
+        private void desel_Click(object sender, RoutedEventArgs e)
+        {
+            deselect();
+        }
+
+        public static void deselect()
+        {
+            if (Schedentry.cut != null)
+            {
+                Schedentry.cut.Opacity = 1;
+                Schedentry.cut = null;
+            }
+        }
+
+        private void remove_Click(object sender, RoutedEventArgs e)
+        {
+            if (Schedentry.cut != null)
+            {
+                var cut = Schedentry.cut;
+                var p = (StackPanel)cut.Parent;
+
+                var index = p.Children.IndexOf(cut);
+                p.Children.RemoveAt(index);
+                p.Children.Insert(index, new Schedentry(new string[] { }, cut.idx));
+                Schedentry.cut = null;
+            }
+        }
+
+        private void schedsave_Click(object sender, RoutedEventArgs e)
+        {
+            deselect();
+            var usched = new List<List<List<List<string>>>>();
+            foreach (StackPanel sp in docks.Children)
+            {
+                usched.Add(new List<List<List<string>>>());
+                foreach (Schedentry se in sp.Children)
+                {
+                    if (se.info.Length > 0 && !Program.group.ContainsKey(se.info[0]))
+                        usched.Last().Add(new List<List<string>>());
+                    else
+                        usched.Last().Add(new List<List<string>>());
+                    if (se.info.Length >= 3 || se.info.Length == 0)
+                        usched.Last().Last().Add(new List<string>(se.info));
+                }
+            }
+            {
+            //string s = "";
+            //var sched = Program.schedule.schedule;
+
+            //double ovall = 0, succ = 0;
+            //for (int x = 0; x < usched.Count(); x++)
+            //{
+            //    for (int y = 0; y < usched[x].Count(); y++)
+            //    {
+            //        for (int z = 0; z < usched[x][y].Count(); z++)
+            //        {
+            //            for (int w = 0; w < usched[x][y][z].Count(); w++)
+            //            {
+            //                ovall++;
+            //                //s += usched[x][y][z][w] + " - ";
+            //                if (sched.Count() > x && sched[x].Count() > y && sched[x][y].Count() > z && sched[x][y][z].Count() > w)
+            //                {
+            //                    //s += sched[x][y][z][w];
+            //                    if (sched[x][y][z][w] == usched[x][y][z][w])
+            //                        succ++;
+            //                    else
+            //                    {
+            //                        s += Program.group.Keys.ToArray()[x] + "\t" + sched[x][y][z][w];
+            //                        s += "\n";
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //segrid.Children.Clear();
+            //var scr = new ScrollViewer();
+            //var tb = new TextBlock();
+            //s += Math.Round((succ * 100) / ovall, 3).ToString() + "%";
+            //tb.FontSize = 40;
+            //tb.Text = s;
+            //scr.Content = tb;
+            //segrid.Children.Add(scr);
+        }
+
+            var sched = Program.schedule.schedule; // copy old info if it's not replaced
+            MessageBox.Show((sched == usched).ToString());
+            for (int x = 0; x < sched.Count(); x++)
+            {
+                if (usched.Count() <= x)
+                    usched.Add(sched[x]);
+                for (int y = 0; y < sched[x].Count(); y++)
+                {
+                    if (usched[x].Count() <= y)
+                        usched[x].Add(sched[x][y]);
+                    for (int z = 0; z < sched[x][y].Count(); z++)
+                    {
+                        if (usched[x][y].Count() <= z)
+                            usched[x][y].Add(sched[x][y][z]);
+                        for (int w = 0; w < usched[x][y][z].Count(); w++)
+                        {
+                            if (usched[x][y][z].Count() <= w)
+                                usched[x][y][z].Add(sched[x][y][z][w]);
+                        }
+                    }
+                }
+            }
+            Program.schedule.schedule = usched;
+            Program.schedule.Save();
+            MessageBox.Show("Розклад успішно збережено.");
+        }
+    }
 }

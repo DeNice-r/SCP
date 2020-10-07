@@ -5,6 +5,6 @@ namespace Schedule_Calculator_Pro
 {
     class Buttonplus : Button
     {
-        public string idx = "";
+        public int[] idx;
     }
 }

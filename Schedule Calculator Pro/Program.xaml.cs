@@ -26,7 +26,7 @@ namespace Schedule_Calculator_Pro
         public static Thread PrimaryFileWorkThread = new Thread(SettingsHandle);
         public static bool loadedinfo = false;
         public static CheckBox ChosenDay = null;
-        public static bool workwithschedit = true;
+        public static bool workwithschedit = false;
 
         public Program()
         {
@@ -47,9 +47,9 @@ namespace Schedule_Calculator_Pro
                 }
 
 
-            //var temp = new Thread(CogAnimate);
-            //temp.IsBackground = true;
-            //temp.Start();
+            var temp = new Thread(CogAnimate);
+            temp.IsBackground = true;
+            temp.Start();
             //}
             // uncomment try b4 production stage
             //catch

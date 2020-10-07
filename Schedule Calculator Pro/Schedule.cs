@@ -155,12 +155,12 @@ namespace Schedule_Calculator_Pro
             }
         }
 
-        private void Save()
+        public void Save()
         {
             // Save in json to work w/ it from program later.
             
             System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json"), JsonSerializer.Serialize(schedule));
-
+            System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedfreecfg.json"), JsonSerializer.Serialize(scheduleFree));
 
             for (int _course = 0; _course < 4; _course++)
             {
