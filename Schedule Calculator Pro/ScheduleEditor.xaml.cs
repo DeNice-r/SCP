@@ -43,7 +43,11 @@ namespace Schedule_Calculator_Pro
             if (File.Exists(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")))
             {
                 sched = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")), sched.GetType());
-                Program.schedule.scheduleFree = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedfreecfg.json")), sched.GetType());
+                Program.schedule.scheduleFree = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedfreecfg.json")), Program.schedule.scheduleFree.GetType());
+                //Program.subject = (SortedDictionary<string, Subject>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedsubj.json")), Program.subject.GetType());
+                //Program.group = (SortedDictionary<string, Group>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedgroup.json")), Program.group.GetType());
+                //Program.don = (SortedDictionary<string, Don>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\scheddon.json")), Program.don.GetType());
+                Program.audience = (SortedSet<string>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedaud.json")), Program.audience.GetType());
                 Schedentry.sched = Program.schedule.schedule = sched;
             }
             // Группа > День > Пара > Преподаватели/Предметы/Аудитории

@@ -161,6 +161,11 @@ namespace Schedule_Calculator_Pro
             
             System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json"), JsonSerializer.Serialize(schedule));
             System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedfreecfg.json"), JsonSerializer.Serialize(scheduleFree));
+            System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedsubj.json"), JsonSerializer.Serialize(Program.subject));
+            System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedgroup.json"), JsonSerializer.Serialize(Program.group));
+            System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\scheddon.json"), JsonSerializer.Serialize(Program.don));
+            System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedaud.json"), JsonSerializer.Serialize(Program.audience));
+
 
             for (int _course = 0; _course < 4; _course++)
             {
