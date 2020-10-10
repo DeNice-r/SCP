@@ -26,6 +26,7 @@ namespace Schedule_Calculator_Pro
         public static Thread PrimaryFileWorkThread = new Thread(SettingsHandle);
         public static bool loadedinfo = false;
         public static CheckBox ChosenDay = null;
+
         public static bool workwithschedit = false;
 
         public Program()

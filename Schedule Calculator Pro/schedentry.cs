@@ -23,18 +23,23 @@ namespace Schedule_Calculator_Pro
 {
     class Schedentry : Border
     {
-        public static List<List<uint>> colwidth = new List<List<uint>>();
+        public static List<List<int>> colwidth = new List<List<int>>();
         public static List<List<List<List<string>>>> sched;
         public int[] idx = { -1, -1, -1 };
         public string[] info = { "", "", "" };
         private static BitmapImage cutimg = new BitmapImage(new Uri("Images\\cut.png", UriKind.Relative));
         private static BitmapImage insimg = new BitmapImage(new Uri("Images\\insert.png", UriKind.Relative));
-        DockPanel dock = new DockPanel();
-        StackPanel subjects = new StackPanel();
-        StackPanel dons = new StackPanel();
-        StackPanel auds = new StackPanel();
-        StackPanel ctrls = new StackPanel();
+        public DockPanel dock = new DockPanel();
+        public StackPanel subjects = new StackPanel();
+        public StackPanel dons = new StackPanel();
+        public StackPanel auds = new StackPanel();
+        public StackPanel ctrls = new StackPanel();
+        public Label[] subj = new Label[] { new Label(), new Label() };
+        public Label[] don = new Label[] { new Label(), new Label() };
+        public Label[] aud = new Label[] { new Label(), new Label() };
+        public Border donbord = new Border();
         public static Schedentry cut = null;
+        public static int buttonsizes = 25;
         int fontsize = 12;
 
         public Schedentry()
@@ -56,11 +61,7 @@ namespace Schedule_Calculator_Pro
         {
             idx = idxs;
             info = infos;
-            Label[] subj = new Label[] { new Label(), new Label() };
-            Label[] don = new Label[] { new Label(), new Label() };
-            Label[] aud = new Label[] { new Label(), new Label() };
-            Border donbord = new Border(); donbord.BorderBrush = Brushes.Black;
-            donbord.Child = dons;
+            donbord.BorderBrush = Brushes.Black; donbord.Child = dons;
 
             if (infos.Length >= 3 || infos.Length == 0)
             {
@@ -118,9 +119,9 @@ namespace Schedule_Calculator_Pro
                 var ctrlpanel = new StackPanel(); var ctrlbord = new Border(); ctrlbord.BorderThickness = new Thickness(1, 0, 0, 0); ctrlbord.BorderBrush = Brushes.Black;
                 ctrlbord.Child = ctrlpanel;
                 var cutbutt = new Buttonplus(); cutbutt.Click += SubjCut_Click; cutbutt.idx = idxs; ctrlpanel.Children.Add(cutbutt);
-                cutbutt.Content = cutimage; cutbutt.Height = cutbutt.Width = 25;
+                cutbutt.Content = cutimage; cutbutt.Height = cutbutt.Width = buttonsizes;
                 var insbutt = new Buttonplus(); insbutt.Click += SubjIns_Click; insbutt.idx = idxs; ctrlpanel.Children.Add(insbutt);
-                insbutt.Content = insimage; insbutt.Height = insbutt.Width = 25;
+                insbutt.Content = insimage; insbutt.Height = insbutt.Width = buttonsizes;
                 ctrls.Children.Add(ctrlbord);
             }
             this.BorderBrush = Brushes.Black;
@@ -129,6 +130,26 @@ namespace Schedule_Calculator_Pro
             dock.Children.Add(subjects); dock.Children.Add(donbord); dock.Children.Add(auds); dock.Children.Add(ctrls);
             dock.Height = 50;
             this.Child = dock;
+        }
+
+        public void resize(int s = -1, int d = -1, int a = -1)
+        {
+            if (s != -1)
+                ((Label)subjects.Children[0]).Width = ((Label)subjects.Children[1]).Width = s;
+            if (d != -1)
+                ((Label)dons.Children[0]).Width = ((Label)dons.Children[1]).Width = d;
+            if (a != -1)
+                ((Label)auds.Children[0]).Width = ((Label)auds.Children[1]).Width = a;
+        }
+
+        public void resize(int[] wths)
+        {
+            if (wths[0] != -1)
+                ((Label)subjects.Children[0]).Width = ((Label)subjects.Children[1]).Width = wths[0];
+            if (wths[1] != -1)
+                ((Label)dons.Children[0]).Width = ((Label)dons.Children[1]).Width = wths[1];
+            if (wths[2] != -1)
+                ((Label)auds.Children[0]).Width = ((Label)auds.Children[1]).Width = wths[2];
         }
 
         private void SubjCut_Click(object sender, RoutedEventArgs e)
@@ -149,11 +170,34 @@ namespace Schedule_Calculator_Pro
                 return;
             }
 
+
             var from = (StackPanel)cut.Parent;
             var to = (StackPanel)sentry.Parent;
 
+            int[] w1 = colwidth[Program.group.Keys.ToList().IndexOf(((Schedentry)from.Children[0]).info[0])].ToArray();
+            int[] w2 = colwidth[Program.group.Keys.ToList().IndexOf(((Schedentry)to.Children[0]).info[0])].ToArray();
+            int[] mw;
+
+            if (w1 != w2)
+            {
+                mw = new int[3] { max(w1[0], w2[0]), max(w1[1], w2[1]), max(w1[2], w2[2]) };
+
+                foreach(Schedentry f in from.Children)
+                {
+                    f.resize(mw);
+                }
+                foreach (Schedentry t in to.Children)
+                {
+                    t.resize(mw);
+                }
+            }
+
             var index1 = from.Children.IndexOf(cut);
             var index2 = to.Children.IndexOf(sentry);
+
+            var temp = sentry.idx;
+            sentry.idx = cut.idx;
+            cut.idx = temp;
 
             to.Children.Remove(sentry);
             from.Children.Remove(cut);
@@ -177,6 +221,11 @@ namespace Schedule_Calculator_Pro
             //var dp = (DockPanel)sender;
             //MessageBox.Show("");
             //if()
+        }
+
+        int max(int e1, int e2)
+        {
+            return (e1 > e2) ? e1 : e2;
         }
     }
 }

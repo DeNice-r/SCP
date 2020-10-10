@@ -91,7 +91,7 @@ namespace Schedule_Calculator_Pro
                             }
                         }
                     lensubj *= 7; lendon *= 7; lenaud = lenaud * 7 + 10;
-                    Schedentry.colwidth.Add(new List<uint>() { (uint)lensubj, (uint)lendon, (uint)lenaud });
+                    Schedentry.colwidth.Add(new List<int>() { lensubj, lendon, lenaud });
                 }
                 Schedentry groupentry = new Schedentry(new string[] { Program.group.Keys.ToArray()[_group] }, new int[] { _group });
 
@@ -114,7 +114,7 @@ namespace Schedule_Calculator_Pro
             }
             foreach (var group in uigroups)
                 docks.Children.Add(group);
-        } // Перетягивание на коллбеке дрега с переводом сендера в текстблок.
+        }
 
         private void Window_Closed(object sender, EventArgs e)
         {
@@ -253,9 +253,7 @@ namespace Schedule_Calculator_Pro
                 usched.Add(new List<List<List<string>>>());
                 foreach (Schedentry se in sp.Children)
                 {
-                    if (se.info.Length > 0 && !Program.group.ContainsKey(se.info[0]))
-                        usched.Last().Add(new List<List<string>>());
-                    else
+                    if (se.subj[0].Content != null && DOW.Contains(se.subj[0].Content.ToString()))
                         usched.Last().Add(new List<List<string>>());
                     if (se.info.Length >= 3 || se.info.Length == 0)
                         usched.Last().Last().Add(new List<string>(se.info));
@@ -301,28 +299,22 @@ namespace Schedule_Calculator_Pro
             //segrid.Children.Add(scr);
         }
 
-            var sched = Program.schedule.schedule; // copy old info if it's not replaced
-            MessageBox.Show((sched == usched).ToString());
-            for (int x = 0; x < sched.Count(); x++)
+            for (int x = 0; x < usched.Count(); x++)
             {
-                if (usched.Count() <= x)
-                    usched.Add(sched[x]);
-                for (int y = 0; y < sched[x].Count(); y++)
+                for (int y = 0; y < usched[x].Count(); y++)
                 {
-                    if (usched[x].Count() <= y)
-                        usched[x].Add(sched[x][y]);
-                    for (int z = 0; z < sched[x][y].Count(); z++)
+                    for (int z = usched[x][y].Count()-1; z >= 0; z--)
                     {
-                        if (usched[x][y].Count() <= z)
-                            usched[x][y].Add(sched[x][y][z]);
-                        for (int w = 0; w < usched[x][y][z].Count(); w++)
+                        if(usched[x][y][z].Count != 0)
                         {
-                            if (usched[x][y][z].Count() <= w)
-                                usched[x][y][z].Add(sched[x][y][z][w]);
+                            usched[x][y].RemoveRange(z+1, usched[x][y].Count - z - 1);
+                            break;
                         }
                     }
                 }
             }
+            //MessageBox.Show((sched == usched).ToString());
+            ;
             Program.schedule.schedule = usched;
             Program.schedule.Save();
             MessageBox.Show("Розклад успішно збережено.");
