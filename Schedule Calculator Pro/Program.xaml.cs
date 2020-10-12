@@ -136,6 +136,10 @@ namespace Schedule_Calculator_Pro
                             group[tmp2].relatedAud = excelTemp.ReadCell(t, 7);
                             audience.Add(excelTemp.ReadCell(t, 7));
                         }
+                        if (excelTemp.BReadCell(t, 8))
+                        {
+                            group[tmp2].relatedSubjectsx2[tmp1] = Convert.ToInt32(excelTemp.ReadCell(t, 8));
+                        }
                         t++;
                     }
                 }
@@ -143,9 +147,9 @@ namespace Schedule_Calculator_Pro
 
             var i = 0;
 
-            while (excelTemp.BReadCell(i, 8))
+            while (excelTemp.BReadCell(i, 9))
             {
-                var tmp = excelTemp.ReadCell(i, 8);
+                var tmp = excelTemp.ReadCell(i, 9);
                 if (!group.ContainsKey(tmp))
                 {
                     group.Add(tmp, new Group(tmp));
@@ -153,9 +157,9 @@ namespace Schedule_Calculator_Pro
                 i++;
             }
             i = 0;
-            while (excelTemp.BReadCell(i, 9))
+            while (excelTemp.BReadCell(i, 10))
             {
-                var tmp = excelTemp.ReadCell(i, 9);
+                var tmp = excelTemp.ReadCell(i, 10);
                 if (!subject.ContainsKey(tmp))
                 {
                     subject.Add(tmp, new Subject(tmp));
@@ -163,9 +167,9 @@ namespace Schedule_Calculator_Pro
                 i++;
             }
             i = 0;
-            while (excelTemp.BReadCell(i, 10))
+            while (excelTemp.BReadCell(i, 11))
             {
-                var tmp = excelTemp.ReadCell(i, 10);
+                var tmp = excelTemp.ReadCell(i, 11);
                 if (!group.ContainsKey(tmp))
                 {
                     audience.Add(tmp);
@@ -173,13 +177,10 @@ namespace Schedule_Calculator_Pro
                 i++;
             }
 
-            while (excelTemp.BReadCell(i, 11))
+            while (excelTemp.BReadCell(i, 12))
             {
-                var tmp = excelTemp.ReadCell(i, 11);
-
-                {
-                    group[tmp].StudyingWeeks = Convert.ToInt32(excelTemp.ReadCell(i, 12));
-                }
+                var tmp = excelTemp.ReadCell(i, 12);
+                group[tmp].StudyingWeeks = Convert.ToInt32(excelTemp.ReadCell(i, 13));
                 i++;
             }
 
@@ -267,6 +268,10 @@ namespace Schedule_Calculator_Pro
 
                             excelTemp1.WriteToCell(t, 6, cgroupval.relatedSubjects[csubj][1].ToString());
                             excelTemp1.WriteToCell(t, 7, cgroupval.relatedAud);
+                            if(cgroupval.relatedSubjectsx2.ContainsKey(csubj))
+                                excelTemp1.WriteToCell(t, 8, cgroupval.relatedSubjectsx2[csubj].ToString());
+                            else
+                                excelTemp1.WriteToCell(t, 8, "0");
 
                             if (unwritten[2].Contains(cgroupval.relatedAud))
                                 unwritten[2].Remove(cgroupval.relatedAud);
@@ -279,23 +284,23 @@ namespace Schedule_Calculator_Pro
 
             for (int i = 0; i < unwritten[0].Count; i++) // Сохранить не использованные группы
             {
-                excelTemp1.WriteToCell(i, 8, unwritten[0][i]);
+                excelTemp1.WriteToCell(i, 9, unwritten[0][i]);
             }
             for (int i = 0; i < unwritten[1].Count; i++) // // Сохранить не использованные предметы
             {
-                excelTemp1.WriteToCell(i, 9, unwritten[1][i]);
+                excelTemp1.WriteToCell(i, 10, unwritten[1][i]);
             }
             for (int i = 0; i < unwritten[2].Count; i++) // Сохранить не использованные аудитории
             {
-                excelTemp1.WriteToCell(i, 10, unwritten[2][i]);
+                excelTemp1.WriteToCell(i, 11, unwritten[2][i]);
             }
 
             var temp1 = group.Keys.ToArray();
             var temp2 = group.Values.ToArray();
             for (int i = 0; i < temp1.Count(); i++) // Сохранить соотношение групп - учебных недель
             {
-                excelTemp1.WriteToCell(i, 11, temp1[i]);
-                excelTemp1.WriteToCell(i, 12, temp2[i].StudyingWeeks.ToString());
+                excelTemp1.WriteToCell(i, 12, temp1[i]);
+                excelTemp1.WriteToCell(i, 13, temp2[i].StudyingWeeks.ToString());
             }
 
             excelTemp1.ws.Columns.AutoFit();
@@ -605,6 +610,7 @@ namespace Schedule_Calculator_Pro
                     editdonname.Dispatcher.Invoke(delegate { editdonname.Opacity = x; });
                     editcoupleahalf.Dispatcher.Invoke(delegate { editcoupleahalf.Opacity = x; });
                     editseconddonname.Dispatcher.Invoke(delegate { editseconddonname.Opacity = x; });
+                    editsubjx2.Dispatcher.Invoke(delegate { editsubjx2.Opacity = x; });
                     grouprelsubjok.Dispatcher.Invoke(delegate { grouprelsubjok.Opacity = x; });
                     grouprelsubjcancel.Dispatcher.Invoke(delegate { grouprelsubjcancel.Opacity = x; });
                     Thread.Sleep(2);
@@ -613,11 +619,13 @@ namespace Schedule_Calculator_Pro
                 editdonname.Dispatcher.Invoke(delegate { editdonname.Visibility = Visibility.Hidden; editdonname.Text = ""; });
                 editcoupleahalf.Dispatcher.Invoke(delegate { editcoupleahalf.Visibility = Visibility.Hidden; editcoupleahalf.Text = ""; });
                 editseconddonname.Dispatcher.Invoke(delegate { editseconddonname.Visibility = Visibility.Hidden; editseconddonname.Text = ""; });
+                editsubjx2.Dispatcher.Invoke(delegate { editsubjx2.Visibility = Visibility.Hidden; editsubjx2.SelectedIndex = -1; });
                 grouprelsubjok.Dispatcher.Invoke(delegate { grouprelsubjok.Visibility = Visibility.Hidden; });
                 grouprelsubjcancel.Dispatcher.Invoke(delegate { grouprelsubjcancel.Visibility = Visibility.Hidden; });
             }
             else
             {
+                editsubjx2.Dispatcher.Invoke(delegate { editsubjx2.Visibility = Visibility.Visible; });
                 editsubjname.Dispatcher.Invoke(delegate { editsubjname.Visibility = Visibility.Visible; });
                 editdonname.Dispatcher.Invoke(delegate { editdonname.Visibility = Visibility.Visible; });
                 editcoupleahalf.Dispatcher.Invoke(delegate { editcoupleahalf.Visibility = Visibility.Visible; });
@@ -626,6 +634,7 @@ namespace Schedule_Calculator_Pro
                 grouprelsubjcancel.Dispatcher.Invoke(delegate { grouprelsubjcancel.Visibility = Visibility.Visible; });
                 for (double x = .2; x < 1; x += .02)
                 {
+                    editsubjx2.Dispatcher.Invoke(delegate { editsubjx2.Opacity = x; });
                     editsubjname.Dispatcher.Invoke(delegate { editsubjname.Opacity = x; });
                     editdonname.Dispatcher.Invoke(delegate { editdonname.Opacity = x; });
                     editcoupleahalf.Dispatcher.Invoke(delegate { editcoupleahalf.Opacity = x; });
@@ -1063,12 +1072,13 @@ namespace Schedule_Calculator_Pro
             for (int x = 0; x < temp1.Count; x++)
             {
                 infoset.Add(new List<string>());
-                infoset[x].AddRange(new List<string>() { "", "", "", "" });
+                infoset[x].AddRange(new List<string>() { "", "", "", "", "" });
                 infoset[x][0] = temp1.Keys.ToArray()[x];
                 infoset[x][1] = temp1.Values.ToArray()[x][0];
                 infoset[x][2] = temp1.Values.ToArray()[x][1];
                 if (temp1.Values.ToArray()[x].Count == 3)
                     infoset[x][3] = temp1.Values.ToArray()[x][2];
+                infoset[x][4] = (group[Search.SelectedItem.ToString()].relatedSubjectsx2.Values.ToArray()[x] + 1).ToString();
             }
             grouprelatedinfo.ItemsSource = infoset;
             var temp = new Thread(GroupRelSubjDelAnimate);
@@ -1116,6 +1126,8 @@ namespace Schedule_Calculator_Pro
                 {
                     group[Search.SelectedItem.ToString()].relatedSubjects.Add(editsubjname.Text, new List<string>(group[Search.SelectedItem.ToString()].relatedSubjects.Values.ToArray()[grouprelatedinfo.SelectedIndex]));
                     group[Search.SelectedItem.ToString()].relatedSubjects.Remove(group[Search.SelectedItem.ToString()].relatedSubjects.Keys.ToArray()[grouprelatedinfo.SelectedIndex]);
+                    group[Search.SelectedItem.ToString()].relatedSubjectsx2.Add(editsubjname.Text, editsubjx2.SelectedIndex);
+                    group[Search.SelectedItem.ToString()].relatedSubjectsx2.Remove(group[Search.SelectedItem.ToString()].relatedSubjects.Keys.ToArray()[grouprelatedinfo.SelectedIndex]);
                 }
             }
             else
@@ -1151,12 +1163,13 @@ namespace Schedule_Calculator_Pro
             for (int x = 0; x < temp1.Count; x++)
             {
                 infoset.Add(new List<string>());
-                infoset[x].AddRange(new List<string>() { "", "", "", "" });
+                infoset[x].AddRange(new List<string>() { "", "", "", "", "" });
                 infoset[x][0] = temp1.Keys.ToArray()[x];
                 infoset[x][1] = temp1.Values.ToArray()[x][0];
                 infoset[x][2] = temp1.Values.ToArray()[x][1];
                 if (temp1.Values.ToArray()[x].Count == 3)
                     infoset[x][3] = temp1.Values.ToArray()[x][2];
+                infoset[x][4] = (group[Search.SelectedItem.ToString()].relatedSubjectsx2[editsubjname.Text] + 1).ToString();
             }
             grouprelatedinfo.ItemsSource = infoset;
             var temp2 = new Thread(GroupNewRelSubjAnimate);
@@ -1422,6 +1435,7 @@ namespace Schedule_Calculator_Pro
                 editsubjname.Text = temp1.Keys.ToArray()[grouprelatedinfo.SelectedIndex];
                 editdonname.Text = temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex][0];
                 editcoupleahalf.Text = temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex][1];
+                editsubjx2.SelectedIndex = group[Search.SelectedItem.ToString()].relatedSubjectsx2.Values.ToArray()[grouprelatedinfo.SelectedIndex];
                 if (temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex].Count == 3)
                     editseconddonname.Text = temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex][2];
             }

@@ -9,6 +9,7 @@ namespace Schedule_Calculator_Pro
         public string groupName { get; set; }
         public string relatedAud { get; set; } = "";
         public Dictionary<string, List<string>> relatedSubjects { get; set; } = new Dictionary<string, List<string>>();
+        public Dictionary<string, int> relatedSubjectsx2 { get; set; } = new Dictionary<string, int>();
         public int[] couplesXday { get; set; } = { -1, 3, -1, -1, 3 };
         public int StudyingWeeks { get; set; } = 16;
         public int course;
@@ -30,6 +31,8 @@ namespace Schedule_Calculator_Pro
                 relatedSubjects[SubjName].Add(DonName);
                 relatedSubjects[SubjName][1] = SubjValue;
             }
+            if (!relatedSubjectsx2.ContainsKey(SubjName))
+                relatedSubjectsx2.Add(SubjName, 0);
         }
 
         public int couplesXdayGet(int day)      // Возвращает кол-во пар для конкретного дня и вызывает их рассчёт, если словарь пуст.
