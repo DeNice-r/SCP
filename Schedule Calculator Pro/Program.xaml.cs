@@ -364,10 +364,31 @@ namespace Schedule_Calculator_Pro
             }
             return n;
         }
-        #endregion
 
-        #region Animations
-        private void MenuAnimate()
+        public void dbugrouprelinfo() // DataBase Update
+        {
+            grouprelatedinfo.SelectedIndex = -1;
+            grouprelatedinfo.ItemsSource = null;
+            var temp1 = group[Search.SelectedItem.ToString()].relatedSubjects;
+            List<List<string>> infoset = new List<List<string>>();
+            for (int x = 0; x < temp1.Count; x++)
+            {
+                infoset.Add(new List<string>());
+                infoset[x].AddRange(new List<string>() { "", "", "", "", "" });
+                infoset[x][0] = temp1.Keys.ToArray()[x];
+                infoset[x][1] = temp1.Values.ToArray()[x][0];
+                infoset[x][2] = temp1.Values.ToArray()[x][1];
+                if (temp1.Values.ToArray()[x].Count == 3)
+                    infoset[x][3] = temp1.Values.ToArray()[x][2];
+                infoset[x][4] = group[Search.SelectedItem.ToString()].relatedSubjectsx2.Values.ToArray()[x].ToString();
+                //MessageBox.Show(infoset[x][4]);
+            }
+            grouprelatedinfo.ItemsSource = infoset;
+        }
+#endregion
+
+#region Animations
+private void MenuAnimate()
         {
             var n = -0.16;
             MenuX.Dispatcher.Invoke(delegate { MenuX.IsDefault = true; });
@@ -1066,21 +1087,8 @@ namespace Schedule_Calculator_Pro
         private void grouprelsubjdel_Click(object sender, RoutedEventArgs e)
         {
             group[Search.SelectedItem.ToString()].relatedSubjects.Remove(group[Search.SelectedItem.ToString()].relatedSubjects.Keys.ToArray()[grouprelatedinfo.SelectedIndex]);
-            grouprelatedinfo.ItemsSource = null;
-            var temp1 = group[Search.SelectedItem.ToString()].relatedSubjects;
-            List<List<string>> infoset = new List<List<string>>();
-            for (int x = 0; x < temp1.Count; x++)
-            {
-                infoset.Add(new List<string>());
-                infoset[x].AddRange(new List<string>() { "", "", "", "", "" });
-                infoset[x][0] = temp1.Keys.ToArray()[x];
-                infoset[x][1] = temp1.Values.ToArray()[x][0];
-                infoset[x][2] = temp1.Values.ToArray()[x][1];
-                if (temp1.Values.ToArray()[x].Count == 3)
-                    infoset[x][3] = temp1.Values.ToArray()[x][2];
-                infoset[x][4] = (group[Search.SelectedItem.ToString()].relatedSubjectsx2.Values.ToArray()[x] + 1).ToString();
-            }
-            grouprelatedinfo.ItemsSource = infoset;
+            group[Search.SelectedItem.ToString()].relatedSubjectsx2.Remove(group[Search.SelectedItem.ToString()].relatedSubjects.Keys.ToArray()[grouprelatedinfo.SelectedIndex]);
+            dbugrouprelinfo();
             var temp = new Thread(GroupRelSubjDelAnimate);
             temp.IsBackground = true;
             temp.Start();
@@ -1115,13 +1123,14 @@ namespace Schedule_Calculator_Pro
         {
             if (grouprelatedinfo.SelectedIndex != -1)
             {
-                var temp = group[Search.SelectedItem.ToString()].relatedSubjects;
-                temp.Values.ToArray()[grouprelatedinfo.SelectedIndex][0] = editdonname.Text;
-                temp.Values.ToArray()[grouprelatedinfo.SelectedIndex][1] = editcoupleahalf.Text;
-                if (temp.Values.ToArray().Length == 3)
-                    temp.Values.ToArray()[grouprelatedinfo.SelectedIndex][2] = editseconddonname.Text;
+                //MessageBox.Show(editsubjx2.Text);
+                group[Search.SelectedItem.ToString()].relatedSubjectsx2[editsubjname.Text] = Convert.ToInt32(editsubjx2.Text); //
+                group[Search.SelectedItem.ToString()].relatedSubjects[editsubjname.Text][0] = editdonname.Text;
+                group[Search.SelectedItem.ToString()].relatedSubjects[editsubjname.Text][1] = editcoupleahalf.Text;
+                if (group[Search.SelectedItem.ToString()].relatedSubjects[editsubjname.Text].Count() == 3)
+                    group[Search.SelectedItem.ToString()].relatedSubjects[editsubjname.Text][2] = editseconddonname.Text;
                 else if (editseconddonname.Text != "")
-                    temp.Values.ToArray()[grouprelatedinfo.SelectedIndex].Add(editseconddonname.Text);
+                    group[Search.SelectedItem.ToString()].relatedSubjects[editsubjname.Text].Add(editseconddonname.Text);
                 if (group[Search.SelectedItem.ToString()].relatedSubjects.Keys.ToArray()[grouprelatedinfo.SelectedIndex] != editsubjname.Text)
                 {
                     group[Search.SelectedItem.ToString()].relatedSubjects.Add(editsubjname.Text, new List<string>(group[Search.SelectedItem.ToString()].relatedSubjects.Values.ToArray()[grouprelatedinfo.SelectedIndex]));
@@ -1132,6 +1141,7 @@ namespace Schedule_Calculator_Pro
             }
             else
             {
+                // ?
                 if (don.ContainsKey(editdonname.Text))
                 {
                     if (!don[editdonname.Text].relatedSubjects.Contains(editsubjname.Text))
@@ -1152,26 +1162,13 @@ namespace Schedule_Calculator_Pro
                     don.Add(editseconddonname.Text, new Don(editseconddonname.Text));
                     don[editseconddonname.Text].relatedSubjects.Add(editsubjname.Text);
                 }
-                group[Search.SelectedItem.ToString()].relatedSubjects.Add(editsubjname.Text, new List<string>() { editdonname.Text, editcoupleahalf.Text, editseconddonname.Text });
+                if(group[Search.SelectedItem.ToString()].relatedSubjects.ContainsKey(editdonname.Text))
+                    group[Search.SelectedItem.ToString()].relatedSubjects.Add(editsubjname.Text, new List<string>() { editdonname.Text, editcoupleahalf.Text, editseconddonname.Text });
+                /// ?
             }
             if (!subject.ContainsKey(editsubjname.Text))
                 subject.Add(editsubjname.Text, new Subject(editsubjname.Text));
-            grouprelatedinfo.SelectedIndex = -1;
-            grouprelatedinfo.ItemsSource = null;
-            var temp1 = group[Search.SelectedItem.ToString()].relatedSubjects;
-            List<List<string>> infoset = new List<List<string>>();
-            for (int x = 0; x < temp1.Count; x++)
-            {
-                infoset.Add(new List<string>());
-                infoset[x].AddRange(new List<string>() { "", "", "", "", "" });
-                infoset[x][0] = temp1.Keys.ToArray()[x];
-                infoset[x][1] = temp1.Values.ToArray()[x][0];
-                infoset[x][2] = temp1.Values.ToArray()[x][1];
-                if (temp1.Values.ToArray()[x].Count == 3)
-                    infoset[x][3] = temp1.Values.ToArray()[x][2];
-                infoset[x][4] = (group[Search.SelectedItem.ToString()].relatedSubjectsx2[editsubjname.Text] + 1).ToString();
-            }
-            grouprelatedinfo.ItemsSource = infoset;
+            dbugrouprelinfo();
             var temp2 = new Thread(GroupNewRelSubjAnimate);
             temp2.IsBackground = true;
             temp2.Start();
@@ -1229,22 +1226,26 @@ namespace Schedule_Calculator_Pro
 
         private void audsave_Click(object sender, RoutedEventArgs e)
         {
-            audience.Remove(Search.SelectedItem.ToString());
-            for (int x = 0; x < group.Count; x++)
-                if (group.Values.ToArray()[x].relatedAud == Search.SelectedItem.ToString())
-                    group[group.Keys.ToArray()[x]].relatedAud = audname.Text;
-            for (int x = 0; x < subject.Count; x++)
-                if (subject.Values.ToArray()[x].relatedAud == Search.SelectedItem.ToString())
-                    subject[subject.Keys.ToArray()[x]].relatedAud = audname.Text;
-            for (int x = 0; x < don.Count; x++)
-                if (don.Values.ToArray()[x].relatedAud == Search.SelectedItem.ToString())
-                    don[don.Keys.ToArray()[x]].relatedAud = audname.Text;
-            audience.Remove(Search.SelectedItem.ToString());
-            audience.Add(audname.Text);
-            Search.SelectedIndex = -1;
+            if (Search.SelectedItem.ToString() != "")
+            {
+                audience.Remove(Search.SelectedItem.ToString());
+                for (int x = 0; x < group.Count; x++)
+                    if (group.Values.ToArray()[x].relatedAud == Search.SelectedItem.ToString())
+                        group[group.Keys.ToArray()[x]].relatedAud = audname.Text;
+                for (int x = 0; x < subject.Count; x++)
+                    if (subject.Values.ToArray()[x].relatedAud == Search.SelectedItem.ToString())
+                        subject[subject.Keys.ToArray()[x]].relatedAud = audname.Text;
+                for (int x = 0; x < don.Count; x++)
+                    if (don.Values.ToArray()[x].relatedAud == Search.SelectedItem.ToString())
+                        don[don.Keys.ToArray()[x]].relatedAud = audname.Text;
+                audience.Remove(Search.SelectedItem.ToString());
+                audience.Add(audname.Text);
+                Search.SelectedIndex = -1;
+            }
             var temp = new Thread(AudAnimate);
             temp.IsBackground = true;
             temp.Start();
+            
         }
 
         private void Day_RightClick(object sender, MouseButtonEventArgs e)
@@ -1377,17 +1378,7 @@ namespace Schedule_Calculator_Pro
                     temp.IsBackground = true;
                     temp.Start();
                 }
-                var temp1 = group[sel.ToString()].relatedSubjects;
-                List<List<string>> infoset = new List<List<string>>();
-                for (int x = 0; x < temp1.Count; x++)
-                {
-                    infoset.Add(new List<string>());
-                    infoset[x].AddRange(new List<string>() { "", "", "", "" });
-                    infoset[x][0] = temp1.Keys.ToArray()[x];
-                    for (int y = 1; y <= temp1.Values.ToArray()[x].Count; y++)
-                        infoset[x][y] = temp1.Values.ToArray()[x][y - 1];
-                }
-                grouprelatedinfo.ItemsSource = infoset;
+                dbugrouprelinfo();
                 groupname.Text = sel.ToString();
                 grouprelaud.Text = group[sel.ToString()].relatedAud;
                 groupstudyingweeks.Text = group[sel.ToString()].StudyingWeeks.ToString();
@@ -1435,7 +1426,8 @@ namespace Schedule_Calculator_Pro
                 editsubjname.Text = temp1.Keys.ToArray()[grouprelatedinfo.SelectedIndex];
                 editdonname.Text = temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex][0];
                 editcoupleahalf.Text = temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex][1];
-                editsubjx2.SelectedIndex = group[Search.SelectedItem.ToString()].relatedSubjectsx2.Values.ToArray()[grouprelatedinfo.SelectedIndex];
+                //MessageBox.Show(group[Search.SelectedItem.ToString()].relatedSubjectsx2.Values.ToArray()[grouprelatedinfo.SelectedIndex].ToString());
+                editsubjx2.Text = group[Search.SelectedItem.ToString()].relatedSubjectsx2.Values.ToArray()[grouprelatedinfo.SelectedIndex].ToString();
                 if (temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex].Count == 3)
                     editseconddonname.Text = temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex][2];
             }
