@@ -16,66 +16,168 @@ namespace Schedule_Calculator_Pro
         private Random rnd = new Random();
         public Schedule() { }
 
+        //public void Start()
+        //{
+        //    PreGen();
+        //    var pdon = Program.don;
+        //    var pgroup = Program.group;
+        //    for (int don = 0; don < pdon.Count; don++)
+        //    {
+        //        var tgroups = new List<int>();
+        //        var tlist = new List<List<int>>();
+        //        var curdon = pdon.Values.ToArray()[don];
+        //        var curdonname = pdon.Keys.ToArray()[don];
+        //        for (int group = 0; group < pgroup.Count; group++)
+        //        {
+        //            var tgroup = pgroup.Values.ToArray()[group];
+        //            for (int x = 0; x < tgroup.relatedSubjects.Count; x++)
+        //            {
+        //                if (tgroup.relatedSubjects.Values.ToArray()[x][0] == curdonname)
+        //                {
+        //                    if (!tgroups.Contains(group))
+        //                        tgroups.Add(group);
+        //                    if (tlist.Count < tgroups.Count)
+        //                        tlist.Add(new List<int>());
+        //                    tlist[tlist.Count - 1].Add(x);
+        //                }
+        //            }
+        //        }
+        //        for (int day = 0; day < 5; day++)
+        //        {
+
+        //            for (int couple = 0; couple < 6; couple++)
+        //            {
+        //                // Если преподаватель свободен в этот день на этой паре
+        //                if (scheduleFree[day][couple][0].Contains(pdon.Keys.ToArray()[don]))
+        //                    for (int group = 0; group < tgroups.Count; group++)
+        //                    {
+        //                        var curgroup = pgroup.Values.ToArray()[group];
+        //                        var curgroupname = pgroup.Keys.ToArray()[group];
+        //                        if (curgroup.couplesXdayGet(day) <= couple || schedule[group][day][couple].Count != 0)
+        //                            continue;
+        //                        for (int subj = 0; subj < tlist[group].Count; subj++)
+        //                        {
+        //                            var cursubj = curgroup.relatedSubjects.Values.ToArray()[subj];
+        //                            var cursubjname = curgroup.relatedSubjects.Keys.ToArray()[subj];
+        //                            var cursubjx2 = curgroup.relatedSubjectsx2.Values.ToArray()[subj];
+        //                            var groupsplits = cursubj.Count == 3 && cursubj[2] != "";
+        //                            if (Convert.ToInt32(cursubj[1]) > 0)
+        //                            {
+        //                                if (cursubjx2 == 1)
+        //                                {
+        //                                    if (Convert.ToInt32(cursubj[1]) % curgroup.StudyingWeeks == 8)
+        //                                    {
+
+        //                                    }
+        //                                    else
+        //                                    {
+        //                                        if (groupsplits)
+        //                                        {
+        //                                            if (scheduleFree[day][couple][0].Contains(cursubj[2]))
+        //                                            {
+        //                                                schedule[tgroups[group]][day][couple].Add(cursubjname); // Предмет
+        //                                                schedule[tgroups[group]][day][couple].Add(curdonname); // Преподаватель
+        //                                                schedule[tgroups[group]][day][couple].Add(cursubj[2]);
+        //                                                schedule[tgroups[group]][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория
+        //                                                schedule[tgroups[group]][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория 2
+        //                                                scheduleFree[day][couple][0].Remove(cursubj[2]);
+        //                                                scheduleFree[day][couple][0].Remove(curdonname);
+
+        //                                                pgroup[curgroupname].relatedSubjects[cursubjname][1] = (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) - 16).ToString();
+        //                                                group = 10000;
+        //                                                break;
+        //                                            }
+        //                                        }
+        //                                        else
+        //                                        {
+        //                                            schedule[group][day][couple].Add(cursubjname); // Предмет
+        //                                            schedule[group][day][couple].Add(curdonname); // Преподаватель
+        //                                            scheduleFree[day][couple][0].Remove(curdonname);
+        //                                            schedule[group][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория
+
+        //                                            pgroup[curgroupname].relatedSubjects[cursubjname][1] = (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) - 16).ToString();
+        //                                            group = 10000;
+        //                                            break;
+        //                                        }
+        //                                    }
+        //                                }
+        //                                else if (cursubjx2 == 2)
+        //                                {
+
+        //                                }
+        //                            }
+        //                        }
+        //                    }
+        //            }
+        //        }
+        //    }
+        //    Save();
+        //    MessageBox.Show("Розклад складено.");
+        //}
+
+        // TODO:
+        // 1. Проверить работоспособность алгоритма с нововведениями
+        // 2. сделать 2 пары подрят
+        // 3. Сделать 2 чередующиеся пары (кол-во пар/семестр%кол-во пар это предмета/семестр == 8)
+        // 4. Возможно уменьшить влияние рассчитаных пар/день хотя бы в случае двух пар подрят
+        // 5. ???
+
         public void Start()
         {
             PreGen();
             var pdon = Program.don;
             var pgroup = Program.group;
+
             for (int don = 0; don < pdon.Count; don++)
             {
                 var tgroups = new List<int>();
                 var tlist = new List<List<int>>();
-                var curdon = pdon.Values.ToArray()[don];
-                var curdonname = pdon.Keys.ToArray()[don];
                 for (int group = 0; group < pgroup.Count; group++)
                 {
-                    var tgroup = pgroup.Values.ToArray()[group];                                                       // TODO:
-                    for (int x = 0; x < tgroup.relatedSubjects.Count; x++)                                             // 1. Проверить работоспособность алгоритма с нововведениями
-                    {                                                                                                  // 2. сделать 2 пары подрят
-                        if (tgroup.relatedSubjects.Values.ToArray()[x][0] == curdonname)                               // 3. Сделать 2 чередующиеся пары (кол-во пар/семестр%кол-во пар это предмета/семестр == 8)
-                        {                                                                                              // 4. Возможно уменьшить влияние рассчитаных пар/день хотя бы в случае двух пар подрят
-                            if (!tgroups.Contains(group))                                                              // 5. ???
-                                tgroups.Add(group);                                                                    //
-                            if (tlist.Count < tgroups.Count)                                                           //
-                                tlist.Add(new List<int>());                                                            //
-                            tlist[tlist.Count - 1].Add(x);                                                             //
-                        }                                                                                              //
-                    }                                                                                                  //
-                }                                                                                                      //
-                for (int day = 0; day < 5; day++)                                                                      //
-                {                                                                                                      //
-                                                                                                                       //
+                    var tgroup = pgroup.Values.ToArray()[group];
+                    for (int x = 0; x < tgroup.relatedSubjects.Count; x++)
+                    {
+                        if (tgroup.relatedSubjects.Values.ToArray()[x][0] == pdon.Values.ToArray()[don].donName)
+                        {
+                            if (!tgroups.Contains(group))
+                                tgroups.Add(group);
+                            if (tlist.Count < tgroups.Count)
+                                tlist.Add(new List<int>());
+                            tlist.Last().Add(x);
+                        }
+                    }
+                }
+                for (int day = 0; day < 5; day++)
+                {
+
                     for (int couple = 0; couple < 6; couple++)
                     {
                         // Если преподаватель свободен в этот день на этой паре
                         if (scheduleFree[day][couple][0].Contains(pdon.Keys.ToArray()[don]))
                             for (int group = 0; group < tgroups.Count; group++)
                             {
-                                var curgroup =     pgroup.Values.ToArray()[group];
-                                var curgroupname = pgroup.Keys.ToArray()[group];
-                                if (curgroup.couplesXdayGet(day) <= couple || schedule[tgroups[group]][day][couple].Count != 0)
+                                if (pgroup.Values.ToArray()[tgroups[group]].couplesXdayGet(day) <= couple || schedule[tgroups[group]][day][couple].Count != 0)
                                     continue;
                                 for (int subj = 0; subj < tlist[group].Count; subj++)
-                                {
-                                    var cursubj = curgroup.relatedSubjects.Values.ToArray()[subj];
-                                    var cursubjname = curgroup.relatedSubjects.Keys.ToArray()[subj];
-                                    if (Convert.ToInt32(cursubj[1]) > 0)
+                                    if (Convert.ToInt32(pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][1]) > 0)
                                     {
-                                        var groupsplits = cursubj.Count == 3 && cursubj[2] != "";
-                                        if (groupsplits && scheduleFree[day][couple][0].Contains(cursubj[2]))
-                                            schedule[tgroups[group]][day][couple].Add(cursubjname); // Предмет
-                                        schedule[tgroups[group]][day][couple].Add(curdonname); // Преподаватель
-                                        schedule[tgroups[group]][day][couple].Add(cursubj[2]);
-                                        schedule[tgroups[group]][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория
-                                        schedule[tgroups[group]][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория 2
-                                        scheduleFree[day][couple][0].Remove(cursubj[2]);
-                                        scheduleFree[day][couple][0].Remove(curdonname);
+                                        schedule[tgroups[group]][day][couple].Add(pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Keys.ToArray()[tlist[group][subj]]); // Предмет
+                                        schedule[tgroups[group]][day][couple].Add(pdon.Keys.ToArray()[don]); // Преподаватель
+                                        var b = pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]].Count == 3 && pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][2] != "";
+                                        if (b)
+                                        {
+                                            schedule[tgroups[group]][day][couple].Add(pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][2]);
+                                            scheduleFree[day][couple][0].Remove(pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][2]);
+                                        }
+                                        schedule[tgroups[group]][day][couple].Add(getAud(day, couple, pgroup.Values.ToArray()[tgroups[group]], pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Keys.ToArray()[tlist[group][subj]], 0)); // Аудитория
+                                        if (b)
+                                            schedule[tgroups[group]][day][couple].Add(getAud(day, couple, pgroup.Values.ToArray()[tgroups[group]], pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Keys.ToArray()[tlist[group][subj]], 0)); // Аудитория
+                                        scheduleFree[day][couple][0].Remove(pdon.Keys.ToArray()[don]);
 
-                                        pgroup[curgroupname].relatedSubjects[cursubjname][1] = (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) - 16).ToString();
+                                        pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][1] = (Convert.ToInt32(pgroup.Values.ToArray()[tgroups[group]].relatedSubjects.Values.ToArray()[tlist[group][subj]][1]) - 16).ToString();
                                         group = 10000;
                                         break;
                                     }
-                                }         
                             }
                     }
                 }

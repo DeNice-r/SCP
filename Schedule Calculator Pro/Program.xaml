@@ -114,13 +114,13 @@
         <Button x:Name="audsave" Click="audsave_Click" Height="25" Width="25" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="563,253,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
             <Image Source="Images/save.png" />
         </Button>
-        <Button x:Name="schedulegenerate" ToolTip="Створити розклад" Visibility="Visible" Height="30" Width="30" Click="schedulegenerate_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="916,471,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
+        <Button x:Name="schedulegenerate" ToolTip="Створити розклад" Height="30" Width="30" Click="schedulegenerate_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="916,471,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
             <Image Source="Images/gen.png" />
         </Button>
-        <Button x:Name="deletegroup" Click="deletegroup_Click" Visibility="Visible" Width="25" Height="25" Margin="717,134,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
+        <Button x:Name="deletegroup" Click="deletegroup_Click" Visibility="Hidden" Width="25" Height="25" Margin="717,134,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
             <Image Source="Images/delete.png" />
         </Button>
-        <DataGrid x:Name="grouprelatedinfo" IsReadOnly="True" SelectionChanged="grouprelatedsubjects_SelectionChanged" Height="200" Margin="184,194,0,0" AutoGenerateColumns="False" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="558">
+        <DataGrid x:Name="grouprelatedinfo" IsReadOnly="True" SelectionChanged="grouprelatedsubjects_SelectionChanged" Height="200" Margin="184,194,0,0" AutoGenerateColumns="False" VerticalAlignment="Top" Visibility="Hidden" HorizontalAlignment="Left" Width="558">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Предмет" Binding="{Binding Path=[0]}" Width="140" />
                 <DataGridTextColumn Header="Викладач" Binding="{Binding Path=[1]}" Width="140" />
@@ -129,14 +129,14 @@
                 <DataGridTextColumn Header="x2" Binding="{Binding Path=[4]}" Width="30" />
             </DataGrid.Columns>
         </DataGrid>
-        <TextBox x:Name="groupname" Visibility="Visible" Height="25" Margin="184,134,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="388" FontSize="18" />
-        <Button x:Name="newgrouprelsubj" Visibility="Visible" Click="newgrouprelsubj_Click" Height="25" Width="25" Margin="747,194,0,0" BorderBrush="{x:Null}" Background="#BFFFFFFF" Foreground="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <TextBox x:Name="groupname" Visibility="Hidden" Height="25" Margin="184,134,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="388" FontSize="18" />
+        <Button x:Name="newgrouprelsubj" Visibility="Hidden" Click="newgrouprelsubj_Click" Height="25" Width="25" Margin="747,194,0,0" BorderBrush="{x:Null}" Background="#BFFFFFFF" Foreground="{x:Null}" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Image Source="Images/add.png" />
         </Button>
-        <Button x:Name="grouprelsubjdel" Visibility="Visible" Click="grouprelsubjdel_Click" Height="25" Width="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="747,224,0,0" Background="#BFFFFFFF" BorderBrush="{x:Null}" Foreground="{x:Null}">
+        <Button x:Name="grouprelsubjdel" Visibility="Hidden" Click="grouprelsubjdel_Click" Height="25" Width="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="747,224,0,0" Background="#BFFFFFFF" BorderBrush="{x:Null}" Foreground="{x:Null}">
             <Image Source="Images/delete.png" />
         </Button>
-        <ComboBox IsVisibleChanged="groupaddcouple_dbusubj" x:Name="editsubjname" Visibility="Visible" Height="25" Margin="184,164,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="140" Foreground="Black" Background="{x:Null}" FontSize="18">
+        <ComboBox IsVisibleChanged="groupaddcouple_dbusubj" x:Name="editsubjname" Visibility="Hidden" Height="25" Margin="184,164,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="140" Foreground="Black" Background="{x:Null}" FontSize="18">
             <ComboBox.BorderBrush>
                 <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                     <GradientStop Color="#FFFF3E53" Offset="0" />
@@ -144,7 +144,7 @@
                 </LinearGradientBrush>
             </ComboBox.BorderBrush>
         </ComboBox>
-        <TextBox x:Name="editcoupleahalf" Visibility="Visible" Height="25" Margin="474,164,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30" Foreground="Black" Background="{x:Null}" FontSize="18">
+        <TextBox x:Name="editcoupleahalf" Visibility="Hidden" Height="25" Margin="474,164,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="30" Foreground="Black" Background="{x:Null}" FontSize="18">
             <TextBox.BorderBrush>
                 <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                     <GradientStop Color="#FFFF3E53" Offset="0" />
@@ -152,7 +152,7 @@
                 </LinearGradientBrush>
             </TextBox.BorderBrush>
         </TextBox>
-        <ComboBox IsVisibleChanged="groupaddcouple_dbudon" x:Name="editseconddonname" Visibility="Visible" Height="25" Width="125" Margin="509,164,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="Black" Background="{x:Null}" FontSize="18">
+        <ComboBox IsVisibleChanged="groupaddcouple_dbudon" x:Name="editseconddonname" Visibility="Hidden" Height="25" Width="125" Margin="509,164,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="Black" Background="{x:Null}" FontSize="18">
             <ComboBox.BorderBrush>
                 <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                     <GradientStop Color="#FFFF3E53" Offset="0" />
@@ -160,7 +160,7 @@
                 </LinearGradientBrush>
             </ComboBox.BorderBrush>
         </ComboBox>
-        <ComboBox x:Name="editsubjx2" Visibility="Visible" Height="25" Width="43" Margin="639,164,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="Black" Background="{x:Null}" FontSize="18">
+        <ComboBox x:Name="editsubjx2" Visibility="Hidden" Height="25" Width="43" Margin="639,164,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="Black" Background="{x:Null}" FontSize="18">
             <ComboBoxItem Content="1"/>
             <ComboBoxItem Content="2"/>
             <ComboBox.BorderBrush>
@@ -170,7 +170,7 @@
                 </LinearGradientBrush>
             </ComboBox.BorderBrush>
         </ComboBox>
-        <ComboBox IsVisibleChanged="groupaddcouple_dbudon" x:Name="editdonname" Visibility="Visible" Height="25" Margin="329,164,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="140" Foreground="Black" Background="{x:Null}" FontSize="18">
+        <ComboBox IsVisibleChanged="groupaddcouple_dbudon" x:Name="editdonname" Visibility="Hidden" Height="25" Margin="329,164,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="140" Foreground="Black" Background="{x:Null}" FontSize="18">
             <ComboBox.BorderBrush>
                 <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                     <GradientStop Color="#FFFF3E53" Offset="0" />
@@ -178,27 +178,27 @@
                 </LinearGradientBrush>
             </ComboBox.BorderBrush>
         </ComboBox>
-        <Button x:Name="grouprelsubjok" Visibility="Visible" Click="grouprelsubjok_Click" Height="25" Width="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="687,164,0,0" Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}">
+        <Button x:Name="grouprelsubjok" Visibility="Hidden" Click="grouprelsubjok_Click" Height="25" Width="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="687,164,0,0" Foreground="{x:Null}" BorderBrush="{x:Null}" Background="{x:Null}">
             <Image Source="Images/ok.png" />
         </Button>
-        <Button x:Name="grouprelsubjcancel" Visibility="Visible" Click="grouprelsubjcancel_Click" Height="25" Width="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="717,164,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
+        <Button x:Name="grouprelsubjcancel" Visibility="Hidden" Click="grouprelsubjcancel_Click" Height="25" Width="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="717,164,0,0" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
             <Image Source="Images/xcircled.png" />
         </Button>
-        <TextBox x:Name="groupstudyingweeks" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Height="25" Margin="632,134,0,0" FontSize="18">
+        <TextBox x:Name="groupstudyingweeks" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" Height="25" Margin="632,134,0,0" FontSize="18">
             <TextBox.ToolTip>
                 <ToolTip>
                     Кількість навчальних тижнів в цьому семестрі
                 </ToolTip>
             </TextBox.ToolTip>
         </TextBox>
-        <TextBox x:Name="grouprelaud" HorizontalAlignment="Left" Visibility="Visible" VerticalAlignment="Top" Width="50" Height="25" Margin="577,134,0,0" FontSize="18">
+        <TextBox x:Name="grouprelaud" HorizontalAlignment="Left" Visibility="Hidden" VerticalAlignment="Top" Width="50" Height="25" Margin="577,134,0,0" FontSize="18">
             <TextBox.ToolTip>
                 <ToolTip>
                     Аудиторія групи
                 </ToolTip>
             </TextBox.ToolTip>
         </TextBox>
-        <Button x:Name="groupsavechanges" Height="25" Visibility="Visible" Width="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="687,134,0,0" Background="{x:Null}" Foreground="{x:Null}" BorderBrush="{x:Null}" Click="groupsavechanges_Click">
+        <Button x:Name="groupsavechanges" Height="25" Visibility="Hidden" Width="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="687,134,0,0" Background="{x:Null}" Foreground="{x:Null}" BorderBrush="{x:Null}" Click="groupsavechanges_Click">
             <Image Source="Images/save.png" />
         </Button>
         <TextBox Width="200" Visibility="Hidden" Name="subjectname" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="356,238,0,0" FontSize="18" />

@@ -108,6 +108,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Buttonplus.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Don.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="Schedentry.cs" />
