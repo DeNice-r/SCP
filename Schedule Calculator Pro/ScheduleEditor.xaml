@@ -10,13 +10,13 @@
     <Grid x:Name="segrid" Margin="0,0,0,0">
         <Grid x:Name="sidebar" Width="30" VerticalAlignment="Top" HorizontalAlignment="Left" Height="509">
             <Button x:Name="desel"     ToolTip="Скинути вибір"  Click="desel_Click"     Height="30" Margin="0,0,0,0"  VerticalAlignment="Top"    HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
-                <Image Source="Images/desel.png"/>
+                <Image Source="Images/desel.png" />
             </Button>
             <Button x:Name="remove"    ToolTip="Видалити пару"  Click="remove_Click"    Height="30" Margin="0,30,0,0" VerticalAlignment="Top"    HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
-                <Image Source="Images/deleteblack.png"/>
+                <Image Source="Images/deleteblack.png" />
             </Button>
             <Button x:Name="schedsave" ToolTip="Зберегти зміни" Click="schedsave_Click" Height="30" Margin="0,0,0,0"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
-                <Image Source="Images/saveblack.png"/>
+                <Image Source="Images/saveblack.png" />
             </Button>
         </Grid>
         <ScrollViewer x:Name="ContentMgr"  VerticalAlignment="Top" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Visible" Margin="30,0,0,0">

@@ -1,27 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.IO;
-using System.Threading;
-using drawing = System.Drawing;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Drawing.Imaging;
-using System.Windows.Media.Effects;
 
 namespace Schedule_Calculator_Pro
 {
-    class Schedentry : Border
+    internal class Schedentry : Border
     {
         public static List<List<int>> colwidth = new List<List<int>>();
         public static List<List<List<List<string>>>> sched;
@@ -40,7 +28,7 @@ namespace Schedule_Calculator_Pro
         public Border donbord = new Border();
         public static Schedentry cut = null;
         public static int buttonsizes = 25;
-        int fontsize = 12;
+        private int fontsize = 12;
 
         public Schedentry()
         {
@@ -82,6 +70,7 @@ namespace Schedule_Calculator_Pro
                             subj[0].FontSize = 20;
                     }
                     break;
+
                 case 3:
                     {
                         subj[0].Content = infos[0]; subj[0].Height = 50; subj[0].VerticalContentAlignment = VerticalAlignment.Center;
@@ -89,6 +78,7 @@ namespace Schedule_Calculator_Pro
                         aud[0].Content = infos[2]; aud[0].Height = 50; aud[0].VerticalContentAlignment = VerticalAlignment.Center;
                     }
                     break;
+
                 case 5:
                     {
                         subj[0].Content = infos[0]; subj[0].Height = 50; subj[0].VerticalContentAlignment = VerticalAlignment.Center;
@@ -97,6 +87,7 @@ namespace Schedule_Calculator_Pro
                         don[0].Height = 25; aud[0].Height = 25;
                     }
                     break;
+
                 case 6:
                     {
                         subj[0].Content = infos[0]; subj[1].Content = infos[1];
@@ -105,6 +96,7 @@ namespace Schedule_Calculator_Pro
                         subj[0].Height = 25; don[0].Height = 25; aud[0].Height = 25;
                     }
                     break;
+
                 default:
                     break;
             }
@@ -156,7 +148,7 @@ namespace Schedule_Calculator_Pro
         {
             ScheduleEditor.deselect();
             var s = (Buttonplus)sender;
-            cut = (Schedentry)((DockPanel)((StackPanel)((Border)((StackPanel) s.Parent).Parent).Parent).Parent).Parent;
+            cut = (Schedentry)((DockPanel)((StackPanel)((Border)((StackPanel)s.Parent).Parent).Parent).Parent).Parent;
             cut.Opacity = .35;
         }
 
@@ -170,7 +162,6 @@ namespace Schedule_Calculator_Pro
                 return;
             }
 
-
             var from = (StackPanel)cut.Parent;
             var to = (StackPanel)sentry.Parent;
 
@@ -182,7 +173,7 @@ namespace Schedule_Calculator_Pro
             {
                 mw = new int[3] { max(w1[0], w2[0]), max(w1[1], w2[1]), max(w1[2], w2[2]) };
 
-                foreach(Schedentry f in from.Children)
+                foreach (Schedentry f in from.Children)
                 {
                     f.resize(mw);
                 }
@@ -223,10 +214,9 @@ namespace Schedule_Calculator_Pro
             //if()
         }
 
-        int max(int e1, int e2)
+        private int max(int e1, int e2)
         {
             return (e1 > e2) ? e1 : e2;
         }
     }
 }
-

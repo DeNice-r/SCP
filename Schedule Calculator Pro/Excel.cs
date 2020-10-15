@@ -3,17 +3,18 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Windows;
+
 using _Excel = Microsoft.Office.Interop.Excel;
 
 namespace Schedule_Calculator_Pro
 {
     public class Excel
     {
-        string path = "";
+        private string path = "";
         public _Application excel = new _Excel.Application();
         public Workbook wb;
         public Worksheet ws;
+
         public Excel(string path)
         {
             this.path = path;
@@ -21,12 +22,14 @@ namespace Schedule_Calculator_Pro
             wb = excel.Workbooks.Add(1);
             ws = wb.Worksheets[1];
         }
+
         public Excel(string path, int sheet)
         {
             this.path = path;
             wb = excel.Workbooks.Open(path);
             ws = wb.Worksheets[sheet];
         }
+
         public void close()
         {
             excel.Quit();
@@ -39,20 +42,24 @@ namespace Schedule_Calculator_Pro
         {
             return Convert.ToString(ws.Cells[i + 1, j + 1].Value2);
         }
+
         public void WriteToCell(int i, int j, string s)
         {
             ws.Cells[i + 1, j + 1].Value2 = s;
         }
+
         public void Save()
         {
             wb.Save();
         }
+
         public void SaveAs()
         {
             if (File.Exists(path))
                 File.Delete(path);
             wb.SaveAs(path);
         }
+
         public bool BReadCell(int i, int j)
         {
             i++; j++;

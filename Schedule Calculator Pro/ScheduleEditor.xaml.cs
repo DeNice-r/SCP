@@ -1,25 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.IO;
-using System.Threading;
 using drawing = System.Drawing;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Drawing.Imaging;
-using System.Windows.Media.Effects;
-using System.Xml.Schema;
-using System.Runtime.CompilerServices;
 
 namespace Schedule_Calculator_Pro
 {
@@ -30,7 +21,7 @@ namespace Schedule_Calculator_Pro
     {
         private static Program parent = null;
         public static string[] DOW = { "Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця" };
-        List<StackPanel> uigroups = new List<StackPanel>();
+        private List<StackPanel> uigroups = new List<StackPanel>();
         public static List<List<List<List<string>>>> sched = new List<List<List<List<string>>>>();
 
         public ScheduleEditor(Program p)
@@ -43,16 +34,14 @@ namespace Schedule_Calculator_Pro
             if (File.Exists(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")))
             {
                 sched = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")), sched.GetType());
-                Program.schedule.scheduleFree = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedfreecfg.json")), Program.schedule.scheduleFree.GetType());
+                //Program.schedule.scheduleFree = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedfreecfg.json")), Program.schedule.scheduleFree.GetType());
                 //Program.subject = (SortedDictionary<string, Subject>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedsubj.json")), Program.subject.GetType());
                 //Program.group = (SortedDictionary<string, Group>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedgroup.json")), Program.group.GetType());
                 //Program.don = (SortedDictionary<string, Don>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\scheddon.json")), Program.don.GetType());
-                Program.audience = (SortedSet<string>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedaud.json")), Program.audience.GetType());
-                Schedentry.sched = Program.schedule.schedule = sched;
+                //Program.audience = (SortedSet<string>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedaud.json")), Program.audience.GetType());
+                //Schedentry.sched = Program.schedule.schedule = sched;
             }
             // Группа > День > Пара > Преподаватели/Предметы/Аудитории
-
-
 
             while (!Program.loadedinfo) Thread.Sleep(100);
 
@@ -60,7 +49,7 @@ namespace Schedule_Calculator_Pro
             {
                 {
                     int lensubj = 0, lendon = 0, lenaud = 0;
-                    foreach (var d in sched[_group]) // Calc 
+                    foreach (var d in sched[_group]) // Calc
                         foreach (var c in d)
                         {
                             if (c.Count() > 0)
@@ -124,7 +113,6 @@ namespace Schedule_Calculator_Pro
                 if (parent != null)
                     parent.Close();
             }
-
         }
 
         private void Window_SizeChanged(object sender, EventArgs e)
@@ -260,54 +248,54 @@ namespace Schedule_Calculator_Pro
                 }
             }
             {
-            //string s = "";
-            //var sched = Program.schedule.schedule;
+                //string s = "";
+                //var sched = Program.schedule.schedule;
 
-            //double ovall = 0, succ = 0;
-            //for (int x = 0; x < usched.Count(); x++)
-            //{
-            //    for (int y = 0; y < usched[x].Count(); y++)
-            //    {
-            //        for (int z = 0; z < usched[x][y].Count(); z++)
-            //        {
-            //            for (int w = 0; w < usched[x][y][z].Count(); w++)
-            //            {
-            //                ovall++;
-            //                //s += usched[x][y][z][w] + " - ";
-            //                if (sched.Count() > x && sched[x].Count() > y && sched[x][y].Count() > z && sched[x][y][z].Count() > w)
-            //                {
-            //                    //s += sched[x][y][z][w];
-            //                    if (sched[x][y][z][w] == usched[x][y][z][w])
-            //                        succ++;
-            //                    else
-            //                    {
-            //                        s += Program.group.Keys.ToArray()[x] + "\t" + sched[x][y][z][w];
-            //                        s += "\n";
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //segrid.Children.Clear();
-            //var scr = new ScrollViewer();
-            //var tb = new TextBlock();
-            //s += Math.Round((succ * 100) / ovall, 3).ToString() + "%";
-            //tb.FontSize = 40;
-            //tb.Text = s;
-            //scr.Content = tb;
-            //segrid.Children.Add(scr);
-        }
+                //double ovall = 0, succ = 0;
+                //for (int x = 0; x < usched.Count(); x++)
+                //{
+                //    for (int y = 0; y < usched[x].Count(); y++)
+                //    {
+                //        for (int z = 0; z < usched[x][y].Count(); z++)
+                //        {
+                //            for (int w = 0; w < usched[x][y][z].Count(); w++)
+                //            {
+                //                ovall++;
+                //                //s += usched[x][y][z][w] + " - ";
+                //                if (sched.Count() > x && sched[x].Count() > y && sched[x][y].Count() > z && sched[x][y][z].Count() > w)
+                //                {
+                //                    //s += sched[x][y][z][w];
+                //                    if (sched[x][y][z][w] == usched[x][y][z][w])
+                //                        succ++;
+                //                    else
+                //                    {
+                //                        s += Program.group.Keys.ToArray()[x] + "\t" + sched[x][y][z][w];
+                //                        s += "\n";
+                //                    }
+                //                }
+                //            }
+                //        }
+                //    }
+                //}
+                //segrid.Children.Clear();
+                //var scr = new ScrollViewer();
+                //var tb = new TextBlock();
+                //s += Math.Round((succ * 100) / ovall, 3).ToString() + "%";
+                //tb.FontSize = 40;
+                //tb.Text = s;
+                //scr.Content = tb;
+                //segrid.Children.Add(scr);
+            }
 
             for (int x = 0; x < usched.Count(); x++)
             {
                 for (int y = 0; y < usched[x].Count(); y++)
                 {
-                    for (int z = usched[x][y].Count()-1; z >= 0; z--)
+                    for (int z = usched[x][y].Count() - 1; z >= 0; z--)
                     {
-                        if(usched[x][y][z].Count != 0)
+                        if (usched[x][y][z].Count != 0)
                         {
-                            usched[x][y].RemoveRange(z+1, usched[x][y].Count - z - 1);
+                            usched[x][y].RemoveRange(z + 1, usched[x][y].Count - z - 1);
                             break;
                         }
                     }

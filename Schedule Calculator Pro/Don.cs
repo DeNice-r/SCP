@@ -9,6 +9,7 @@ namespace Schedule_Calculator_Pro
         public List<string> relatedSubjects { get; set; } = new List<string>();
         public string relatedAud { get; set; } = "";
         public bool[] possDays { get; set; } = new bool[] { true, true, true, true, true };
+
         public bool[][] dayStats { get; set; } = new bool[][] { new bool[] { true, true, true, true, true, true },
                                                                 new bool[] { true, true, true, true, true, true },
                                                                 new bool[] { true, true, true, true, true, true },
@@ -97,7 +98,6 @@ namespace Schedule_Calculator_Pro
             for (int x = 0; x < 5; x++)
             {
                 possDays[x] = (isStrict(x) == 1 || isStrict(x) == 0);
-
             }
         }
 

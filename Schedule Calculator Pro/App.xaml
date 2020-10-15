@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:Schedule_Calculator_Pro"
              StartupUri="Program.xaml">
     <Application.Resources>
-         
     </Application.Resources>
 </Application>

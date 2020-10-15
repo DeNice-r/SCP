@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Schedule_Calculator_Pro"
         mc:Ignorable="d"
-        
+
         Title="Створювач розкладу" Width="960" Height="540" ResizeMode="CanMinimize" Closed="Window_Closed">
     <Grid x:Name="grid" MouseLeftButtonUp="Grid_Click">
         <Grid.Background>
@@ -80,20 +80,20 @@
             <Image Source="Images/delete.png" />
         </Button>
         <!--Visibility="Hidden" Opacity="0"-->
-        <CheckBox Content="Понеділок" ToolTip="Викладач може провести пару у понеділок?" Click="dond_Click" x:Name="dond1" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,203,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden"/>
-        <CheckBox Content="Вівторок"  ToolTip="Викладач може провести пару у вівторок?"  Click="dond_Click" x:Name="dond2" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,223,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden"/>
-        <CheckBox Content="Середа"    ToolTip="Викладач може провести пару у середу?"    Click="dond_Click" x:Name="dond3" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,243,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden"/>
-        <CheckBox Content="Четвер"    ToolTip="Викладач може провести пару у четвер?"    Click="dond_Click" x:Name="dond4" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,263,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden"/>
-        <CheckBox Content="П'ятниця"  ToolTip="Викладач може провести пару у п'ятницю?"  Click="dond_Click" x:Name="dond5" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,283,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden"/>
+        <CheckBox Content="Понеділок" ToolTip="Викладач може провести пару у понеділок?" Click="dond_Click" x:Name="dond1" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,203,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" />
+        <CheckBox Content="Вівторок"  ToolTip="Викладач може провести пару у вівторок?"  Click="dond_Click" x:Name="dond2" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,223,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" />
+        <CheckBox Content="Середа"    ToolTip="Викладач може провести пару у середу?"    Click="dond_Click" x:Name="dond3" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,243,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" />
+        <CheckBox Content="Четвер"    ToolTip="Викладач може провести пару у четвер?"    Click="dond_Click" x:Name="dond4" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,263,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" />
+        <CheckBox Content="П'ятниця"  ToolTip="Викладач може провести пару у п'ятницю?"  Click="dond_Click" x:Name="dond5" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,283,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" />
 
         <CheckBox x:Uid="1" Content="" ToolTip="Викладач може провести першу пару?"    x:Name="donc1" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="164,313,0,0" VerticalAlignment="Top" Visibility="Hidden" />
-        <CheckBox x:Uid="2" Content="" ToolTip="Викладач може провести другу пару?"    x:Name="donc2" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="184,313,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
-        <CheckBox x:Uid="3" Content="" ToolTip="Викладач може провести третю пару?"    x:Name="donc3" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="204,313,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
-        <CheckBox x:Uid="4" Content="" ToolTip="Викладач може провести четверту пару?" x:Name="donc4" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="224,313,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
-        <CheckBox x:Uid="5" Content="" ToolTip="Викладач може провести п'яту пару?"    x:Name="donc5" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="244,313,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
-        <CheckBox x:Uid="6" Content="" ToolTip="Викладач може провести шосту пару?"    x:Name="donc6" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="264,313,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+        <CheckBox x:Uid="2" Content="" ToolTip="Викладач може провести другу пару?"    x:Name="donc2" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="184,313,0,0" VerticalAlignment="Top" Visibility="Hidden" />
+        <CheckBox x:Uid="3" Content="" ToolTip="Викладач може провести третю пару?"    x:Name="donc3" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="204,313,0,0" VerticalAlignment="Top" Visibility="Hidden" />
+        <CheckBox x:Uid="4" Content="" ToolTip="Викладач може провести четверту пару?" x:Name="donc4" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="224,313,0,0" VerticalAlignment="Top" Visibility="Hidden" />
+        <CheckBox x:Uid="5" Content="" ToolTip="Викладач може провести п'яту пару?"    x:Name="donc5" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="244,313,0,0" VerticalAlignment="Top" Visibility="Hidden" />
+        <CheckBox x:Uid="6" Content="" ToolTip="Викладач може провести шосту пару?"    x:Name="donc6" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="264,313,0,0" VerticalAlignment="Top" Visibility="Hidden" />
 
-        <ComboBox x:Name="donrelaud" SelectionChanged="donrelaud_SelectionChanged" Visibility="Hidden" HorizontalAlignment="Left" Margin="553,188,0,0" VerticalAlignment="Top" Width="69" Height="25"/>
+        <ComboBox x:Name="donrelaud" SelectionChanged="donrelaud_SelectionChanged" Visibility="Hidden" HorizontalAlignment="Left" Margin="553,188,0,0" VerticalAlignment="Top" Width="69" Height="25" />
         <!--  -->
         <Button x:Name="save" ToolTip="Зберегти зміни у базі даних" Height="30" Width="30" Click="save_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="884,471,0,0" BorderBrush="{x:Null}" Foreground="{x:Null}" Background="{x:Null}">
             <Image Source="Images/save.png" />
@@ -161,8 +161,8 @@
             </ComboBox.BorderBrush>
         </ComboBox>
         <ComboBox x:Name="editsubjx2" Visibility="Hidden" Height="25" Width="43" Margin="639,164,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Foreground="Black" Background="{x:Null}" FontSize="18">
-            <ComboBoxItem Content="1"/>
-            <ComboBoxItem Content="2"/>
+            <ComboBoxItem Content="1" />
+            <ComboBoxItem Content="2" />
             <ComboBox.BorderBrush>
                 <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                     <GradientStop Color="#FFFF3E53" Offset="0" />

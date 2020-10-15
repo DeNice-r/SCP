@@ -13,6 +13,7 @@ namespace Schedule_Calculator_Pro
         public int[] couplesXday { get; set; } = { -1, 3, -1, -1, 3 };
         public int StudyingWeeks { get; set; } = 16;
         public int course;
+
         public Group(string groupName)
         {
             this.groupName = groupName;
@@ -20,6 +21,7 @@ namespace Schedule_Calculator_Pro
             couplesXday[1] = couplesXday[4] = 3;
             course = groupName[groupName.Length - 2] - '0';
         }
+
         public void SubjValEdit(string SubjName, string DonName, string SubjValue)
         {
             if (!relatedSubjects.ContainsKey(SubjName))
@@ -41,7 +43,6 @@ namespace Schedule_Calculator_Pro
                 couplesXdayCalc();
             return couplesXday[day];
         }
-
 
         public void couplesXdayCalc()            // Рассчёт кол-ва пар на каждый день
         {

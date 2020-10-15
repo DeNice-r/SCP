@@ -6,8 +6,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Schedule_Calculator_Pro
 {
@@ -15,6 +13,7 @@ namespace Schedule_Calculator_Pro
     {
         // Оголошуємо всі змінні, які далі потрібно буде використовувати в інших класах:
         public static ScheduleEditor scheditwin = null;
+
         public static SortedDictionary<string, Don> don = new SortedDictionary<string, Don>();
         public static SortedDictionary<string, Group> group = new SortedDictionary<string, Group>();
         public static SortedDictionary<string, Subject> subject = new SortedDictionary<string, Subject>();
@@ -33,20 +32,19 @@ namespace Schedule_Calculator_Pro
         {
             //try
             //{
-                InitializeComponent();
-                SchedGenThread.IsBackground = true;
-                PrimaryFileWorkThread.IsBackground = true;
-                PrimaryFileWorkThread.Priority = ThreadPriority.Highest;
-                PrimaryFileWorkThread.Start();
-                if (workwithschedit)
-                {
-                    Height = 0;
-                    Width = 250;
-                    Top = 27;
-                    Left = -8;
-                    EditSchedule_Click(new object(), new RoutedEventArgs());
-                }
-
+            InitializeComponent();
+            SchedGenThread.IsBackground = true;
+            PrimaryFileWorkThread.IsBackground = true;
+            PrimaryFileWorkThread.Priority = ThreadPriority.Highest;
+            PrimaryFileWorkThread.Start();
+            if (workwithschedit)
+            {
+                Height = 0;
+                Width = 250;
+                Top = 27;
+                Left = -8;
+                EditSchedule_Click(new object(), new RoutedEventArgs());
+            }
 
             var temp = new Thread(CogAnimate);
             temp.IsBackground = true;
@@ -60,8 +58,8 @@ namespace Schedule_Calculator_Pro
             //}
         }
 
-
         #region Settings handlers
+
         public static void SettingsHandle()
         {
             //Перевіряємо, чи існує файл з налаштуваннями, відкриваємо його, якщо він є і створюємо у зворотньому випадку.
@@ -268,7 +266,7 @@ namespace Schedule_Calculator_Pro
 
                             excelTemp1.WriteToCell(t, 6, cgroupval.relatedSubjects[csubj][1].ToString());
                             excelTemp1.WriteToCell(t, 7, cgroupval.relatedAud);
-                            if(cgroupval.relatedSubjectsx2.ContainsKey(csubj))
+                            if (cgroupval.relatedSubjectsx2.ContainsKey(csubj))
                                 excelTemp1.WriteToCell(t, 8, cgroupval.relatedSubjectsx2[csubj].ToString());
                             else
                                 excelTemp1.WriteToCell(t, 8, "0");
@@ -328,6 +326,7 @@ namespace Schedule_Calculator_Pro
                     Search.IsDropDownOpen = true;
             }
         }
+
         private void SearchHandle2(object sender, EventArgs e)
         {
             if (!(don.Keys.ToList().All(x => database.Contains(x)) && group.Keys.ToList().All(x => database.Contains(x)) && subject.Keys.ToList().All(x => database.Contains(x)) && audience.All(x => database.Contains(x))))
@@ -343,13 +342,15 @@ namespace Schedule_Calculator_Pro
             if (!Search.IsDropDownOpen)
                 Search.IsDropDownOpen = true;
         }
-        #endregion
+
+        #endregion Settings handlers
 
         #region Secondary funcs
+
         public static int DaynameToNum(string s)
         {
             if (s[s.Length - 1] == '/')
-                 s = s.Substring(0, s.Length - 1);
+                s = s.Substring(0, s.Length - 1);
             int n = 0;
             switch (s)
             {
@@ -385,10 +386,12 @@ namespace Schedule_Calculator_Pro
             }
             grouprelatedinfo.ItemsSource = infoset;
         }
-#endregion
 
-#region Animations
-private void MenuAnimate()
+        #endregion Secondary funcs
+
+        #region Animations
+
+        private void MenuAnimate()
         {
             var n = -0.16;
             MenuX.Dispatcher.Invoke(delegate { MenuX.IsDefault = true; });
@@ -664,9 +667,7 @@ private void MenuAnimate()
                     grouprelsubjcancel.Dispatcher.Invoke(delegate { grouprelsubjcancel.Opacity = x; });
                     Thread.Sleep(2);
                 }
-
             }
-
         }
 
         private void GroupRelSubjDelAnimate()
@@ -808,12 +809,13 @@ private void MenuAnimate()
                 }
             }
         }
-        #endregion
 
+        #endregion Animations
 
         #region Callbacks
 
         #region Click callbacks
+
         private void Menu_Click(object sender, RoutedEventArgs e)
         {
             if (!MenuX.IsDefault)
@@ -919,7 +921,6 @@ private void MenuAnimate()
                 temp.IsBackground = true;
                 temp.Start();
             }
-
         }
 
         private void save_Click(object sender, RoutedEventArgs e)
@@ -980,7 +981,6 @@ private void MenuAnimate()
                         group[key].relatedSubjects.Remove(group[key].relatedSubjects.Keys.ToArray()[x]);
                         x--;
                     }
-
             }
             Search.SelectedIndex = -1;
             database.RemoveRange(0, database.Count);
@@ -998,7 +998,6 @@ private void MenuAnimate()
             var temp = new Thread(DonAnimate);
             temp.IsBackground = true;
             temp.Start();
-
         }
 
         private void donrelsubjdel_Click(object sender, RoutedEventArgs e)
@@ -1025,7 +1024,6 @@ private void MenuAnimate()
                 SchedGenThread.IsBackground = true;
                 SchedGenThread.Start();
             }
-
         }
 
         private void auddel_Click(object sender, RoutedEventArgs e)
@@ -1162,7 +1160,7 @@ private void MenuAnimate()
                     don.Add(editseconddonname.Text, new Don(editseconddonname.Text));
                     don[editseconddonname.Text].relatedSubjects.Add(editsubjname.Text);
                 }
-                if(group[Search.SelectedItem.ToString()].relatedSubjects.ContainsKey(editdonname.Text))
+                if (group[Search.SelectedItem.ToString()].relatedSubjects.ContainsKey(editdonname.Text))
                     group[Search.SelectedItem.ToString()].relatedSubjects.Add(editsubjname.Text, new List<string>() { editdonname.Text, editcoupleahalf.Text, editseconddonname.Text });
                 /// ?
             }
@@ -1245,7 +1243,6 @@ private void MenuAnimate()
             var temp = new Thread(AudAnimate);
             temp.IsBackground = true;
             temp.Start();
-            
         }
 
         private void Day_RightClick(object sender, MouseButtonEventArgs e)
@@ -1305,7 +1302,7 @@ private void MenuAnimate()
             var chosendaynum = DaynameToNum(ChosenDay.Content.ToString());
             var curday = curdon.dayStats[chosendaynum];
             var cbox = (CheckBox)sender;
-            curday[Convert.ToInt32(cbox.Uid)-1] = (bool)cbox.IsChecked;
+            curday[Convert.ToInt32(cbox.Uid) - 1] = (bool)cbox.IsChecked;
             curdon.fixConsC();
             ChosenDay.IsChecked = curdon.possDays[chosendaynum];
         }
@@ -1342,9 +1339,11 @@ private void MenuAnimate()
                 scheditwin.Show();
             }
         }
-        #endregion
+
+        #endregion Click callbacks
 
         #region Selection changed callbacks
+
         private void Search_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var sel = Search.SelectedItem;
@@ -1449,9 +1448,11 @@ private void MenuAnimate()
             if (Search.SelectedIndex != -1)
                 don[Search.SelectedItem.ToString()].relatedAud = donrelaud.SelectedItem.ToString();
         }
-        #endregion
+
+        #endregion Selection changed callbacks
 
         #region Database update callbacks
+
         private void groupaddcouple_dbudon(object sender, DependencyPropertyChangedEventArgs e)
         {
             editdonname.ItemsSource = don.Keys.ToArray();
@@ -1467,9 +1468,10 @@ private void MenuAnimate()
         {
             donrelsubjname.ItemsSource = subject.Keys.ToArray();
         }
-        #endregion
 
-        #endregion
+        #endregion Database update callbacks
+
+        #endregion Callbacks
 
         ~Program()
         {
