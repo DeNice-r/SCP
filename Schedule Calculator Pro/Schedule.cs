@@ -397,7 +397,7 @@ namespace Schedule_Calculator_Pro
             // Save in json to work w/ it from program later.
 
             System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json"), JsonSerializer.Serialize(schedule));
-            //System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedfreecfg.json"), JsonSerializer.Serialize(scheduleFree));
+            System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedfreecfg.json"), JsonSerializer.Serialize(scheduleFree));
             //System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedsubj.json"), JsonSerializer.Serialize(Program.subject));
             //System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedgroup.json"), JsonSerializer.Serialize(Program.group));
             //System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\scheddon.json"), JsonSerializer.Serialize(Program.don));
@@ -408,60 +408,65 @@ namespace Schedule_Calculator_Pro
                 var xcl = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Розклад " + (_course + 1) + " курс.xlsx"));
                 var col = 2;
                 var row = 1;
-                var mxcpl = new List<int>() { 0, 0, 0, 0, 0 };
 
-                for (int dy = 0; dy < 5; dy++)
-                {
-                    for (int grp = 0; grp < schedule.Count; grp++)
-                    {
-                        var t = 0;
-                        if (Program.group.Values.ToArray()[grp].course == _course + 1 && mxcpl[dy] < schedule[grp][dy].Count)
-                            for (int z = 0; z < schedule[grp][dy].Count; z++)
-                                if (schedule[grp][dy][z].Count == 5)
-                                    t++;
-                        mxcpl[dy] = schedule[grp][dy].Count + t;
-                    }
-                }
-
-                var wtf = new List<List<List<int>>>();
+                var cplen = new List<List<List<int>>>();
 
                 for (int crs = 0; crs < 4; crs++)
                 {
-                    wtf.Add(new List<List<int>>());
+                    cplen.Add(new List<List<int>>());
                     for (int dy = 0; dy < 5; dy++)
                     {
-                        wtf[crs].Add(new List<int>());
+                        cplen[crs].Add(new List<int>());
                         for (int cpl = 0; cpl < 6; cpl++)
+                        {
+                            cplen[crs][dy].Add(1);
+                            for (int grp = 0; grp < Program.group.Count; grp++)
+                            {
+                                if (Program.group.Values.ToArray()[grp].course - 1 != crs || schedule[grp][dy].Count <= cpl || cplen[crs][dy][cpl] == 2)
+                                    continue;
+                                if (schedule[grp][dy][cpl].Count >= 5)
+                                {
+                                    cplen[crs][dy][cpl] = 2;
+                                }
+                            }
+                        }
+                        for (int cpl = 5; cpl >= 0; cpl--) // найти макс по всем группам, потом уже занулять ненужные
                         {
                             for (int grp = 0; grp < Program.group.Count; grp++)
                             {
-                                if (Program.group.Values.ToArray()[grp].course - 1 != crs)
+                                if (Program.group.Values.ToArray()[grp].course - 1 != crs || schedule[grp][dy].Count <= cpl)
                                     continue;
-                                if (schedule[grp][dy].Count < cpl)
-                                    wtf[crs][dy].Add(0);
+                                if (schedule[grp][dy][cpl].Count == 0)
+                                    cplen[crs][dy][cpl] = 0;
+                                else
+                                {
+                                    cpl = -1;
+                                    break;
+                                }
                             }
-                        }
-                    }
-                }
 
-                for (int crs = 0; crs < 4; crs++)
-                {
-                    for (int dy = 0; dy < 5; dy++)
-                    {
-                        for (int cpl = 0; cpl < 6; cpl++)
-                        {
-                            for (int grp = 0; grp < Program.group.Count; grp++)
-                            {
-                                if (wtf[crs][dy].Count <= cpl || wtf[crs][dy][cpl] == 2 || Program.group.Values.ToArray()[grp].course - 1 != crs || schedule[grp][dy].Count <= cpl)
-                                    continue;
-                                if (schedule[grp][dy][cpl].Count == 5)
-                                    wtf[crs][dy][cpl] = 2;
-                                else if (schedule[grp][dy][cpl].Count == 3)
-                                    wtf[crs][dy][cpl] = 1;
-                            }
                         }
                     }
                 }
+                ;
+                //for (int crs = 0; crs < 4; crs++)
+                //{
+                //    for (int dy = 0; dy < 5; dy++)
+                //    {
+                //        for (int cpl = 0; cpl < 6; cpl++)
+                //        {
+                //            for (int grp = 0; grp < Program.group.Count; grp++)
+                //            {
+                //                if (wtf[crs][dy].Count <= cpl || wtf[crs][dy][cpl] == 2 || Program.group.Values.ToArray()[grp].course - 1 != crs || schedule[grp][dy].Count <= cpl)
+                //                    continue;
+                //                if (schedule[grp][dy][cpl].Count == 5 || schedule[grp][dy][cpl].Count == 6)
+                //                    wtf[crs][dy][cpl] = 2;
+                //                else if (schedule[grp][dy][cpl].Count == 3)
+                //                    wtf[crs][dy][cpl] = 1;
+                //            }
+                //        }
+                //    }
+                //}
 
                 for (int _group = 0; _group < schedule.Count; _group++)
                 {
@@ -491,19 +496,30 @@ namespace Schedule_Calculator_Pro
                                     xcl.ws.get_Range(getcolname(trow + 1) + (tcol + 1).ToString() + ":" + getcolname(trow + 1) + (tcol + 2).ToString()).Cells.VerticalAlignment = XlVAlign.xlVAlignCenter;
                                     xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][0]); trow++;
                                     xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][1]); trow++;
-                                    xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][3]); trow = row + 1; tcol++; mxcpl[_day]++;
+                                    xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][3]); trow = row + 1; tcol++;
                                     xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][2]); trow++;
                                     xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][4]);
                                     tcol--;
                                     trow++;
                                 }
+                                else if (schedule[_group][_day][_couple].Count == 6)
+                                {
+                                    xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][0]); trow++;
+                                    xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][2]); trow++;
+                                    xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][4]); trow = row + 1; tcol++;
+                                    xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][1]); trow++;
+                                    xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][3]); trow++;
+                                    xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][5]);
+                                    tcol--;
+                                    trow++;
+                                }
                                 if (mx < trow - row)
                                     mx = trow - row;
-                                if (wtf[_course][_day].Count > _couple)
-                                    tcol += wtf[_course][_day][_couple];
+                                if (cplen[_course][_day].Count > _couple)
+                                    tcol += cplen[_course][_day][_couple];
                             }
                             //col += mxcpl[_day]+1;
-                            col += wtf[_course][_day].Sum();
+                            col += cplen[_course][_day].Sum();
                         }
                         if (_group != schedule.Count - 1)
                             col = 2;
@@ -519,7 +535,7 @@ namespace Schedule_Calculator_Pro
                 xcl.WriteToCell(0, 0, s1);
                 xcl.ws.get_Range("A1").Cells.HorizontalAlignment = XlHAlign.xlHAlignCenter;
                 var t3 = Program.group.Count(x => x.Value.course - 1 == _course) * 3;
-                var t2 = wtf[_course].Sum(x => x.Sum()) + 1;
+                var t2 = cplen[_course].Sum(x => x.Sum()) + 1;
                 xcl.ws.Range["A1:" + getcolname(t3 + 1) + (1 + t2).ToString()].Borders.LineStyle = XlLineStyle.xlContinuous;
                 xcl.ws.Range["A1:" + getcolname(t3 + 1) + (1 + t2).ToString()].Borders.Weight = XlBorderWeight.xlThin;
                 xcl.ws.Range["A1:" + getcolname(t3 + 1) + (1 + t2).ToString()].Borders[XlBordersIndex.xlEdgeBottom].Weight = XlBorderWeight.xlMedium;
@@ -529,7 +545,7 @@ namespace Schedule_Calculator_Pro
                 int t1 = 3;
                 for (int zz = 0; zz < 5; zz++)
                 {
-                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + wtf[_course][zz].Sum() - 1, 1]].Merge();
+                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + cplen[_course][zz].Sum() - 1, 1]].Merge();
                     switch (zz)
                     {
                         case 0:
@@ -563,13 +579,13 @@ namespace Schedule_Calculator_Pro
                             break;
                     }
 
-                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + wtf[_course][zz].Sum() - 1, (Program.group.Count(x => x.Value.course == _course + 1) * 3 + 1)]].Borders[XlBordersIndex.xlEdgeBottom].Weight = XlBorderWeight.xlMedium;
-                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + wtf[_course][zz].Sum() - 1, (Program.group.Count(x => x.Value.course == _course + 1) * 3 + 1)]].Borders[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlMedium;
-                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + wtf[_course][zz].Sum() - 1, (Program.group.Count(x => x.Value.course == _course + 1) * 3 + 1)]].Borders[XlBordersIndex.xlEdgeRight].Weight = XlBorderWeight.xlMedium;
-                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + wtf[_course][zz].Sum() - 1, (Program.group.Count(x => x.Value.course == _course + 1) * 3 + 1)]].Borders[XlBordersIndex.xlEdgeLeft].Weight = XlBorderWeight.xlMedium;
-                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + wtf[_course][zz].Sum() - 1, 1]].HorizontalAlignment = XlHAlign.xlHAlignCenter;
-                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + wtf[_course][zz].Sum() - 1, 1]].VerticalAlignment = XlVAlign.xlVAlignCenter;
-                    t1 += wtf[_course][zz].Sum();
+                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + cplen[_course][zz].Sum() - 1, (Program.group.Count(x => x.Value.course == _course + 1) * 3 + 1)]].Borders[XlBordersIndex.xlEdgeBottom].Weight = XlBorderWeight.xlMedium;
+                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + cplen[_course][zz].Sum() - 1, (Program.group.Count(x => x.Value.course == _course + 1) * 3 + 1)]].Borders[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlMedium;
+                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + cplen[_course][zz].Sum() - 1, (Program.group.Count(x => x.Value.course == _course + 1) * 3 + 1)]].Borders[XlBordersIndex.xlEdgeRight].Weight = XlBorderWeight.xlMedium;
+                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + cplen[_course][zz].Sum() - 1, (Program.group.Count(x => x.Value.course == _course + 1) * 3 + 1)]].Borders[XlBordersIndex.xlEdgeLeft].Weight = XlBorderWeight.xlMedium;
+                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + cplen[_course][zz].Sum() - 1, 1]].HorizontalAlignment = XlHAlign.xlHAlignCenter;
+                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + cplen[_course][zz].Sum() - 1, 1]].VerticalAlignment = XlVAlign.xlVAlignCenter;
+                    t1 += cplen[_course][zz].Sum();
                 }
                 for (int i = 2; i < 28; i++)
                 {
