@@ -146,7 +146,7 @@ namespace Schedule_Calculator_Pro
                     for (int couple = 0; couple < 6; couple++)
                     {
                         // Если преподаватель свободен в этот день на этой паре
-                        if (scheduleFree[day][couple][0].Contains(pdon.Keys.ToArray()[don]))
+                        if (halfisfree(day, couple, curdonname))
                         {
                             bool found = false;
                             for (int group = 0; group < tgroups.Count && !found; group++)
@@ -154,6 +154,14 @@ namespace Schedule_Calculator_Pro
                                 var cgidx = tgroups[group];
                                 var curgroup = pgroup.Values.ToArray()[cgidx];
                                 var curgroupname = pgroup.Keys.ToArray()[cgidx];
+                                List<string> halves = new List<string>();
+
+                                foreach(var subjectt in curgroup.relatedSubjects)
+                                {
+                                    if(Convert.ToInt32(subjectt.Value[1])%16 != 0)
+                                        halves.Add(subjectt.Key);
+                                }
+
                                 if (curgroup.couplesXdayGet(day) <= couple || schedule[cgidx][day][couple].Count != 0)
                                     continue;
                                 for (int subj = 0; subj < tlist[group].Count && !found; subj++)
@@ -168,7 +176,7 @@ namespace Schedule_Calculator_Pro
                                         {
                                             case 1:
                                                 {
-                                                    if (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) >= curgroup.StudyingWeeks)
+                                                    if ((Convert.ToInt32(cursubjname[1]) >= curgroup.StudyingWeeks && scheduleFree[day][couple][0].Contains(curdonname)))
                                                     {
                                                         if (splits)
                                                         {
@@ -195,16 +203,32 @@ namespace Schedule_Calculator_Pro
                                                         }
                                                         found = true;
                                                     }
-                                                    else if (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) != 0)
+                                                    else if (Convert.ToInt32(cursubj[1]) % curgroup.StudyingWeeks != 0)
                                                     {
-                                                        // чередование
+                                                        foreach (var half in halves) {
+                                                            var cursubj2 = curgroup.relatedSubjects[half];
+                                                            if (!halfisfree(day, couple, cursubj2[0]) || Convert.ToInt32(cursubj2[1]) % curgroup.StudyingWeeks == 0)
+                                                                continue;
+
+                                                            schedule[cgidx][day][couple].Add(cursubjname); // Предмет
+                                                            schedule[cgidx][day][couple].Add(half); // Предмет
+                                                            schedule[cgidx][day][couple].Add(curdon); // Преподаватель
+                                                            schedule[cgidx][day][couple].Add(cursubj2[0]);
+                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 1488)); // Аудитория
+                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, half, 1488)); // Аудитория
+                                                            halfObjRem(day, couple, 0, curdon);
+                                                            halfObjRem(day, couple, 0, cursubj[0]);
+
+
+                                                            found = true;
+                                                        }
                                                     }
                                                 }
                                                 break;
 
                                             case 2:
                                                 {
-                                                    if (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) >= curgroup.StudyingWeeks)
+                                                    if (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) >= curgroup.StudyingWeeks /*  * 2?  */ && scheduleFree[day][couple][0].Contains(curdonname))
                                                     {
                                                         if (splits)
                                                         {
@@ -252,6 +276,7 @@ namespace Schedule_Calculator_Pro
                                                     else if (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) != 0)
                                                     {
                                                         // чередование
+                                                        found = true;
                                                     }
                                                 }
                                                 break;
@@ -264,7 +289,7 @@ namespace Schedule_Calculator_Pro
                                         }
                                         // TODO:
                                         // 1. Проверить работоспособность алгоритма с нововведениями ---
-                                        // 2. сделать 2 пары подрят
+                                        // 2. сделать 2 пары подрят ---
                                         // 3. Сделать 2 чередующиеся пары (кол-во пар/семестр%кол-во пар это предмета/семестр == 8)
                                         // 4. Возможно уменьшить влияние рассчитаных пар/день хотя бы в случае двух пар подрят
                                         // 5. ???
@@ -277,6 +302,18 @@ namespace Schedule_Calculator_Pro
             }
             Save();
             MessageBox.Show("Розклад складено. Рекомендовано перезапустити програму для подальшої роботи щоб уникнути непередбачених проблем.");
+        }
+
+        private bool halfisfree(int day, int couple, string don)
+        {
+            if (don.Contains("/"))
+            {
+                return scheduleFree[day][couple][0].Contains(don);
+            }
+            else
+            {
+                return scheduleFree[day][couple][0].Contains(don) || scheduleFree[day][couple][0].Contains(don+"/");
+            }
         }
 
         private void halfObjRem(int day, int couple, int idx, string obj)
