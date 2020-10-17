@@ -396,16 +396,16 @@ namespace Schedule_Calculator_Pro
         {
             // Save in json to work w/ it from program later.
 
-            System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json"), JsonSerializer.Serialize(schedule));
-            System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedfreecfg.json"), JsonSerializer.Serialize(scheduleFree));
-            //System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedsubj.json"), JsonSerializer.Serialize(Program.subject));
-            //System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedgroup.json"), JsonSerializer.Serialize(Program.group));
-            //System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\scheddon.json"), JsonSerializer.Serialize(Program.don));
-            //System.IO.File.WriteAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedaud.json"), JsonSerializer.Serialize(Program.audience));
+            System.IO.File.WriteAllText(Consts.LocalToGlobal("\\schedcfg.json"), JsonSerializer.Serialize(schedule));
+            System.IO.File.WriteAllText(Consts.LocalToGlobal("\\schedfreecfg.json"), JsonSerializer.Serialize(scheduleFree));
+            //System.IO.File.WriteAllText(Consts.LocalToGlobal("\\schedsubj.json"), JsonSerializer.Serialize(Program.subject));
+            //System.IO.File.WriteAllText(Consts.LocalToGlobal("\\schedgroup.json"), JsonSerializer.Serialize(Program.group));
+            //System.IO.File.WriteAllText(Consts.LocalToGlobal("\\scheddon.json"), JsonSerializer.Serialize(Program.don));
+            //System.IO.File.WriteAllText(Consts.LocalToGlobal("\\schedaud.json"), JsonSerializer.Serialize(Program.audience));
 
             for (int _course = 0; _course < 4; _course++)
             {
-                var xcl = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Розклад " + (_course + 1) + " курс.xlsx"));
+                var xcl = new Excel(Consts.LocalToGlobal("\\Розклад " + (_course + 1) + " курс.xlsx"));
                 var col = 2;
                 var row = 1;
 
@@ -432,18 +432,20 @@ namespace Schedule_Calculator_Pro
                         }
                         for (int cpl = 5; cpl >= 0; cpl--) // найти макс по всем группам, потом уже занулять ненужные
                         {
+                            var got = false;
                             for (int grp = 0; grp < Program.group.Count; grp++)
                             {
                                 if (Program.group.Values.ToArray()[grp].course - 1 != crs || schedule[grp][dy].Count <= cpl)
                                     continue;
-                                if (schedule[grp][dy][cpl].Count == 0)
-                                    cplen[crs][dy][cpl] = 0;
-                                else
+                                if (schedule[grp][dy][cpl].Count != 0)
                                 {
-                                    cpl = -1;
+                                    got = true;
                                     break;
                                 }
                             }
+                            if (!got)
+                                cplen[crs][dy][cpl] = 0;
+                            else break;
 
                         }
                     }
@@ -506,7 +508,7 @@ namespace Schedule_Calculator_Pro
                                 {
                                     xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][0]); trow++;
                                     xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][2]); trow++;
-                                    xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][4]); trow = row + 1; tcol++;
+                                    xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][4]); trow = row; tcol++;
                                     xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][1]); trow++;
                                     xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][3]); trow++;
                                     xcl.WriteToCell(tcol, trow, schedule[_group][_day][_couple][5]);
@@ -599,7 +601,7 @@ namespace Schedule_Calculator_Pro
                 xcl.SaveAs();
                 xcl.close();
             }
-            Excel xcl1 = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Вільні викладачі.xlsx"));
+            Excel xcl1 = new Excel(Consts.LocalToGlobal("\\Вільні викладачі.xlsx"));
             var xrow = 1;
             var xcol = 0;
             var xrowt = 0;
@@ -681,7 +683,7 @@ namespace Schedule_Calculator_Pro
             xcl1.SaveAs();
             xcl1.close();
 
-            xcl1 = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Вільні аудиторії.xlsx"));
+            xcl1 = new Excel(Consts.LocalToGlobal("\\Вільні аудиторії.xlsx"));
             xcol = 0;
             xrow = 1;
             xrowt = 0;

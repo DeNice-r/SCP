@@ -108,7 +108,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Buttonplus.cs" />
-    <Compile Include="Class1.cs" />
+    <Compile Include="Consts.cs" />
     <Compile Include="Don.cs" />
     <Compile Include="Group.cs" />
     <Compile Include="Schedentry.cs" />
@@ -220,6 +220,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\saveblack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Sounds\jobdonenotif.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

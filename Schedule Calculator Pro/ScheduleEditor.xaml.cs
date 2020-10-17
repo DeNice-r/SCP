@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using drawing = System.Drawing;
+using System.Media;
 
 namespace Schedule_Calculator_Pro
 {
@@ -30,20 +31,27 @@ namespace Schedule_Calculator_Pro
             parent = p;
             ContentMgr.Height = Height - 39;
             ContentMgr.Width = Width - 16;
+            Consts.SaveLoadInProgress = true;
+            TableGen();
+        }
+        private void TableGen()
+        {
             // Table generation
-            if (File.Exists(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")))
+            if (File.Exists(Consts.LocalToGlobal("\\schedcfg.json")))
             {
-                sched = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedcfg.json")), sched.GetType());
-                Program.schedule.scheduleFree = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedfreecfg.json")), Program.schedule.scheduleFree.GetType());
-                //Program.subject = (SortedDictionary<string, Subject>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedsubj.json")), Program.subject.GetType());
-                //Program.group = (SortedDictionary<string, Group>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedgroup.json")), Program.group.GetType());
-                //Program.don = (SortedDictionary<string, Don>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\scheddon.json")), Program.don.GetType());
-                //Program.audience = (SortedSet<string>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\schedaud.json")), Program.audience.GetType());
+                sched = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\schedcfg.json")), sched.GetType());
+                Program.schedule.scheduleFree = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\schedfreecfg.json")), Program.schedule.scheduleFree.GetType());
+                //Program.subject = (SortedDictionary<string, Subject>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\schedsubj.json")), Program.subject.GetType());
+                //Program.group = (SortedDictionary<string, Group>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\schedgroup.json")), Program.group.GetType());
+                //Program.don = (SortedDictionary<string, Don>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\scheddon.json")), Program.don.GetType());
+                //Program.audience = (SortedSet<string>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\schedaud.json")), Program.audience.GetType());
                 //Schedentry.sched = Program.schedule.schedule = sched;
             }
             // Группа > День > Пара > Преподаватели/Предметы/Аудитории
 
             while (!Program.loadedinfo) Thread.Sleep(100);
+
+            sched[0][0][0] = new List<string>() { "T", "E", "S", "T", "1", "2" };
 
             for (int _group = 0; _group < sched.Count(); _group++)
             {
@@ -103,7 +111,9 @@ namespace Schedule_Calculator_Pro
             }
             foreach (var group in uigroups)
                 docks.Children.Add(group);
-            schedsave_Click(new object(), new RoutedEventArgs());
+            //schedsave_Click(new object(), new RoutedEventArgs());
+            Consts.JobDoneSound.Play();
+            Consts.SaveLoadInProgress = false;
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -207,12 +217,13 @@ namespace Schedule_Calculator_Pro
 
         private void desel_Click(object sender, RoutedEventArgs e)
         {
-            deselect();
+            if (!Consts.SaveLoadInProgress)
+                deselect();
         }
 
         public static void deselect()
         {
-            if (Schedentry.cut != null)
+            if (!Consts.SaveLoadInProgress && Schedentry.cut != null)
             {
                 Schedentry.cut.Opacity = 1;
                 Schedentry.cut = null;
@@ -221,7 +232,7 @@ namespace Schedule_Calculator_Pro
 
         private void remove_Click(object sender, RoutedEventArgs e)
         {
-            if (Schedentry.cut != null)
+            if (!Consts.SaveLoadInProgress && Schedentry.cut != null)
             {
                 var cut = Schedentry.cut;
                 var p = (StackPanel)cut.Parent;
@@ -235,78 +246,53 @@ namespace Schedule_Calculator_Pro
 
         private void schedsave_Click(object sender, RoutedEventArgs e)
         {
-            deselect();
-            var usched = new List<List<List<List<string>>>>();
-            foreach (StackPanel sp in docks.Children)
+            if (!Consts.SaveLoadInProgress)
             {
-                usched.Add(new List<List<List<string>>>());
-                foreach (Schedentry se in sp.Children)
-                {
-                    if (se.subj[0].Content != null && DOW.Contains(se.subj[0].Content.ToString()))
-                        usched.Last().Add(new List<List<string>>());
-                    if (se.info.Length >= 3 || se.info.Length == 0)
-                        usched.Last().Last().Add(new List<string>(se.info));
-                }
-            }
-            {
-                //string s = "";
-                //var sched = Program.schedule.schedule;
-
-                //double ovall = 0, succ = 0;
-                //for (int x = 0; x < usched.Count(); x++)
-                //{
-                //    for (int y = 0; y < usched[x].Count(); y++)
-                //    {
-                //        for (int z = 0; z < usched[x][y].Count(); z++)
-                //        {
-                //            for (int w = 0; w < usched[x][y][z].Count(); w++)
-                //            {
-                //                ovall++;
-                //                //s += usched[x][y][z][w] + " - ";
-                //                if (sched.Count() > x && sched[x].Count() > y && sched[x][y].Count() > z && sched[x][y][z].Count() > w)
-                //                {
-                //                    //s += sched[x][y][z][w];
-                //                    if (sched[x][y][z][w] == usched[x][y][z][w])
-                //                        succ++;
-                //                    else
-                //                    {
-                //                        s += Program.group.Keys.ToArray()[x] + "\t" + sched[x][y][z][w];
-                //                        s += "\n";
-                //                    }
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-                //segrid.Children.Clear();
-                //var scr = new ScrollViewer();
-                //var tb = new TextBlock();
-                //s += Math.Round((succ * 100) / ovall, 3).ToString() + "%";
-                //tb.FontSize = 40;
-                //tb.Text = s;
-                //scr.Content = tb;
-                //segrid.Children.Add(scr);
+                Consts.SaveLoadInProgress = true;
+                var sthr = new Thread(Save); sthr.IsBackground = true; sthr.Start();
             }
 
-            for (int x = 0; x < usched.Count(); x++)
+        }
+
+        private void Save()
+        {
+            ScheduleEditorWindow.Dispatcher.Invoke(delegate
             {
-                for (int y = 0; y < usched[x].Count(); y++)
+                deselect();
+                var usched = new List<List<List<List<string>>>>();
+                foreach (StackPanel sp in docks.Children)
                 {
-                    for (int z = usched[x][y].Count() - 1; z >= 0; z--)
+                    usched.Add(new List<List<List<string>>>());
+                    foreach (Schedentry se in sp.Children)
                     {
-                        if (usched[x][y][z].Count != 0)
+                        if (se.subj[0].Content != null && DOW.Contains(se.subj[0].Content.ToString()))
+                            usched.Last().Add(new List<List<string>>());
+                        if (se.info.Length >= 3 || se.info.Length == 0)
+                            usched.Last().Last().Add(new List<string>(se.info));
+                    }
+                }
+
+                for (int x = 0; x < usched.Count(); x++)
+                {
+                    for (int y = 0; y < usched[x].Count(); y++)
+                    {
+                        for (int z = usched[x][y].Count() - 1; z >= 0; z--)
                         {
-                            usched[x][y].RemoveRange(z + 1, usched[x][y].Count - z - 1);
-                            break;
+                            if (usched[x][y][z].Count != 0)
+                            {
+                                usched[x][y].RemoveRange(z + 1, usched[x][y].Count - z - 1);
+                                break;
+                            }
                         }
                     }
                 }
-            }
-            //MessageBox.Show((sched == usched).ToString());
-            ;
-            Program.schedule.schedule = usched;
-            Program.schedule.Save();
-            MessageBox.Show("Розклад успішно збережено.");
+
+                Program.schedule.schedule = usched;
+                Program.schedule.Save();
+                Consts.JobDoneSound.Play();
+                MessageBox.Show("Розклад успішно збережено.");
+                Consts.SaveLoadInProgress = false;
+            });
         }
     }
 }

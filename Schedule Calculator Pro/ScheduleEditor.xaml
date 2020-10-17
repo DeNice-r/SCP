@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Schedule_Calculator_Pro"
         mc:Ignorable="d"
         Title="Редактор розкладу" Width="960" Height="540"
+        x:Name="ScheduleEditorWindow"
         Closed="Window_Closed" SizeChanged="Window_SizeChanged" LocationChanged="Window_SizeChanged" KeyDown="segrid_KeyDown">
     <Grid x:Name="segrid" Margin="0,0,0,0">
         <Grid x:Name="sidebar" Width="30" VerticalAlignment="Top" HorizontalAlignment="Left" Height="509">

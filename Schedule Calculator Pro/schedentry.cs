@@ -12,7 +12,6 @@ namespace Schedule_Calculator_Pro
     internal class Schedentry : Border
     {
         public static List<List<int>> colwidth = new List<List<int>>();
-        public static List<List<List<List<string>>>> sched;
         public int[] idx = { -1, -1, -1 };
         public string[] info = { "", "", "" };
         private static BitmapImage cutimg = new BitmapImage(new Uri("Images\\cut.png", UriKind.Relative));
@@ -28,7 +27,6 @@ namespace Schedule_Calculator_Pro
         public Border donbord = new Border();
         public static Schedentry cut = null;
         public static int buttonsizes = 25;
-        private int fontsize = 12;
 
         public Schedentry()
         {

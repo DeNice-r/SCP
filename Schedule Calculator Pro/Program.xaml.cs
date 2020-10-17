@@ -30,13 +30,16 @@ namespace Schedule_Calculator_Pro
 
         public Program()
         {
+            Consts.Init();
             //try
             //{
             InitializeComponent();
+            Consts.SaveLoadInProgress = true;
             SchedGenThread.IsBackground = true;
             PrimaryFileWorkThread.IsBackground = true;
             PrimaryFileWorkThread.Priority = ThreadPriority.Highest;
             PrimaryFileWorkThread.Start();
+
             if (workwithschedit)
             {
                 Height = 0;
@@ -64,7 +67,9 @@ namespace Schedule_Calculator_Pro
         {
             //Перевіряємо, чи існує файл з налаштуваннями, відкриваємо його, якщо він є і створюємо у зворотньому випадку.
             if (File.Exists("База даних.xlsx"))
+            {
                 GetSettings();
+            }
             else if (File.Exists("Дані.xlsx"))
             {
                 CreateSettings();
@@ -79,7 +84,7 @@ namespace Schedule_Calculator_Pro
 
         private static void GetSettings()
         {
-            Excel excelTemp = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\База даних.xlsx"), 1);
+            Excel excelTemp = new Excel(Consts.LocalToGlobal("\\База даних.xlsx"), 1);
             var t = 0;
             while (excelTemp.BReadCell(t, 0))
             {
@@ -185,13 +190,15 @@ namespace Schedule_Calculator_Pro
             excelTemp.close();
             //MessageBox.Show("Завантаження початкових даних завершено.");
             loadedinfo = true;
+            Consts.JobDoneSound.Play();
+            Consts.SaveLoadInProgress = false;
         }
 
         private static void CreateSettings()
         {
             if (!File.Exists("База даних.xlsx"))
             {
-                Excel excelTemp = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Дані.xlsx"), 1);
+                Excel excelTemp = new Excel(Consts.LocalToGlobal("\\Дані.xlsx"), 1);
 
                 int it = 1, jt = 0;
                 while (excelTemp.BReadCell(it, jt))
@@ -223,7 +230,7 @@ namespace Schedule_Calculator_Pro
 
                 excelTemp.close();
             }
-            Excel excelTemp1 = new Excel(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\База даних.xlsx"));
+            Excel excelTemp1 = new Excel(Consts.LocalToGlobal("\\База даних.xlsx"));
             List<List<string>> unwritten = new List<List<string>>();
             unwritten.Add(group.Keys.ToList()); unwritten.Add(subject.Keys.ToList()); unwritten.Add(audience.ToList());
             var t = 0;
@@ -278,6 +285,8 @@ namespace Schedule_Calculator_Pro
                         }
                     }
                 }
+                Consts.JobDoneSound.Play();
+                Consts.SaveLoadInProgress = false;
             }
 
             for (int i = 0; i < unwritten[0].Count; i++) // Сохранить не использованные группы
@@ -930,8 +939,11 @@ namespace Schedule_Calculator_Pro
                 MessageBox.Show("Збереження вже відбувається...");
             else if (SchedGenThread.IsAlive)
                 MessageBox.Show("Збереження неможливо, тому що відбувається створення розкладу.");
+            else if (Consts.SaveLoadInProgress)
+                MessageBox.Show("Збереження неможливо, тому що відбувається інше створення/завантаження/збереження.");
             else
             {
+                Consts.SaveLoadInProgress = true;
                 SavingThread = new Thread(CreateSettings);
                 SavingThread.IsBackground = true;
                 SavingThread.Start();
@@ -1052,10 +1064,10 @@ namespace Schedule_Calculator_Pro
 
         private void MenuSchedule_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Розклад 1 курс.xlsx"));
-            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Розклад 2 курс.xlsx"));
-            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Розклад 3 курс.xlsx"));
-            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Розклад 4 курс.xlsx"));
+            System.Diagnostics.Process.Start(Consts.LocalToGlobal("\\Розклад 1 курс.xlsx"));
+            System.Diagnostics.Process.Start(Consts.LocalToGlobal("\\Розклад 2 курс.xlsx"));
+            System.Diagnostics.Process.Start(Consts.LocalToGlobal("\\Розклад 3 курс.xlsx"));
+            System.Diagnostics.Process.Start(Consts.LocalToGlobal("\\Розклад 4 курс.xlsx"));
         }
 
         private void deletegroup_Click(object sender, RoutedEventArgs e)
@@ -1214,12 +1226,12 @@ namespace Schedule_Calculator_Pro
 
         private void MenuFreeDon_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Вільні викладачі.xlsx"));
+            System.Diagnostics.Process.Start(Consts.LocalToGlobal("\\Вільні викладачі.xlsx"));
         }
 
         private void MenuFreeAud_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(System.Reflection.Assembly.GetExecutingAssembly().Location.Replace("\\Schedule Calculator Pro.exe", "\\Вільні аудиторії.xlsx"));
+            System.Diagnostics.Process.Start(Consts.LocalToGlobal("\\Вільні аудиторії.xlsx"));
         }
 
         private void audsave_Click(object sender, RoutedEventArgs e)
