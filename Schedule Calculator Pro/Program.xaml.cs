@@ -1032,6 +1032,7 @@ namespace Schedule_Calculator_Pro
                 MessageBox.Show("Зараз неможливо створити розклад тому, що відбувається зчитування чи створення файлу.");
             else
             {
+                Consts.SaveLoadInProgress = true;
                 SchedGenThread = new Thread(schedule.Start);
                 SchedGenThread.IsBackground = true;
                 SchedGenThread.Start();

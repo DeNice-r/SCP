@@ -450,25 +450,6 @@ namespace Schedule_Calculator_Pro
                         }
                     }
                 }
-                ;
-                //for (int crs = 0; crs < 4; crs++)
-                //{
-                //    for (int dy = 0; dy < 5; dy++)
-                //    {
-                //        for (int cpl = 0; cpl < 6; cpl++)
-                //        {
-                //            for (int grp = 0; grp < Program.group.Count; grp++)
-                //            {
-                //                if (wtf[crs][dy].Count <= cpl || wtf[crs][dy][cpl] == 2 || Program.group.Values.ToArray()[grp].course - 1 != crs || schedule[grp][dy].Count <= cpl)
-                //                    continue;
-                //                if (schedule[grp][dy][cpl].Count == 5 || schedule[grp][dy][cpl].Count == 6)
-                //                    wtf[crs][dy][cpl] = 2;
-                //                else if (schedule[grp][dy][cpl].Count == 3)
-                //                    wtf[crs][dy][cpl] = 1;
-                //            }
-                //        }
-                //    }
-                //}
 
                 for (int _group = 0; _group < schedule.Count; _group++)
                 {
@@ -548,6 +529,7 @@ namespace Schedule_Calculator_Pro
                 for (int zz = 0; zz < 5; zz++)
                 {
                     xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + cplen[_course][zz].Sum() - 1, 1]].Merge();
+                    xcl.ws.Range[xcl.ws.Cells[t1, 1], xcl.ws.Cells[t1 + cplen[_course][zz].Sum() - 1, 1]].Font.Bold = true;
                     switch (zz)
                     {
                         case 0:
