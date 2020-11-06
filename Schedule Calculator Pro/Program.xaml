@@ -10,8 +10,10 @@
     <Grid x:Name="grid" MouseLeftButtonUp="Grid_Click">
         <Grid.Background>
             <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                <GradientStop Color="#FFFF3E53" />
-                <GradientStop Color="#FFFFFF64" Offset="1" />
+                <GradientStop Color="#c0c0c0c0" />
+                <GradientStop Color="#c0c0c0c0" Offset="1" />
+                <!--<GradientStop Color="#FFFF3E53" />
+                <GradientStop Color="#FFFFFF64" Offset="1" />-->
             </LinearGradientBrush>
         </Grid.Background>
         <ComboBox x:Name="Search" ToolTip="Вибрати об'єкт для внесення змін" FontSize="17" PreviewMouseLeftButtonUp="SearchHandle1" PreviewKeyUp="SearchHandle2" IsTextSearchEnabled="false" Margin="30,0,0,0" VerticalAlignment="Top" Height="30" IsEditable="True" SelectionChanged="Search_SelectionChanged" BorderBrush="White" />

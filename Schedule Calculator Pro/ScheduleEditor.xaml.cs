@@ -51,8 +51,6 @@ namespace Schedule_Calculator_Pro
 
             while (!Program.loadedinfo) Thread.Sleep(100);
 
-            sched[0][0][0] = new List<string>() { "T", "E", "S", "T", "1", "2" };
-
             for (int _group = 0; _group < sched.Count(); _group++)
             {
                 {
