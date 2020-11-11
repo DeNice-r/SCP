@@ -60,7 +60,6 @@ namespace Schedule_Calculator_Pro
             {
                 case 1:
                     {
-                        //if(idx)
                         subj[0].Content = infos[0]; subj[0].VerticalContentAlignment = VerticalAlignment.Center;
                         subj[0].Width = colwidth[idxs[0]][0] + colwidth[idxs[0]][1] + colwidth[idxs[0]][2];
 
@@ -207,9 +206,6 @@ namespace Schedule_Calculator_Pro
 
         private void Cpl_DragEnter(object sender, MouseButtonEventArgs e)
         {
-            //var dp = (DockPanel)sender;
-            //MessageBox.Show("");
-            //if()
         }
 
         private int max(int e1, int e2)

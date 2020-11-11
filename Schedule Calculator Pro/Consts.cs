@@ -14,7 +14,7 @@ namespace Schedule_Calculator_Pro
             JobDoneSound.LoadAsync();
         }
 
-        public static string LocalToGlobal(string path) // convert local path (relative to the .EXE) to global path
+        public static string LocalToGlobal(string path)
         {
             return AssemblyPath.Replace("\\Schedule Calculator Pro.exe", path);
         }

@@ -36,18 +36,11 @@ namespace Schedule_Calculator_Pro
         }
         private void TableGen()
         {
-            // Table generation
             if (File.Exists(Consts.LocalToGlobal("\\schedcfg.json")))
             {
                 sched = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\schedcfg.json")), sched.GetType());
                 Program.schedule.scheduleFree = (List<List<List<List<string>>>>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\schedfreecfg.json")), Program.schedule.scheduleFree.GetType());
-                //Program.subject = (SortedDictionary<string, Subject>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\schedsubj.json")), Program.subject.GetType());
-                //Program.group = (SortedDictionary<string, Group>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\schedgroup.json")), Program.group.GetType());
-                //Program.don = (SortedDictionary<string, Don>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\scheddon.json")), Program.don.GetType());
-                //Program.audience = (SortedSet<string>)JsonSerializer.Deserialize(System.IO.File.ReadAllText(Consts.LocalToGlobal("\\schedaud.json")), Program.audience.GetType());
-                //Schedentry.sched = Program.schedule.schedule = sched;
             }
-            // Группа > День > Пара > Преподаватели/Предметы/Аудитории
 
             while (!Program.loadedinfo) Thread.Sleep(100);
 
@@ -55,7 +48,7 @@ namespace Schedule_Calculator_Pro
             {
                 {
                     int lensubj = 0, lendon = 0, lenaud = 0;
-                    foreach (var d in sched[_group]) // Calc
+                    foreach (var d in sched[_group])
                         foreach (var c in d)
                         {
                             if (c.Count() > 0)
@@ -109,7 +102,6 @@ namespace Schedule_Calculator_Pro
             }
             foreach (var group in uigroups)
                 docks.Children.Add(group);
-            //schedsave_Click(new object(), new RoutedEventArgs());
             Consts.JobDoneSound.Play();
             Consts.SaveLoadInProgress = false;
         }
@@ -129,13 +121,11 @@ namespace Schedule_Calculator_Pro
             ContentMgr.Height = ActualHeight - 39;
             ContentMgr.Width = ActualWidth - 46;
             sidebar.Height = ActualHeight - 39;
-            //if(ContentMgr.Width > 1000 )
-            //    MessageBox.Show(((TextBlock)((Border)uigroups[0].Children[0]).Child).ActualWidth.ToString());
         }
 
         private void segrid_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.R) // TODO: Скринить контент мгр и скроллить, потом клеить или скринить док/стек панели и клеить. Начинать со второго!!!
+            if (e.Key == Key.R)
             {
                 segrid.UpdateLayout();
 

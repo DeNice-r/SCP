@@ -78,7 +78,7 @@ namespace Schedule_Calculator_Pro
             dayStats[n] = new bool[] { true, true, true, true, true, true };
         }
 
-        public void fixConsD() // fix consistency w/ possDays as master
+        public void fixConsD()
         {
             for (int x = 0; x < 5; x++)
             {
@@ -93,7 +93,7 @@ namespace Schedule_Calculator_Pro
             }
         }
 
-        public void fixConsC() // fix consistency w/ dayStats as master
+        public void fixConsC()
         {
             for (int x = 0; x < 5; x++)
             {
@@ -104,7 +104,7 @@ namespace Schedule_Calculator_Pro
         public int isStrict(int n)
         {
             var v = dayStats[n];
-            return (v[0] && v[1] && v[2] && v[3] && v[4] && v[5]) ? 1 : (!v[0] && !v[1] && !v[2] && !v[3] && !v[4] && !v[5]) ? -1 : 0; // if all v's are true 1, are false -1 and 0 if they're mixed
+            return (v[0] && v[1] && v[2] && v[3] && v[4] && v[5]) ? 1 : (!v[0] && !v[1] && !v[2] && !v[3] && !v[4] && !v[5]) ? -1 : 0;
         }
     }
 }

@@ -37,16 +37,15 @@ namespace Schedule_Calculator_Pro
                 relatedSubjectsx2.Add(SubjName, 0);
         }
 
-        public int couplesXdayGet(int day)      // Возвращает кол-во пар для конкретного дня и вызывает их рассчёт, если словарь пуст.
+        public int couplesXdayGet(int day)      
         {
             if (couplesXday.Contains(-1))
                 couplesXdayCalc();
             return couplesXday[day];
         }
 
-        public void couplesXdayCalc()            // Рассчёт кол-ва пар на каждый день
+        public void couplesXdayCalc()  
         {
-            // Важная формула: (relatedSubjects.Sum(x => x.Value) - 3 * StudyingWeeks) / (StudyingWeeks * 4);
             int uncalcdays = 4, modifier = 3 * StudyingWeeks;
             var t1 = couplesXday;
             while (uncalcdays > 0)

@@ -11,7 +11,6 @@ namespace Schedule_Calculator_Pro
 {
     public partial class Program : Window
     {
-        // Оголошуємо всі змінні, які далі потрібно буде використовувати в інших класах:
         public static ScheduleEditor scheditwin = null;
 
         public static SortedDictionary<string, Don> don = new SortedDictionary<string, Don>();
@@ -31,8 +30,6 @@ namespace Schedule_Calculator_Pro
         public Program()
         {
             Consts.Init();
-            //try
-            //{
             InitializeComponent();
             Consts.SaveLoadInProgress = true;
             SchedGenThread.IsBackground = true;
@@ -52,20 +49,12 @@ namespace Schedule_Calculator_Pro
             var temp = new Thread(CogAnimate);
             temp.IsBackground = true;
             temp.Start();
-            //}
-            // uncomment try b4 production stage
-            //catch
-            //{
-            //MessageBox.Show("Виникла критична помилка. Перезапустіть програму та спробуйте ще раз, якщо помилка повторюється - перезапустіть комп'ютер. Якщо перезапуски не допомогли - зв'яжіться із системним адміністратором.\n\n\nІнформація для системного адміністратора:\n1. Програма потребує .NET 4.8;\n2. Якщо відсутні DLL-файли чи будь-які інші, спробуйте перевстановити програму з Git за посиланням https://github.com/DeNice-r/SCP/tree/master/Schedule%20Calculator%20Pro/bin/Release; \n3. Зверніться до розробника за посиланням https://t.me/dncyW", "Упс...");
-            //    Environment.Exit(111);
-            //}
         }
 
         #region Settings handlers
 
         public static void SettingsHandle()
         {
-            //Перевіряємо, чи існує файл з налаштуваннями, відкриваємо його, якщо він є і створюємо у зворотньому випадку.
             if (File.Exists("База даних.xlsx"))
             {
                 GetSettings();
@@ -88,7 +77,7 @@ namespace Schedule_Calculator_Pro
             var t = 0;
             while (excelTemp.BReadCell(t, 0))
             {
-                var tmp = excelTemp.ReadCell(t, 0);       // преподаватель
+                var tmp = excelTemp.ReadCell(t, 0);       
                 if (!don.ContainsKey(tmp))
                 {
                     don.Add(tmp, new Don(tmp));
@@ -105,7 +94,7 @@ namespace Schedule_Calculator_Pro
                 t++;
                 while (excelTemp.BReadCell(t, 3))
                 {
-                    var tmp1 = excelTemp.ReadCell(t, 3);       // предмет
+                    var tmp1 = excelTemp.ReadCell(t, 3);       
                     if (!subject.ContainsKey(tmp1))
                     {
                         subject.Add(tmp1, new Subject(tmp1));
@@ -114,13 +103,13 @@ namespace Schedule_Calculator_Pro
                         don[tmp].relatedSubjects.Add(tmp1);
                     if (excelTemp.BReadCell(t, 4))
                     {
-                        subject[tmp1].relatedAud = excelTemp.ReadCell(t, 4);        // аудитория предмета
+                        subject[tmp1].relatedAud = excelTemp.ReadCell(t, 4);        
                         audience.Add(excelTemp.ReadCell(t, 4));
                     }
                     t++;
                     while (excelTemp.BReadCell(t, 5))
                     {
-                        var tmp2 = excelTemp.ReadCell(t, 5);    // группа
+                        var tmp2 = excelTemp.ReadCell(t, 5);    
                         if (!group.ContainsKey(tmp2))
                         {
                             group.Add(tmp2, new Group(tmp2));
@@ -129,7 +118,7 @@ namespace Schedule_Calculator_Pro
                         {
                             var tmp3 = "";
                             if (excelTemp.BReadCell(t, 6))
-                                tmp3 = excelTemp.ReadCell(t, 6);            // кол-во пар в семестре
+                                tmp3 = excelTemp.ReadCell(t, 6);            
                             group[tmp2].SubjValEdit(tmp1, tmp, tmp3);
                         }
                         else if (!group[tmp2].relatedSubjects[tmp1].Contains(tmp))
@@ -188,7 +177,6 @@ namespace Schedule_Calculator_Pro
             }
 
             excelTemp.close();
-            //MessageBox.Show("Завантаження початкових даних завершено.");
             loadedinfo = true;
             Consts.JobDoneSound.Play();
             Consts.SaveLoadInProgress = false;
@@ -205,28 +193,28 @@ namespace Schedule_Calculator_Pro
                 {
                     don.Add(excelTemp.ReadCell(it, jt), new Don(excelTemp.ReadCell(it, jt)));
                     it++;
-                }       // Преподаватель
+                }       
 
                 jt++; it = 1;
                 while (excelTemp.BReadCell(it, jt))
                 {
                     group.Add(excelTemp.ReadCell(it, jt), new Group(excelTemp.ReadCell(it, jt)));
                     it++;
-                }       // Группа
+                }       
 
                 jt++; it = 1;
                 while (excelTemp.BReadCell(it, jt))
                 {
                     subject.Add(excelTemp.ReadCell(it, jt), new Subject(excelTemp.ReadCell(it, jt)));
                     it++;
-                }       // Предмет
+                }       
 
                 jt++; it = 1;
                 while (excelTemp.BReadCell(it, jt))
                 {
                     audience.Add(excelTemp.ReadCell(it, jt));
                     it++;
-                }       // Аудитория
+                }       
 
                 excelTemp.close();
             }
@@ -253,7 +241,7 @@ namespace Schedule_Calculator_Pro
                     if (unwritten[1].Contains(csubj))
                         unwritten[1].Remove(csubj);
 
-                    if (!subject.ContainsKey(csubj)) // ?
+                    if (!subject.ContainsKey(csubj))
                         MessageBox.Show("Критична помилка: Цілісність даних порушена.");
 
                     excelTemp1.WriteToCell(t, 4, subject[csubj].relatedAud);
@@ -289,22 +277,22 @@ namespace Schedule_Calculator_Pro
                 Consts.SaveLoadInProgress = false;
             }
 
-            for (int i = 0; i < unwritten[0].Count; i++) // Сохранить не использованные группы
+            for (int i = 0; i < unwritten[0].Count; i++) 
             {
                 excelTemp1.WriteToCell(i, 9, unwritten[0][i]);
             }
-            for (int i = 0; i < unwritten[1].Count; i++) // // Сохранить не использованные предметы
+            for (int i = 0; i < unwritten[1].Count; i++) 
             {
                 excelTemp1.WriteToCell(i, 10, unwritten[1][i]);
             }
-            for (int i = 0; i < unwritten[2].Count; i++) // Сохранить не использованные аудитории
+            for (int i = 0; i < unwritten[2].Count; i++) 
             {
                 excelTemp1.WriteToCell(i, 11, unwritten[2][i]);
             }
 
             var temp1 = group.Keys.ToArray();
             var temp2 = group.Values.ToArray();
-            for (int i = 0; i < temp1.Count(); i++) // Сохранить соотношение групп - учебных недель
+            for (int i = 0; i < temp1.Count(); i++) 
             {
                 excelTemp1.WriteToCell(i, 12, temp1[i]);
                 excelTemp1.WriteToCell(i, 13, temp2[i].StudyingWeeks.ToString());
@@ -318,7 +306,6 @@ namespace Schedule_Calculator_Pro
 
         private void SearchHandle1(object sender, MouseEventArgs e)
         {
-            //MessageBox.Show(e.GetPosition(grid).X.ToString() + " " + e.GetPosition(grid).Y.ToString());
             if (e.GetPosition(grid).Y >= 0 && e.GetPosition(grid).Y <= 30 && e.GetPosition(grid).X >= 30 && e.GetPosition(grid).X <= 915)
             {
                 if (!(don.Keys.ToList().All(x => database.Contains(x)) && group.Keys.ToList().All(x => database.Contains(x)) && subject.Keys.ToList().All(x => database.Contains(x)) && audience.All(x => database.Contains(x))))
@@ -375,7 +362,7 @@ namespace Schedule_Calculator_Pro
             return n;
         }
 
-        public void dbugrouprelinfo() // DataBase Update
+        public void dbugrouprelinfo() 
         {
             grouprelatedinfo.SelectedIndex = -1;
             grouprelatedinfo.ItemsSource = null;
@@ -391,7 +378,6 @@ namespace Schedule_Calculator_Pro
                 if (temp1.Values.ToArray()[x].Count == 3)
                     infoset[x][3] = temp1.Values.ToArray()[x][2];
                 infoset[x][4] = group[Search.SelectedItem.ToString()].relatedSubjectsx2.Values.ToArray()[x].ToString();
-                //MessageBox.Show(infoset[x][4]);
             }
             grouprelatedinfo.ItemsSource = infoset;
         }
@@ -930,6 +916,12 @@ namespace Schedule_Calculator_Pro
                 temp.IsBackground = true;
                 temp.Start();
             }
+            if (audname.IsVisible)
+            {
+                var temp = new Thread(AudAnimate);
+                temp.IsBackground = true;
+                temp.Start();
+            }
         }
 
         private void save_Click(object sender, RoutedEventArgs e)
@@ -1134,8 +1126,7 @@ namespace Schedule_Calculator_Pro
         {
             if (grouprelatedinfo.SelectedIndex != -1)
             {
-                //MessageBox.Show(editsubjx2.Text);
-                group[Search.SelectedItem.ToString()].relatedSubjectsx2[editsubjname.Text] = Convert.ToInt32(editsubjx2.Text); //
+                group[Search.SelectedItem.ToString()].relatedSubjectsx2[editsubjname.Text] = Convert.ToInt32(editsubjx2.Text); 
                 group[Search.SelectedItem.ToString()].relatedSubjects[editsubjname.Text][0] = editdonname.Text;
                 group[Search.SelectedItem.ToString()].relatedSubjects[editsubjname.Text][1] = editcoupleahalf.Text;
                 if (group[Search.SelectedItem.ToString()].relatedSubjects[editsubjname.Text].Count() == 3)
@@ -1152,7 +1143,6 @@ namespace Schedule_Calculator_Pro
             }
             else
             {
-                // ?
                 if (don.ContainsKey(editdonname.Text))
                 {
                     if (!don[editdonname.Text].relatedSubjects.Contains(editsubjname.Text))
@@ -1175,7 +1165,6 @@ namespace Schedule_Calculator_Pro
                 }
                 if (group[Search.SelectedItem.ToString()].relatedSubjects.ContainsKey(editdonname.Text))
                     group[Search.SelectedItem.ToString()].relatedSubjects.Add(editsubjname.Text, new List<string>() { editdonname.Text, editcoupleahalf.Text, editseconddonname.Text });
-                /// ?
             }
             if (!subject.ContainsKey(editsubjname.Text))
                 subject.Add(editsubjname.Text, new Subject(editsubjname.Text));
@@ -1237,7 +1226,7 @@ namespace Schedule_Calculator_Pro
 
         private void audsave_Click(object sender, RoutedEventArgs e)
         {
-            if (Search.SelectedItem.ToString() != "")
+            if (Search.SelectedIndex != -1)
             {
                 audience.Remove(Search.SelectedItem.ToString());
                 for (int x = 0; x < group.Count; x++)
@@ -1260,9 +1249,7 @@ namespace Schedule_Calculator_Pro
 
         private void Day_RightClick(object sender, MouseButtonEventArgs e)
         {
-            // проверить / в остальных, убрать, не вызывать анимэйшон если уже показаны чекбоксы
             CheckBox cbox = (CheckBox)sender;
-            //MessageBox.Show((tbox == dond1).ToString());
             var cboxcs = cbox.Content.ToString();
             if (!cboxcs.Contains('/'))
             {
@@ -1298,15 +1285,6 @@ namespace Schedule_Calculator_Pro
                 }
                 cbox.Content = cboxcs.Substring(0, cboxcs.Length - 1);
             }
-
-            //switch (tbox.Content)
-            //{
-            //    case "Понеділок": ; break;
-            //    case "Вівторок": break;
-            //    case "Середа": break;
-            //    case "Четвер": break;
-            //    case "П'ятниця": break;
-            //}
         }
 
         private void Couple_Click(object sender, RoutedEventArgs e)
@@ -1438,7 +1416,6 @@ namespace Schedule_Calculator_Pro
                 editsubjname.Text = temp1.Keys.ToArray()[grouprelatedinfo.SelectedIndex];
                 editdonname.Text = temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex][0];
                 editcoupleahalf.Text = temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex][1];
-                //MessageBox.Show(group[Search.SelectedItem.ToString()].relatedSubjectsx2.Values.ToArray()[grouprelatedinfo.SelectedIndex].ToString());
                 editsubjx2.Text = group[Search.SelectedItem.ToString()].relatedSubjectsx2.Values.ToArray()[grouprelatedinfo.SelectedIndex].ToString();
                 if (temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex].Count == 3)
                     editseconddonname.Text = temp1.Values.ToArray()[grouprelatedinfo.SelectedIndex][2];

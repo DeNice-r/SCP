@@ -69,7 +69,7 @@ namespace Schedule_Calculator_Pro
                 return false;
         }
 
-        public static void KillAllInteropProcesses() // убиваем процесс по имени файла
+        public static void KillAllInteropProcesses()
         {
             var processes = from p in Process.GetProcessesByName("EXCEL") select p;
             foreach (var process in processes)

@@ -12,8 +12,6 @@
             <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
                 <GradientStop Color="#c0c0c0c0" />
                 <GradientStop Color="#c0c0c0c0" Offset="1" />
-                <!--<GradientStop Color="#FFFF3E53" />
-                <GradientStop Color="#FFFFFF64" Offset="1" />-->
             </LinearGradientBrush>
         </Grid.Background>
         <ComboBox x:Name="Search" ToolTip="Вибрати об'єкт для внесення змін" FontSize="17" PreviewMouseLeftButtonUp="SearchHandle1" PreviewKeyUp="SearchHandle2" IsTextSearchEnabled="false" Margin="30,0,0,0" VerticalAlignment="Top" Height="30" IsEditable="True" SelectionChanged="Search_SelectionChanged" BorderBrush="White" />
@@ -51,7 +49,7 @@
                 </LinearGradientBrush>
             </Button.Background>
         </Button>
-        <!-- -->
+
         <DataGrid x:Name="donrelatedsubjects" IsReadOnly="True" SelectionChanged="donrelatedsubjects_SelectionChanged" HorizontalAlignment="Left" Height="100" Margin="297,244,0,0" AutoGenerateColumns="False" VerticalAlignment="Top" Width="350" Visibility="Hidden">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Предмети" Binding="{Binding}" />
@@ -81,7 +79,7 @@
         <Button x:Name="donrelsubjdel" Click="donrelsubjdel_Click" Height="24" Width="26" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="597,244,0,0" Background="White" BorderBrush="{x:Null}" Foreground="{x:Null}" Visibility="Hidden">
             <Image Source="Images/delete.png" />
         </Button>
-        <!--Visibility="Hidden" Opacity="0"-->
+
         <CheckBox Content="Понеділок" ToolTip="Викладач може провести пару у понеділок?" Click="dond_Click" x:Name="dond1" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,203,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" />
         <CheckBox Content="Вівторок"  ToolTip="Викладач може провести пару у вівторок?"  Click="dond_Click" x:Name="dond2" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,223,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" />
         <CheckBox Content="Середа"    ToolTip="Викладач може провести пару у середу?"    Click="dond_Click" x:Name="dond3" FontSize="16" MouseRightButtonUp="Day_RightClick" IsChecked="True" Margin="164,243,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Hidden" />
@@ -96,7 +94,7 @@
         <CheckBox x:Uid="6" Content="" ToolTip="Викладач може провести шосту пару?"    x:Name="donc6" Click="Couple_Click" IsChecked="False" HorizontalAlignment="Left" Margin="264,313,0,0" VerticalAlignment="Top" Visibility="Hidden" />
 
         <ComboBox x:Name="donrelaud" SelectionChanged="donrelaud_SelectionChanged" Visibility="Hidden" HorizontalAlignment="Left" Margin="553,188,0,0" VerticalAlignment="Top" Width="69" Height="25" />
-        <!--  -->
+
         <Button x:Name="save" ToolTip="Зберегти зміни у базі даних" Height="30" Width="30" Click="save_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="884,471,0,0" BorderBrush="{x:Null}" Foreground="{x:Null}" Background="{x:Null}">
             <Image Source="Images/save.png" />
         </Button>

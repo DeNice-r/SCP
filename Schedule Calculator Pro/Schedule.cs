@@ -9,8 +9,8 @@ namespace Schedule_Calculator_Pro
 {
     public class Schedule
     {
-        public List<List<List<List<string>>>> schedule { get; set; } = new List<List<List<List<string>>>>();        // Группа > День > Пара > Преподаватели/Предметы/Аудитории
-        public List<List<List<List<string>>>> scheduleFree { get; set; } = new List<List<List<List<string>>>>();        // День > Пара >  Преподаватель/Аудитория
+        public List<List<List<List<string>>>> schedule { get; set; } = new List<List<List<List<string>>>>();
+        public List<List<List<List<string>>>> scheduleFree { get; set; } = new List<List<List<List<string>>>>();
         private Random rnd = new Random();
 
         public Schedule()
@@ -49,7 +49,6 @@ namespace Schedule_Calculator_Pro
                 {
                     for (int couple = 0; couple < 6; couple++)
                     {
-                        // Если преподаватель свободен в этот день на этой паре
                         if (halfisfree(day, couple, curdonname))
                         {
                             bool found = false;
@@ -84,24 +83,24 @@ namespace Schedule_Calculator_Pro
                                                     {
                                                         if (splits)
                                                         {
-                                                            if (!scheduleFree[day][couple][0].Contains(cursubj[2])) // ------изменило расписание
-                                                                continue;                                           //
-                                                            schedule[cgidx][day][couple].Add(    cursubjname); // Предмет
-                                                            schedule[cgidx][day][couple].Add(    curdonname); // Преподаватель
+                                                            if (!scheduleFree[day][couple][0].Contains(cursubj[2]))
+                                                                continue;                                           
+                                                            schedule[cgidx][day][couple].Add(    cursubjname);
+                                                            schedule[cgidx][day][couple].Add(    curdonname);
                                                             schedule[cgidx][day][couple].Add(    cursubj[2]);
                                                             scheduleFree[day][couple][0].Remove( cursubj[2]);
-                                                            schedule[cgidx][day][couple].Add(    getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория
-                                                            schedule[cgidx][day][couple].Add(    getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория
+                                                            schedule[cgidx][day][couple].Add(    getAud(day, couple, curgroup, cursubjname, 0));
+                                                            schedule[cgidx][day][couple].Add(    getAud(day, couple, curgroup, cursubjname, 0));
                                                             scheduleFree[day][couple][0].Remove(curdonname);
 
                                                             pgroup[curgroupname].relatedSubjects[cursubjname][1] = (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) - curgroup.StudyingWeeks).ToString();
                                                         }
                                                         else
                                                         {
-                                                            schedule[cgidx][day][couple].Add(        cursubjname); // Предмет
-                                                            schedule[cgidx][day][couple].Add(        curdonname); // Преподаватель
+                                                            schedule[cgidx][day][couple].Add(        cursubjname);
+                                                            schedule[cgidx][day][couple].Add(        curdonname);
                                                             scheduleFree[day][couple][0].Remove(     curdonname);
-                                                            schedule[cgidx][day][couple].Add(getAud( day, couple, curgroup, cursubjname, 0)); // Аудитория
+                                                            schedule[cgidx][day][couple].Add(getAud( day, couple, curgroup, cursubjname, 0));
 
                                                             pgroup[curgroupname].relatedSubjects[cursubjname][1] = (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) - curgroup.StudyingWeeks).ToString();
                                                         }
@@ -111,12 +110,12 @@ namespace Schedule_Calculator_Pro
                                                     {
                                                         if(halves.Count == 1)
                                                         {
-                                                            schedule[cgidx][day][couple].Add(" "); // Предмет
-                                                            schedule[cgidx][day][couple].Add(cursubjname); // Предмет
-                                                            schedule[cgidx][day][couple].Add(" "); // Преподаватель
-                                                            schedule[cgidx][day][couple].Add(curdonname); // Преподаватель
-                                                            schedule[cgidx][day][couple].Add(" "); // Аудитория
-                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 1488)); // Аудитория
+                                                            schedule[cgidx][day][couple].Add(" ");
+                                                            schedule[cgidx][day][couple].Add(cursubjname);
+                                                            schedule[cgidx][day][couple].Add(" ");
+                                                            schedule[cgidx][day][couple].Add(curdonname);
+                                                            schedule[cgidx][day][couple].Add(" ");
+                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 5));
                                                             halfObjRem(day, couple, 0, curdonname);
                                                             halfObjRem(day, couple, 0, cursubj[0]);
                                                             halves.Remove(cursubjname);
@@ -132,12 +131,12 @@ namespace Schedule_Calculator_Pro
                                                             if (half == cursubjname || !halfisfree(day, couple, cursubj2[0]) || Convert.ToInt32(cursubj2[1]) % curgroup.StudyingWeeks == 0)
                                                                 continue;
 
-                                                            schedule[cgidx][day][couple].Add(cursubjname); // Предмет
-                                                            schedule[cgidx][day][couple].Add(half); // Предмет
-                                                            schedule[cgidx][day][couple].Add(curdonname); // Преподаватель
-                                                            schedule[cgidx][day][couple].Add(cursubj2[0]); // Преподаватель
-                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 1488)); // Аудитория
-                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, half, 1488)); // Аудитория
+                                                            schedule[cgidx][day][couple].Add(cursubjname);
+                                                            schedule[cgidx][day][couple].Add(half);
+                                                            schedule[cgidx][day][couple].Add(curdonname);
+                                                            schedule[cgidx][day][couple].Add(cursubj2[0]);
+                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 1488));
+                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, half, 1488));
                                                             halfObjRem(day, couple, 0, curdonname);
                                                             halfObjRem(day, couple, 0, cursubj[0]);
                                                             halves.Remove(half);
@@ -153,46 +152,45 @@ namespace Schedule_Calculator_Pro
 
                                             case 2:
                                                 {
-                                                    if (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) >= curgroup.StudyingWeeks /*  * 2?  */ && scheduleFree[day][couple][0].Contains(curdonname))
+                                                    if (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) >= curgroup.StudyingWeeks && scheduleFree[day][couple][0].Contains(curdonname))
                                                     {
                                                         if (splits)
                                                         {
-                                                            if (!scheduleFree[day][couple][0].Contains(cursubj[2])) // ------изменило расписание
-                                                                continue;                                           //
-                                                            // Свободны ли оба преподавателя на этой и следующей паре? Если нет - пропускаем.
+                                                            if (!scheduleFree[day][couple][0].Contains(cursubj[2]))
+                                                                continue;                                           
                                                             if (!(couple < 5 && scheduleFree[day][couple][0].Contains(cursubj[2]) && scheduleFree[day][couple + 1][0].Contains(cursubj[2]) && scheduleFree[day][couple + 1][0].Contains(cursubj[0])))
                                                                 continue;
-                                                            schedule[cgidx][day][couple].Add(cursubjname); // Предмет
-                                                            schedule[cgidx][day][couple].Add(curdonname); // Преподаватель
+                                                            schedule[cgidx][day][couple].Add(cursubjname); 
+                                                            schedule[cgidx][day][couple].Add(curdonname); 
                                                             schedule[cgidx][day][couple].Add(cursubj[2]);
                                                             scheduleFree[day][couple][0].Remove(cursubj[2]);
-                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория
-                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория
+                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); 
+                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); 
                                                             scheduleFree[day][couple][0].Remove(curdonname);
 
                                                             couple++;
-                                                            schedule[cgidx][day][couple].Add(cursubjname); // Предмет
-                                                            schedule[cgidx][day][couple].Add(curdonname); // Преподаватель
+                                                            schedule[cgidx][day][couple].Add(cursubjname); 
+                                                            schedule[cgidx][day][couple].Add(curdonname); 
                                                             schedule[cgidx][day][couple].Add(cursubj[2]);
                                                             scheduleFree[day][couple][0].Remove(cursubj[2]);
-                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория
-                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория
+                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); 
+                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); 
                                                             scheduleFree[day][couple][0].Remove(curdonname);
 
                                                             pgroup[curgroupname].relatedSubjects[cursubjname][1] = (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) - curgroup.StudyingWeeks * 2).ToString();
                                                         }
                                                         else
                                                         {
-                                                            schedule[cgidx][day][couple].Add(cursubjname); // Предмет
-                                                            schedule[cgidx][day][couple].Add(curdonname); // Преподаватель
+                                                            schedule[cgidx][day][couple].Add(cursubjname); 
+                                                            schedule[cgidx][day][couple].Add(curdonname); 
                                                             scheduleFree[day][couple][0].Remove(curdonname);
-                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория
+                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); 
 
                                                             couple++;
-                                                            schedule[cgidx][day][couple].Add(cursubjname); // Предмет
-                                                            schedule[cgidx][day][couple].Add(curdonname); // Преподаватель
+                                                            schedule[cgidx][day][couple].Add(cursubjname); 
+                                                            schedule[cgidx][day][couple].Add(curdonname); 
                                                             scheduleFree[day][couple][0].Remove(curdonname);
-                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); // Аудитория
+                                                            schedule[cgidx][day][couple].Add(getAud(day, couple, curgroup, cursubjname, 0)); 
 
                                                             pgroup[curgroupname].relatedSubjects[cursubjname][1] = (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) - curgroup.StudyingWeeks * 2).ToString();
                                                         }
@@ -200,8 +198,6 @@ namespace Schedule_Calculator_Pro
                                                     }
                                                     else if (Convert.ToInt32(pgroup[curgroupname].relatedSubjects[cursubjname][1]) != 0)
                                                     {
-                                                        // чередование
-                                                        //found = true;
                                                     }
                                                 }
                                                 break;
@@ -212,12 +208,6 @@ namespace Schedule_Calculator_Pro
                                                     throw new Exception("Ошибка. У группы " + curgroupname + " пара " + cursubjname + " невозможное количество раз подрят (<1 или >2). Возможно, база данных была повреждена или ошибочно изменена.");
                                                 }
                                         }
-                                        // TODO:
-                                        // 1. Проверить работоспособность алгоритма с нововведениями ---
-                                        // 2. сделать 2 пары подрят ---
-                                        // 3. Сделать 2 чередующиеся пары (кол-во пар/семестр%кол-во пар это предмета/семестр == 8)
-                                        // 4. Возможно уменьшить влияние рассчитаных пар/день хотя бы в случае двух пар подрят
-                                        // 5. ???
                                     }
                                 }
                             }
@@ -319,14 +309,9 @@ namespace Schedule_Calculator_Pro
 
         public void Save()
         {
-            // Save in json to work w/ it from program later.
 
             System.IO.File.WriteAllText(Consts.LocalToGlobal("\\schedcfg.json"), JsonSerializer.Serialize(schedule));
             System.IO.File.WriteAllText(Consts.LocalToGlobal("\\schedfreecfg.json"), JsonSerializer.Serialize(scheduleFree));
-            //System.IO.File.WriteAllText(Consts.LocalToGlobal("\\schedsubj.json"), JsonSerializer.Serialize(Program.subject));
-            //System.IO.File.WriteAllText(Consts.LocalToGlobal("\\schedgroup.json"), JsonSerializer.Serialize(Program.group));
-            //System.IO.File.WriteAllText(Consts.LocalToGlobal("\\scheddon.json"), JsonSerializer.Serialize(Program.don));
-            //System.IO.File.WriteAllText(Consts.LocalToGlobal("\\schedaud.json"), JsonSerializer.Serialize(Program.audience));
 
             for (int _course = 0; _course < 4; _course++)
             {
@@ -355,7 +340,7 @@ namespace Schedule_Calculator_Pro
                                 }
                             }
                         }
-                        for (int cpl = 5; cpl >= 0; cpl--) // найти макс по всем группам, потом уже занулять ненужные
+                        for (int cpl = 5; cpl >= 0; cpl--)
                         {
                             var got = false;
                             for (int grp = 0; grp < Program.group.Count; grp++)
@@ -426,7 +411,6 @@ namespace Schedule_Calculator_Pro
                                 if (cplen[_course][_day].Count > _couple)
                                     tcol += cplen[_course][_day][_couple];
                             }
-                            //col += mxcpl[_day]+1;
                             col += cplen[_course][_day].Sum();
                         }
                         if (_group != schedule.Count - 1)
@@ -449,7 +433,7 @@ namespace Schedule_Calculator_Pro
                 xcl.ws.Range["A1:" + getcolname(t3 + 1) + (1 + t2).ToString()].Borders[XlBordersIndex.xlEdgeBottom].Weight = XlBorderWeight.xlMedium;
                 xcl.ws.Range["A1:" + getcolname(t3 + 1) + (1 + t2).ToString()].Borders[XlBordersIndex.xlEdgeTop].Weight = XlBorderWeight.xlMedium;
                 xcl.ws.Range["A1:" + getcolname(t3 + 1) + (1 + t2).ToString()].Borders[XlBordersIndex.xlEdgeRight].Weight = XlBorderWeight.xlMedium;
-                xcl.ws.Range["A1:" + getcolname(t3 + 1) + (1 + t2).ToString()].Borders[XlBordersIndex.xlEdgeLeft].Weight = XlBorderWeight.xlMedium; // mcol => wtf[_course].Sum(x => x.Sum())
+                xcl.ws.Range["A1:" + getcolname(t3 + 1) + (1 + t2).ToString()].Borders[XlBordersIndex.xlEdgeLeft].Weight = XlBorderWeight.xlMedium;
                 int t1 = 3;
                 for (int zz = 0; zz < 5; zz++)
                 {
@@ -685,28 +669,5 @@ namespace Schedule_Calculator_Pro
             }
             return outp;
         }
-
-        // ?
-        //private int func1(List<int> inp, int crs, int dy)
-        //{
-        //    var t = 5;
-        //    while (inp[t] == 0)
-        //        t--;
-        //    return t;
-        //}
-
-        //private int func2(List<List<int>> inp)
-        //{
-        //    var outp = 0;
-
-        //    for (int x = 0; x < inp.Count; x++)
-        //    {
-        //        for (int y = 0; y < inp[x].Count; y++)
-        //        {
-        //            outp += inp[x][y];
-        //        }
-        //    }
-        //    return outp;
-        //}
     }
 }
